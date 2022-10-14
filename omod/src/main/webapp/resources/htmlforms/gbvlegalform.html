@@ -1,0 +1,211 @@
+<!--
+  ~ The contents of this file are subject to the OpenMRS Public License
+  ~ Version 1.0 (the "License"); you may not use this file except in
+  ~ compliance with the License. You may obtain a copy of the License at
+  ~ http://license.openmrs.org
+  ~
+  ~ Software distributed under the License is distributed on an "AS IS"
+  ~ basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+  ~ License for the specific language governing rights and limitations
+  ~ under the License.
+  ~
+  ~ Copyright (C) OpenMRS, LLC.  All Rights Reserved.
+  -->
+<htmlform>
+  <script type="text/javascript" src="../moduleResources/kenyaemr/scripts/moment.js"></script>
+  <script type="text/javascript">
+       $(document).ready(function () {
+            //Defaults
+            jq("#other-referral-place-row").hide();
+
+
+            //Referred by selected
+            jq("#other-referral-place :input[type=checkbox]").change(otherReferralSelected);
+          });
+
+        var otherReferralSelected = function () {
+            var val = jq(this).val();
+            if (val == 5622 ){
+                jq("#other-referral-place-row").show();
+            }else {
+                jq("#other-referral-place-row").hide();
+                clearHiddenSections(jq("#other-referral-place-row"));
+            }
+        };
+
+
+        //Before Submit
+        beforeSubmit.push(function() {
+            var referredBy = getValue('referral-by.value');
+            var clientType = getValue('client-type.value');
+            var otherReferred = jq('#other-referral input[type=text]').val();
+            var infoSource = getValue('information-source.value');
+            var otherInfoSource = jq('#other-information-source input[type=text]').val();
+            var county = getField('county.value').val();
+            if(referredBy == ""){
+                getField('referral-by.error').html('Please specify referral source').show();
+                return false;
+            }else {
+                getField('referral-by.error').html('Please specify referral source').hide();
+            }
+
+
+            return true;
+        });
+
+        //Clear hidden sections
+        clearHiddenSections = function(parentObj) {
+            parentObj.find('input[type=radio]').each(function() {
+                this.checked = false;
+            });
+            parentObj.find('input[type=checkbox]').each(function() {
+                this.checked = false;
+            });
+            parentObj.find('input[type=text]').each(function() {
+                jq(this).val("");
+            });
+            parentObj.find('select').each(function() {
+                this.selectedIndex =0;
+            });
+        }
+
+    </script>
+  <style>
+        .simple-table {
+        border: solid 1px #DDEEEE;
+        border-collapse: collapse;
+        border-spacing: 0;
+        font: normal 13px Arial, sans-serif;
+        }
+
+        .simple-table thead th {
+        background-color: #DDEFEF;
+        border: solid 1px #DDEEEE;
+        color: #336B6B;
+        padding: 10px;
+        text-align: left;
+        text-shadow: 1px 1px 1px #fff;
+        }
+
+        .simple-table td {
+        border: solid 1px #DDEEEE;
+        color: #333;
+        padding: 10px;
+        text-shadow: 1px 1px 1px #fff;
+        }
+    </style>
+
+  <div class="ke-form-header">
+    <table width="100%">
+      <tr>
+        <td>Date of Incident: <encounterDate id="encounter-date" showTime="true" /></td>
+        <td>Encounter provider: <encounterProvider default="currentUser" role="Provider"/></td>
+        <td>Location: <encounterLocation default="GlobalProperty:kenyaemr.defaultLocation" type="autocomplete" /></td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="ke-form-content">
+    <fieldset class="adherence-screening">
+      <legend>
+        <strong>Offence Report Details</strong>
+      </legend>
+      <table class="simple-table" id="Checklist-tbl1">
+        <tr>
+          <td>OB Number</td>
+          <td><obs required="true" conceptId="167133" size="50"/></td>
+          <td>Police Station Reported to</td>
+          <td><obs required="true" conceptId="165262" size="50"/></td>
+          <td>Name of the perpetrator</td>
+          <td><obs required="true" conceptId="165230" size="50"/></td>
+        </tr>
+        <tr>
+          <td>Investigating officer</td>
+          <td><obs required="true" conceptId="167018" size="50"/></td>
+          <td>Phone number (for the Investigating officer)</td>
+          <td><obs required="true" conceptId="163152" size="50"/></td>
+        </tr>
+      </table>
+    </fieldset>
+
+
+    <!--ACtion-->
+    <fieldset id="Assesment-tab4">
+      <legend>
+        <strong>Nature of Action taken</strong>
+      </legend>
+      <table class="simple-table" id="adherence-1">
+        <tr>
+          <td size="40">Nature of Action taken <span style="color:red;"><strong>*</strong></span></td>
+          <td>
+            <obs  conceptId="165205" answerLabel="P3 filled" answerConceptId="118935" style="checkbox" /><br></br>
+            <obs  conceptId="165205" answerLabel="In court" answerConceptId="118688" style="checkbox" /><br></br>
+            <obs  conceptId="165205" answerLabel="Alternative Dispute resolution (ADR)" answerConceptId="141537" style="checkbox" /><br></br>
+            <obs  conceptId="165205" answerLabel="Cases dropped" answerConceptId="145691" style="checkbox" /><br></br>
+            <obs  conceptId="165205" answerLabel="Settled out of court" answerConceptId="127910" style="checkbox" /><br></br>
+            <obs  conceptId="165205" answerLabel="Alternative justice system" answerConceptId="126582" style="checkbox" /><br></br>
+            <obs  conceptId="165205" answerLabel="Conviction" answerConceptId="147944" style="checkbox" /><br></br>
+            <obs  conceptId="165205" answerLabel="Unreported case" answerConceptId="161638" style="checkbox" /><br></br>
+          </td>
+        </tr>
+        <tr>
+          <td>Brief Description of Action(s) taken</td>
+          <td> <obs conceptId="166511" size="50"  style="textarea"/> </td>
+        </tr>
+      </table>
+    </fieldset>
+    <!--REferral from GBVRC-->
+    <fieldset id="Assesment-tab6">
+      <legend>
+        <strong>Referral from GBV Recovery Center</strong>
+      </legend>
+      <table class="simple-table" id="adherence-4">
+        <tr>
+          <td size="40">Referral from GBV Recovery center to</td>
+          <td>
+            <obs  conceptId="1885" answerLabel="Police station" answerConceptId="165192" style="checkbox" /><br></br>
+            <obs  conceptId="1885" answerLabel="Children protection" answerConceptId="161597" style="checkbox" /><br></br>
+            <obs  conceptId="1885" answerLabel="Local administrators" answerConceptId="162690" style="checkbox" /><br></br>
+            <obs  conceptId="1885" answerLabel="Shelter homes" answerConceptId="167254" style="checkbox" /><br></br>
+            <obs  conceptId="1885" answerLabel="School" answerConceptId="159928" style="checkbox" /><br></br>
+            <obs  conceptId="1885" answerLabel="Legal offices" answerConceptId="135914" style="checkbox" /><br></br>
+            <obs  conceptId="1885" answerLabel="DREAMs program" answerConceptId="141777" style="checkbox" /><br></br>
+            <obs  conceptId="1885" answerLabel="Other (specify)" answerConceptId="5622" style="checkbox" id="other-referral-place" />
+          </td>
+        </tr>
+        <tr id="other-referral-place-row">
+          <td>Any other referral place <span style="color:red;"><strong>*</strong></span></td>
+          <td> <obs conceptId="161103AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" size="50"  style="textarea"/> </td>
+        </tr>
+      </table>
+    </fieldset>
+    <!--Court Info-->
+    <fieldset id="Assesment-tab5">
+      <legend>
+        <strong>Case Details</strong>
+      </legend>
+      <table class="simple-table" id="adherence-5">
+        <tr>
+           <td>In Court</td>
+           <td>
+            <obs required="true" conceptId="1562" answerLabels="Yes,No" answerConceptIds="1065,1066" style="radio" />
+           </td>
+           <td>Criminal Suit Number</td>
+           <td> <obs conceptId="162086" size="50" /></td>
+           <td rowspan="2">Case Details</td>
+           <td rowspan="2"><obs conceptId="161011" size="70" style="textarea" /></td>
+        </tr>
+        <tr>
+            <td>Alternative contact name</td>
+            <td><obs conceptId="163258" size="50" /></td>
+            <td>Phone Number</td>
+            <td><obs conceptId="159635" size="50" /></td>
+        </tr>
+      </table>
+    </fieldset>
+  </div>
+  <div class="ke-form-footer">
+    <submit />
+  </div>
+
+</htmlform>

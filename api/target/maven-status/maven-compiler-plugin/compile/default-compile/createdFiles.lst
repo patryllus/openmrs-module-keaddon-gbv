@@ -1,0 +1,6 @@
+org/openmrs/module/keaddonexample/metadata/ExampleMetadata$_Form.class
+org/openmrs/module/keaddonexample/ExampleConstants.class
+org/openmrs/module/keaddonexample/metadata/ExampleMetadata.class
+org/openmrs/module/keaddonexample/metadata/ExampleMetadata$_EncounterType.class
+org/openmrs/module/keaddonexample/calculation/EligibleForExampleProgramCalculation.class
+org/openmrs/module/keaddonexample/ExampleActivator.class

@@ -1,0 +1,135 @@
+<!--
+  ~ The contents of this file are subject to the OpenMRS Public License
+  ~ Version 1.0 (the "License"); you may not use this file except in
+  ~ compliance with the License. You may obtain a copy of the License at
+  ~ http://license.openmrs.org
+  ~
+  ~ Software distributed under the License is distributed on an "AS IS"
+  ~ basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+  ~ License for the specific language governing rights and limitations
+  ~ under the License.
+  ~
+  ~ Copyright (C) OpenMRS, LLC.  All Rights Reserved.
+  -->
+<htmlform>
+  <script type="text/javascript" src="../moduleResources/kenyaemr/scripts/moment.js"></script>
+  <script type="text/javascript">
+
+
+    </script>
+  <style>
+        .simple-table {
+        border: solid 1px #DDEEEE;
+        border-collapse: collapse;
+        border-spacing: 0;
+        font: normal 13px Arial, sans-serif;
+        }
+
+        .simple-table thead th {
+        background-color: #DDEFEF;
+        border: solid 1px #DDEEEE;
+        color: #336B6B;
+        padding: 10px;
+        text-align: left;
+        text-shadow: 1px 1px 1px #fff;
+        }
+
+        .simple-table td {
+        border: solid 1px #DDEEEE;
+        color: #333;
+        padding: 10px;
+        text-shadow: 1px 1px 1px #fff;
+        }
+    </style>
+
+  <div class="ke-form-header">
+    <table width="100%">
+      <tr>
+        <td>Encounter Date: <encounterDate id="encounter-date" showTime="true" /></td>
+        <td>Location: <encounterLocation default="GlobalProperty:kenyaemr.defaultLocation" type="autocomplete" /></td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="ke-form-content">
+    <fieldset class="adherence-screening">
+      <table class="simple-table" id="Checklist-tbl1">
+        <tr>
+          <td colspan="2">
+            <h3><strong>Note to the health care provider: Read the entire form to the survivor,explaining that he or she can choose any (or none) of the items listed.
+              Obtain a signature, or thumb print with signature of a witness.</strong></h3>
+            <p>I <strong><lookup expression="patient.personName"/></strong> authorize the above-named health facility to perform the following (select appropriately):</p>
+          </td>
+        </tr>
+        <tr>
+          <td>Conduct a medical examination,including pelvic examination:</td>
+          <td>
+            <obs conceptId="165176" required="true"  answerConceptIds="1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" style="radio" answerLabels="Yes,No" />
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Collect evidence,such as body fluid samples,collection of clothing,hair combings,scraping or cuttings of finger nails, blood samples and photographs:
+          </td>
+          <td>
+            <obs conceptId="161934" required="true"  answerConceptIds="1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" style="radio" answerLabels="Yes,No" />
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Provide evidence and medical information to the police and law courts concerning my case; this information will be limited to the results of this examination
+          and any relevant follow-up care provided
+          </td>
+          <td>
+            <obs conceptId="165180" required="true" answerConceptIds="1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" style="radio" answerLabels="Yes,No" />
+          </td>
+        </tr>
+      </table>
+    </fieldset>
+    <!--Witness details-->
+    <fieldset id="Assesment-tab3">
+      <legend>
+            <strong>Clients and Witness Details</strong>
+      </legend>
+       <table class="simple-table" id="adherence-3">
+         <tr>
+              <td>Name of survivor</td>
+              <td>
+               <lookup expression="patient.personName"/>
+              </td>
+              <td>Client signature(Initial)</td>
+              <td>
+               <obs conceptId="167018" size="30" />
+              </td>
+              <td rowspan="3">Consenting Date</td>
+              <td rowspan="3">
+                <obs conceptId="1711" size="30" />
+              </td>
+         </tr>
+         <tr>
+              <td>Name of witness:</td>
+              <td>
+                <obs conceptId="164141" size="30" />
+              </td>
+               <td>Witness signature (Initial):</td>
+              <td>
+                <obs conceptId="163258" size="30" />
+              </td>
+          </tr>
+         <tr>
+               <td>Name of Health care provider (HCP):</td>
+               <td>
+                 <obs conceptId="1473" size="30" />
+               </td>
+               <td>HCP signature (or Initial):</td>
+               <td>
+                 <obs conceptId="163258" size="30" />
+               </td>
+         </tr>
+        </table>
+    </fieldset>
+  </div>
+  <div class="ke-form-footer">
+    <submit />
+  </div>
+</htmlform>

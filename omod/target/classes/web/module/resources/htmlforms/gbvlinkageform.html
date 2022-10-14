@@ -1,0 +1,226 @@
+<!--
+  ~ The contents of this file are subject to the OpenMRS Public License
+  ~ Version 1.0 (the "License"); you may not use this file except in
+  ~ compliance with the License. You may obtain a copy of the License at
+  ~ http://license.openmrs.org
+  ~
+  ~ Software distributed under the License is distributed on an "AS IS"
+  ~ basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+  ~ License for the specific language governing rights and limitations
+  ~ under the License.
+  ~
+  ~ Copyright (C) OpenMRS, LLC.  All Rights Reserved.
+  -->
+<htmlform>
+    <script type="text/javascript" src="../moduleResources/kenyaemr/scripts/moment.js"></script>
+    <script type="text/javascript">
+         $(document).ready(function () {
+            //Defaults
+            jq("#tbl-other-action-taken").hide();
+            jq("#tbl-other-special-need").hide();
+
+
+            //Referred by selected
+            jq("#other-action :input[type=checkbox]").change(otherActionSelected);
+            jq("#any-special-need :input[type=radio]").change(otherSpecialNeedSelected);
+          });
+
+        var otherActionSelected = function () {
+            var val = jq(this).val();
+            if (val == 5622 ){
+                jq("#tbl-other-action-taken").show();
+            }else {
+                jq("#tbl-other-action-taken").hide();
+                clearHiddenSections(jq("#tbl-other-action-taken"));
+            }
+        };
+
+
+        var otherSpecialNeedSelected = function () {
+            var val = jq(this).val();
+            if (val == 5622 ){
+                jq("#tbl-other-special-need").show();
+
+            }else {
+                jq("#tbl-other-special-need").hide();
+                clearHiddenSections(jq("#tbl-other-special-need"));
+            }
+        };
+
+        //Before Submit
+        beforeSubmit.push(function() {
+            var infoSource = getValue('information-source.value');
+            var otherInfoSource = jq('#other-information-source input[type=text]').val();
+            var county = getField('county.value').val();
+
+            if(referredBy == ""){
+                getField('referral-by.error').html('Please specify referral source').show();
+                return false;
+            }else {
+                getField('referral-by.error').html('Please specify referral source').hide();
+            }
+
+            return true;
+        });
+
+        //Clear hidden sections
+        clearHiddenSections = function(parentObj) {
+            parentObj.find('input[type=radio]').each(function() {
+                this.checked = false;
+            });
+            parentObj.find('input[type=checkbox]').each(function() {
+                this.checked = false;
+            });
+            parentObj.find('input[type=text]').each(function() {
+                jq(this).val("");
+            });
+            parentObj.find('select').each(function() {
+                this.selectedIndex =0;
+            });
+        }
+    </script>
+    <style>
+        .simple-table {
+        border: solid 1px #DDEEEE;
+        border-collapse: collapse;
+        border-spacing: 0;
+        font: normal 13px Arial, sans-serif;
+        }
+
+        .simple-table thead th {
+        background-color: #DDEFEF;
+        border: solid 1px #DDEEEE;
+        color: #336B6B;
+        padding: 10px;
+        text-align: left;
+        text-shadow: 1px 1px 1px #fff;
+        }
+
+        .simple-table td {
+        border: solid 1px #DDEEEE;
+        color: #333;
+        padding: 10px;
+        text-shadow: 1px 1px 1px #fff;
+        }
+    </style>
+    <div class="ke-form-header">
+        <table width="100%">
+            <tr>
+                <td>Encounter Date: <encounterDate id="encounter-date" showTime="true" /></td>
+                <td>Encounter provider: <encounterProvider default="currentUser" role="Provider"/></td>
+                <td>Location: <encounterLocation default="GlobalProperty:kenyaemr.defaultLocation" type="autocomplete" /></td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="ke-form-content">
+        <fieldset class="adherence-screening">
+            <table class="simple-table" id="Checklist-tbl1">
+                <tr>
+                    <td>Date of Violence</td>
+                    <td> <obs required="true" conceptId="165349" size="40" /></td>
+                    <td>Nature of Violence</td>
+                    <td>
+                        <obs  conceptId="165205" answerLabel="Physical" answerConceptId="158358" style="checkbox" /><br></br>
+                        <obs  conceptId="165205" answerLabel="Sexual" answerConceptId="152370" style="checkbox" /><br></br>
+                        <obs  conceptId="165205" answerLabel="Emotional" answerConceptId="117510" style="checkbox" /><br></br>
+                        <obs  conceptId="165205" answerLabel="Financial" answerConceptId="124824" style="checkbox" /><br></br>
+                        <obs  conceptId="165205" answerLabel="IPV" answerConceptId="141815" style="checkbox" /><br></br>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Any actions taken by client so far <i>(tick all that apply)</i></td>
+                    <td>
+                        <obs  conceptId="159639" answerLabel="Reported to Authority" answerConceptId="165193" style="checkbox" /><br></br>
+                        <obs  conceptId="159639" answerLabel="Gone to hospital" answerConceptId="161189" style="checkbox" /><br></br>
+                        <obs  conceptId="159639" answerLabel="Taken over the counter medication" answerConceptId="151316" style="checkbox" /><br></br>
+                        <obs  conceptId="159639" answerLabel="Moved to safe space" answerConceptId="167254" style="checkbox" /><br></br>
+                        <obs  conceptId="159639" answerLabel="Received counselling" answerConceptId="165183" style="checkbox" /><br></br>
+                        <obs  conceptId="159639" answerLabel="Perpetrator apprehended" answerConceptId="148502" style="checkbox" /><br></br>
+                        <obs  conceptId="159639" answerLabel="Other (specify)" answerConceptId="5622" style="checkbox" id="other-action" /><br></br>
+                    </td>
+                    <td>
+                        <table id="tbl-other-action-taken">
+                            <tr>
+                                <td>Other action taken, specify</td>
+                                <td><obs required="true" conceptId="166511" style="textarea"/></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Any Special needs</td>
+                    <td>
+                        <obs id="any-special-need" conceptId="161601" answerLabels="Child or Adolescent,
+                                                               Elderly (>60yrs),
+                                                               OVC,
+                                                               Person living with disability,
+                                                               None,
+                                                               Other (specify)"
+                                                answerConceptIds="166043,118686,165368,161599,1107,5622"
+                                                style="radio"
+                                                required="true"/>
+                    </td>
+                    <td>
+                        <table id="tbl-other-special-need">
+                            <tr>
+                                <td>Specify other special needs</td>
+                                <td><obs conceptId="161011" style="textarea" size="50" /></td>
+                            </tr>
+                        </table>
+
+                    </td>
+
+                </tr>
+            </table>
+        </fieldset>
+        <!--Community Interraction-->
+        <fieldset id="Assesment-tab3">
+            <legend>
+                <strong>Community Interaction</strong>
+            </legend>
+            <table class="simple-table" id="adherence-3">
+                <tr>
+                    <td>Date contacted at the Community</td>
+                    <td>
+                        <obs required="true" conceptId="165144" size="50" />
+                    </td>
+                    <td>Number of Interactive sessions with mobilizer</td>
+                    <td>
+                        <obs required="true" conceptId="1639" size="30" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>Date referred to the GBV recovery center</td>
+                    <td>
+                        <obs required="true" conceptId="161560" size="30" />
+                    </td>
+                    <td>Date seen at GBVRC (to be filled at the clinic)</td>
+                    <td>
+                        <obs required="true" conceptId="163260" size="30" />
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+        <!--Mobilizer details-->
+        <fieldset id="Assesment-tab4">
+            <legend>
+                <strong>Community Mobilizer Details</strong>
+            </legend>
+            <table class="simple-table" id="adherence-1">
+                <tr>
+                    <td>Name of Community Mobilizer</td>
+                    <td><obs required="true" conceptId="164141"  size="40" /></td>
+                    <td>Phone Number</td>
+                    <td><obs required="true" conceptId="159635" size="40" /></td>
+                    <td>Received By(Health care provider)</td>
+                    <td><obs conceptId="1473AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" size="50"/></td>
+                </tr>
+            </table>
+        </fieldset>
+    </div>
+    <div class="ke-form-footer">
+        <submit />
+    </div>
+
+</htmlform>

@@ -1,0 +1,213 @@
+<!--
+  ~ The contents of this file are subject to the OpenMRS Public License
+  ~ Version 1.0 (the "License"); you may not use this file except in
+  ~ compliance with the License. You may obtain a copy of the License at
+  ~ http://license.openmrs.org
+  ~
+  ~ Software distributed under the License is distributed on an "AS IS"
+  ~ basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+  ~ License for the specific language governing rights and limitations
+  ~ under the License.
+  ~
+  ~ Copyright (C) OpenMRS, LLC.  All Rights Reserved.
+  -->
+<htmlform>
+  <script type="text/javascript" src="../moduleResources/kenyaemr/scripts/moment.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function () {
+            //Defaults
+            jq("#tbl-other-occupation").hide();
+            jq("#tbl-pep-given").hide();
+            jq("#tbl-ecp-given").hide();
+
+            //Referred by selected
+            jq("#ecp-given :input[type=radio]").change(ecpGivenNoSelected);
+            jq("#pep-given :input[type=radio]").change(pepGivenNoSelected);
+          });
+
+        var ecpGivenNoSelected = function () {
+            var val = jq(this).val();
+            if (val == 1066 ){
+                jq("#tbl-ecp-given").show();
+            }else {
+                jq("#tbl-ecp-given").hide();
+                clearHiddenSections(jq("#tbl-ecp-given"));
+            }
+        };
+
+         var pepGivenNoSelected = function () {
+            var val = jq(this).val();
+            if (val == 1066 ){
+                jq("#tbl-pep-given").show();
+            }else {
+                jq("#tbl-pep-given").hide();
+                clearHiddenSections(jq("#tbl-pep-given"));
+            }
+        };
+
+
+        //Before Submit
+        beforeSubmit.push(function() {
+            var referredBy = getValue('referral-by.value');
+            var clientType = getValue('client-type.value');
+            var otherReferred = jq('#other-referral input[type=text]').val();
+            var infoSource = getValue('information-source.value');
+            var otherInfoSource = jq('#other-information-source input[type=text]').val();
+            var county = getField('county.value').val();
+            if(referredBy == ""){
+                getField('referral-by.error').html('Please specify referral source').show();
+                return false;
+            }else {
+                getField('referral-by.error').html('Please specify referral source').hide();
+            }
+
+
+            return true;
+        });
+
+        //Clear hidden sections
+        clearHiddenSections = function(parentObj) {
+            parentObj.find('input[type=radio]').each(function() {
+                this.checked = false;
+            });
+            parentObj.find('input[type=checkbox]').each(function() {
+                this.checked = false;
+            });
+            parentObj.find('input[type=text]').each(function() {
+                jq(this).val("");
+            });
+            parentObj.find('select').each(function() {
+                this.selectedIndex =0;
+            });
+        }
+    </script>
+  <style>
+        .simple-table {
+        border: solid 1px #DDEEEE;
+        border-collapse: collapse;
+        border-spacing: 0;
+        font: normal 13px Arial, sans-serif;
+        }
+
+        .simple-table thead th {
+        background-color: #DDEFEF;
+        border: solid 1px #DDEEEE;
+        color: #336B6B;
+        padding: 10px;
+        text-align: left;
+        text-shadow: 1px 1px 1px #fff;
+        }
+
+        .simple-table td {
+        border: solid 1px #DDEEEE;
+        color: #333;
+        padding: 10px;
+        text-shadow: 1px 1px 1px #fff;
+        }
+    </style>
+
+  <div class="ke-form-header">
+    <table width="100%">
+      <tr>
+        <td>Encounter Date: <encounterDate id="encounter-date" showTime="true" /></td>
+        <td>Encounter provider: <encounterProvider default="currentUser" role="Provider"/></td>
+        <td>Location: <encounterLocation default="GlobalProperty:kenyaemr.defaultLocation" type="autocomplete" /></td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="ke-form-content">
+    <fieldset class="adherence-screening">
+      <legend>
+        <strong>Perpetrators Details</strong>
+      </legend>
+      <table class="simple-table" id="Checklist-tbl1">
+        <tr>
+          <td>Perpetrator number <br/> <i><strong> format is : (P#-10-2022-00001)</strong></i></td>
+          <td><obs required="true" conceptId="1639" size="30"/></td>
+          <td>Phone number</td>
+          <td><obs conceptId="163152" size="30"/></td>
+          <td>Residence</td>
+          <td><obs required="true" conceptId="167131" size="30"/></td>
+        </tr>
+        <tr>
+          <td>Occupation  <span style="color:red;"><strong>*</strong></span>&nbsp;
+            <obs conceptId="1542" answerLabel="Unemployed" answerConceptId="123801" style="dropdown"/>
+            <obs conceptId="1542" answerLabel="Farmer" answerConceptId="1538" style="dropdown"/>
+            <obs conceptId="1542" answerLabel="Trader" answerConceptId="1539" style="dropdown"/>
+            <obs conceptId="1542" answerLabel="Employee" answerConceptId="1540" style="dropdown"/>
+            <obs conceptId="1542" answerLabel="Housework" answerConceptId="159464" style="dropdown"/>
+            <obs conceptId="1542" answerLabel="Student" answerConceptId="159465" style="dropdown"/>
+            <obs conceptId="1542" answerLabel="Driver" answerConceptId="159466" style="dropdown"/>
+            <obs conceptId="1542" answerLabel="Teacher" answerConceptId="162946" style="dropdown"/>
+            <obs conceptId="1542" answerLabel="Other" answerConceptId="1067" id="other-occupation" style="dropdown"/>
+          </td>
+          <td>
+            <table id="tbl-other-occupation">
+              <tr>
+                <td>Specify other occupation</td>
+                <td><obs required="true" conceptId="160632" size="30"/></td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </fieldset>
+    <!-- Presenting Details-->
+    <fieldset id="Assesment-tab4">
+      <legend>
+        <strong>Presenting Issues</strong>
+      </legend>
+            <table class="simple-table" id="adherence-1">
+              <tr>
+                <td>Presenting Issues</td>
+                <td><obs required="true" conceptId="165138" size="50"  style="textarea"/> </td>
+                <td>Plan of action for presenting issues</td>
+                <td><obs conceptId="163104" size="50"  style="textarea"/> </td>
+              </tr>
+            </table>
+    </fieldset>
+    <!--Immediate Management-->
+    <fieldset id="Assesment-tab5">
+      <legend>
+        <strong>Immediate Management:</strong>
+      </legend>
+              <table class="simple-table" id="adherence-5">
+                <tr>
+                   <td>PEP given</td>
+                   <td> <obs id="pep-given" required="true" conceptId="165171" answerLabels="Yes,No" answerConceptIds="1065,1066" style="radio" /></td>
+                   <td>
+                     <table id="tbl-pep-given">
+                         <tr>
+                           <td>Reason for not giving PEP?</td>
+                           <td><obs required="true" conceptId="162169" style="textarea" size="100"  /></td>
+                         </tr>
+                     </table>
+                   </td>
+
+                </tr>
+                <includeIf velocityTest="$patient.gender == 'F'">
+                <tr>
+                    <td>ECP given</td>
+                     <td> <obs id="ecp-given" required="true" conceptId="374" answerLabels="Yes,No" answerConceptIds="1065,1066" style="radio" /></td>
+                    <td>
+                      <table id="tbl-ecp-given">
+                        <tr>
+                          <td>Reason for giving ECP?</td>
+                          <td><obs required="true" conceptId="160845" style="textarea" size="100"  /></td>
+                        </tr>
+                      </table>
+                    </td>
+                 </tr>
+                </includeIf>
+                <tr>
+                  <td>STI treatment given</td>
+                   <td><obs required="true" conceptId="165200" answerLabels="Yes,No" answerConceptIds="1065,1066" style="radio" /></td>
+                </tr>
+              </table>
+    </fieldset>
+  </div>
+  <div class="ke-form-footer">
+    <submit />
+  </div>
+</htmlform>

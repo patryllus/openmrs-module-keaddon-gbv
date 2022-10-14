@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+	<!-- CIHEB Kenya modules App -->
+
+	<bean id="keaddonexample.app.example" factory-bean="kenyacore.appFactoryBean" factory-method="createInstance">
+		<constructor-arg value="keaddonexample.example"/>
+		<constructor-arg value="GBV"/>
+		<constructor-arg value="keaddonexample/example/home.page"/>
+		<constructor-arg value="keaddonexample:apps/medical.png"/>
+		<constructor-arg value="700"/>
+	</bean>
+
+	<!-- ETL Configuration
+	<bean id="kenyaemr.gbvrc.etl.routines" class="org.openmrs.module.kenyacore.etl.ETLConfiguration">
+		<property name="ddlProcedures">
+			<set>
+				<value>create_gbvrc_etl_tables</value>
+			</set>
+		</property>
+		<property name="dmlProcedures">
+			<set>
+				<value>sp_build_gbvrc_tables</value>
+			</set>
+		</property>
+		<property name="incrementalUpdatesProcedures">
+			<set>
+				<value>sp_gbvrc_scheduled_updates</value>
+			</set>
+		</property>
+		<!-<property name="dataToolDbProcedures">
+                    <set>
+                        <value>create_datatools_tables</value>
+                    </set>
+                </property>-
+	</bean>-->
+
+	<!-- GBVPEPFORMFORMANAGEMENTOFSURVIVOR app -->
+
+	<bean id="keaddonexample.form.pepformformanagementofsurvivors"
+		  class="org.openmrs.module.kenyacore.form.FormDescriptor">
+		<property name="targetUuid" value="f44b2405-226b-47c4-b98f-b826ea4725ae"/>
+		<property name="apps">
+			<set>
+				<ref bean="keaddonexample.app.example"/>
+				<ref bean="kenyaemr.app.chart"/>
+				<!--<ref bean="kenyaemr.app.clinician" />-->
+			</set>
+		</property>
+		<property name="icon" value="keaddonexample:forms/example.png"/>
+		<property name="htmlform" value="keaddonexample:pepformformanagementofsurvivors.html"/>
+	</bean>
+	<!-- GBVLINKAGEFORM app -->
+	<bean id="keaddonexample.form.gbvlinkageform" class="org.openmrs.module.kenyacore.form.FormDescriptor">
+		<property name="targetUuid" value="f760e38c-3d2f-4a5d-aa3d-e9682576efa8"/>
+		<property name="apps">
+			<set>
+				<ref bean="keaddonexample.app.example"/>
+				<ref bean="kenyaemr.app.chart"/>
+				<!--<ref bean="kenyaemr.app.clinician" />-->
+			</set>
+		</property>
+		<property name="icon" value="keaddonexample:forms/example.png"/>
+		<property name="htmlform" value="keaddonexample:gbvlinkageform.html"/>
+	</bean>
+
+	<!-- GBVCONSENTFORM -->
+	<bean id="keaddonexample.form.gbvconsentform" class="org.openmrs.module.kenyacore.form.FormDescriptor">
+		<property name="targetUuid" value="d720a8b3-52cc-41e2-9a75-3fd0d67744e5"/>
+		<property name="apps">
+			<set>
+				<ref bean="keaddonexample.app.example"/>
+				<ref bean="kenyaemr.app.chart"/>
+				<!--<ref bean="kenyaemr.app.clinician" />-->
+			</set>
+		</property>
+		<property name="icon" value="keaddonexample:forms/example.png"/>
+		<property name="htmlform" value="keaddonexample:gbvconsentform.html"/>
+	</bean>
+
+	<!-- GBVLEGALFORM-->
+	<bean id="keaddonexample.form.gbvlegalform" class="org.openmrs.module.kenyacore.form.FormDescriptor">
+		<property name="targetUuid" value="d0c36426-4503-4236-ab5d-39bff77f2b50"/>
+		<property name="apps">
+			<set>
+				<ref bean="keaddonexample.app.example"/>
+				<ref bean="kenyaemr.app.chart"/>
+				<!--<ref bean="kenyaemr.app.clinician" />-->
+			</set>
+		</property>
+		<property name="icon" value="keaddonexample:forms/example.png"/>
+		<property name="htmlform" value="keaddonexample:gbvlegalform.html"/>
+	</bean>
+
+	<bean id="keaddonexample.form.gbvphysicalemotionalform" class="org.openmrs.module.kenyacore.form.FormDescriptor">
+		<property name="targetUuid" value="a0943862-f0fe-483d-9f11-44f62abae063"/>
+		<property name="apps">
+			<set>
+				<ref bean="keaddonexample.app.example"/>
+				<ref bean="kenyaemr.app.chart"/>
+				<!--<ref bean="kenyaemr.app.clinician" />-->
+			</set>
+		</property>
+		<property name="icon" value="keaddonexample:forms/example.png"/>
+		<property name="htmlform" value="keaddonexample:gbvphysicalemotionalform.html"/>
+	</bean>
+
+
+	<bean id="keaddonexample.form.pepformfornonoccupationalexposure"
+		  class="org.openmrs.module.kenyacore.form.FormDescriptor">
+		<property name="targetUuid" value="92de9269-6bb4-4c24-8ec9-870aa2c64b5a"/>
+		<property name="apps">
+			<set>
+				<ref bean="keaddonexample.app.example"/>
+				<ref bean="kenyaemr.app.chart"/>
+				<!--<ref bean="kenyaemr.app.clinician" />-->
+			</set>
+		</property>
+		<property name="icon" value="keaddonexample:forms/example.png"/>
+		<property name="htmlform" value="keaddonexample:pepformfornonoccupationalexposure.html"/>
+	</bean>
+	<!-- GBV PERPETRATOR DETAILS FORM -->
+	<bean id="keaddonexample.form.gbvperpetratordetailform" class="org.openmrs.module.kenyacore.form.FormDescriptor">
+		<property name="targetUuid" value="f37d7e0e-95e8-430d-96a3-8e22664f74d6"/>
+		<property name="apps">
+			<set>
+				<ref bean="keaddonexample.app.example"/>
+				<ref bean="kenyaemr.app.chart"/>
+				<!--<ref bean="kenyaemr.app.clinician" />-->
+			</set>
+		</property>
+		<property name="icon" value="keaddonexample:forms/example.png"/>
+		<property name="htmlform" value="keaddonexample:gbvperpetratordetailform.html"/>
+	</bean>
+
+	<!-- GBV Trauma Counselling form -->
+	<bean id="keaddonexample.form.gbvtraumacounsellingform" class="org.openmrs.module.kenyacore.form.FormDescriptor">
+		<property name="targetUuid" value="e983d758-5adf-4917-8172-0f4be4d8116a"/>
+		<property name="apps">
+			<set>
+				<ref bean="keaddonexample.app.example"/>
+				<ref bean="kenyaemr.app.chart"/>
+				<!--<ref bean="kenyaemr.app.clinician" />-->
+			</set>
+		</property>
+		<property name="icon" value="keaddonexample:forms/example.png"/>
+		<property name="htmlform" value="keaddonexample:gbvtraumacounsellingform.html"/>
+	</bean>
+
+
+	<!-- GBVPOSTRAPECAREFORM -->
+	<bean id="keaddonexample.form.gbvpostrapecareform" class="org.openmrs.module.kenyacore.form.FormDescriptor">
+		<property name="targetUuid" value="c46aa4fd-8a5a-4675-90a7-a6f2119f61d8"/>
+		<property name="apps">
+			<set>
+				<ref bean="keaddonexample.app.example"/>
+				<ref bean="kenyaemr.app.chart"/>
+				<!--<ref bean="kenyaemr.app.clinician" />-->
+			</set>
+		</property>
+		<property name="icon" value="keaddonexample:forms/example.png"/>
+		<property name="htmlform" value="keaddonexample:gbvpostrapecareform.html"/>
+	</bean>
+
+	<!-- GBVPSYCHOLOGICALASSESSMENTFORM -->
+	<bean id="keaddonexample.form.gbvpsychologicalassessmentform"
+		  class="org.openmrs.module.kenyacore.form.FormDescriptor">
+		<property name="targetUuid" value="9d21275a-7657-433a-b305-a736423cc496"/>
+		<property name="apps">
+			<set>
+				<ref bean="keaddonexample.app.example"/>
+				<ref bean="kenyaemr.app.chart"/>
+				<!--<ref bean="kenyaemr.app.clinician" />-->
+			</set>
+		</property>
+		<property name="icon" value="keaddonexample:forms/example.png"/>
+		<property name="htmlform" value="keaddonexample:gbvpsychologicalassessmentform.html"/>
+	</bean>
+
+
+	<bean id="keaddonexample.config.form" class="org.openmrs.module.kenyacore.form.FormConfiguration">
+		<!-- Example of adding a form to the general visit form list -->
+		<property name="commonVisitForms">
+			<set>
+				<ref bean="keaddonexample.form.gbvconsentform"/>
+				<ref bean="keaddonexample.form.gbvlinkageform"/>
+				<ref bean="keaddonexample.form.gbvlegalform"/>
+				<ref bean="keaddonexample.form.pepformfornonoccupationalexposure"/>
+				<ref bean="keaddonexample.form.pepformformanagementofsurvivors"/>
+				<ref bean="keaddonexample.form.gbvphysicalemotionalform"/>
+				<ref bean="keaddonexample.form.gbvperpetratordetailform"/>
+				<ref bean="keaddonexample.form.gbvtraumacounsellingform"/>
+				<ref bean="keaddonexample.form.gbvpostrapecareform"/>
+				<ref bean="keaddonexample.form.gbvpsychologicalassessmentform"/>
+			</set>
+		</property>
+
+		<!-- Example of disabling an existing form. This form will no longer appear in the "Available Forms" list -->
+		<property name="disabledForms">
+			<set>
+				<ref bean="kenyaemr.common.form.progressNote"/>
+			</set>
+		</property>
+	</bean>
+
+</beans>

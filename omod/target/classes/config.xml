@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module configVersion="1.2">
+	<id>keaddonexample</id>
+	<name>CIHEB Module</name>
+	<version>1.0-SNAPSHOT</version>
+	<package>org.openmrs.module.keaddonexample</package>
+	<author>I-TECH</author>
+	<description>CIHEB Kenya Add-on  Module</description>
+	<updateURL>https://dev.openmrs.org/modules/download/keaddonexample/update.rdf</updateURL>
+	<require_version>1.9.7</require_version>
+	<require_modules>
+		<require_module version="17.3.1">org.openmrs.module.kenyaemr</require_module>
+	</require_modules>
+	<activator>org.openmrs.module.keaddonexample.ExampleActivator</activator>
+	<messages>
+		<lang>en</lang>
+		<file>messages.properties</file>
+	</messages>
+</module>
+
+

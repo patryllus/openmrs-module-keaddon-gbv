@@ -1,0 +1,743 @@
+<!--
+  ~ The contents of this file are subject to the OpenMRS Public License
+  ~ Version 1.0 (the "License"); you may not use this file except in
+  ~ compliance with the License. You may obtain a copy of the License at
+  ~ http://license.openmrs.org
+  ~
+  ~ Software distributed under the License is distributed on an "AS IS"
+  ~ basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+  ~ License for the specific language governing rights and limitations
+  ~ under the License.
+  ~
+  ~ Copyright (C) OpenMRS, LLC.  All Rights Reserved.
+  -->
+<htmlform>
+    <script type="text/javascript" src="../moduleResources/kenyaemr/scripts/moment.js"></script>
+    <script type="text/javascript">
+         $(document).ready(function () {
+            //Defaults
+            jq("#tbl-specify-relationship").hide();
+            jq("#tbl-other-sex").hide();
+            jq("#tbl-facility-detail").hide();
+            jq("#tbl-police-station-detail").hide();
+            jq("#tbl-details-survivor-bath").hide();
+            jq("#tbl-details-cloths").hide();
+            jq("#tbl-detail-mark-on-perpetrator").hide();
+            jq("#tbl-stitching-done-comment").hide();
+            jq("#tbl-sti-trx-done-comment").hide();
+            jq("#tbl-other-referral-location").hide();
+
+
+            //Referred by selected
+            jq("#alleged-perpetrator :input[type=radio]").change(allegedPerpetratorKnownSelected);
+            jq("#other-violence :input[type=checkbox]").change(otherSexualViolenceSelected);
+            jq("#health-facility :input[type=radio]").change(reportedToHCYesSelected);
+            jq("#reported-police :input[type=radio]").change(reportedToPSYesSelected);
+            jq("#mark-on-perpetrator :input[type=radio]").change(reportedMarkonPerpetratorSelected);
+            jq("#survivor-bath :input[type=radio]").change(reportedSurvivorBathSelected);
+            jq("#clothes-transported :input[type=radio]").change(reportedClotheTransportedSelected);
+            jq("#other-referral :input[type=checkbox]").change(reportedOtherReferralLocation);
+            jq("#stitching-done :input[type=radio]").change(reportedStitchingDone);
+            jq("#sti-trx-done :input[type=radio]").change(reportedStiTrxDone);
+
+          });
+
+            var reportedStiTrxDone = function () {
+            var val = jq(this).val();
+            if (val == 1065 ){
+                jq("#tbl-sti-trx-done-comment").show();
+            }else {
+                jq("#tbl-sti-trx-done-comment").hide();
+                clearHiddenSections(jq("#tbl-sti-trx-done-comment"));
+            }
+        };
+           var reportedStitchingDone = function () {
+            var val = jq(this).val();
+            if (val == 1065 ){
+                jq("#tbl-stitching-done-comment").show();
+            }else {
+                jq("#tbl-stitching-done-comment").hide();
+                clearHiddenSections(jq("#tbl-stitching-done-comment"));
+            }
+        };
+
+         var reportedOtherReferralLocation = function () {
+            var val = jq(this).val();
+            if (val == 5622 ){
+                jq("#tbl-other-referral-location").show();
+            }else {
+                jq("#tbl-other-referral-location").hide();
+                clearHiddenSections(jq("#tbl-other-referral-location"));
+            }
+        };
+
+          var reportedClotheTransportedSelected = function () {
+            var val = jq(this).val();
+            if (val == 5622 ){
+                jq("#tbl-details-cloths-transport").show();
+            }else {
+                jq("#tbl-details-cloths-transport").hide();
+                clearHiddenSections(jq("#tbl-details-cloths-transport"));
+            }
+        };
+
+          var reportedSurvivorBathSelected = function () {
+            var val = jq(this).val();
+            if (val == 1065 ){
+                jq("#tbl-details-survivor-bath").show();
+            }else {
+                jq("#tbl-details-survivor-bath").hide();
+                clearHiddenSections(jq("#tbl-details-survivor-bath"));
+            }
+        };
+
+         var reportedMarkonPerpetratorSelected = function () {
+            var val = jq(this).val();
+            if (val == 1065 ){
+                jq("#tbl-detail-mark-on-perpetrator").show();
+            }else {
+                jq("#tbl-detail-mark-on-perpetrator").hide();
+                clearHiddenSections(jq("#tbl-detail-mark-on-perpetrator"));
+            }
+        };
+          var reportedToPSYesSelected = function () {
+            var val = jq(this).val();
+            if (val == 1065 ){
+                jq("#tbl-police-station-detail").show();
+            }else {
+                jq("#tbl-police-station-detail").hide();
+                clearHiddenSections(jq("#tbl-police-station-detail"));
+            }
+        };
+        var allegedPerpetratorKnownSelected = function () {
+            var val = jq(this).val();
+            if (val == 1065 ){
+                jq("#tbl-specify-relationship").show();
+            }else {
+                jq("#tbl-specify-relationship").hide();
+                clearHiddenSections(jq("#tbl-specify-relationship"));
+            }
+        };
+
+          var otherSexualViolenceSelected = function () {
+            var val = jq(this).val();
+            if (val == 5622 ){
+                jq("#tbl-other-sex").show();
+            }else {
+                jq("#tbl-other-sex").hide();
+                clearHiddenSections(jq("#tbl-other-sex"));
+            }
+        };
+
+            var reportedToHCYesSelected = function () {
+            var val = jq(this).val();
+            if (val == 1065 ){
+                jq("#tbl-facility-detail").show();
+            }else {
+                jq("#tbl-facility-detail").hide();
+                clearHiddenSections(jq("#tbl-facility-detail"));
+            }
+        };
+
+        //Before Submit
+        beforeSubmit.push(function() {
+            var referredBy = getValue('referral-by.value');
+            var clientType = getValue('client-type.value');
+            var otherReferred = jq('#other-referral input[type=text]').val();
+            var infoSource = getValue('information-source.value');
+            var otherInfoSource = jq('#other-information-source input[type=text]').val();
+            var county = getField('county.value').val();
+            if(referredBy == ""){
+                getField('referral-by.error').html('Please specify referral source').show();
+                return false;
+            }else {
+                getField('referral-by.error').html('Please specify referral source').hide();
+            }
+
+
+            return true;
+        });
+
+        //Clear hidden sections
+        clearHiddenSections = function(parentObj) {
+            parentObj.find('input[type=radio]').each(function() {
+                this.checked = false;
+            });
+            parentObj.find('input[type=checkbox]').each(function() {
+                this.checked = false;
+            });
+            parentObj.find('input[type=text]').each(function() {
+                jq(this).val("");
+            });
+            parentObj.find('select').each(function() {
+                this.selectedIndex =0;
+            });
+        }
+    </script>
+    <style>
+        .simple-table {
+        border: solid 1px #DDEEEE;
+        border-collapse: collapse;
+        border-spacing: 0;
+        font: normal 13px Arial, sans-serif;
+        }
+
+        .simple-table thead th {
+        background-color: #DDEFEF;
+        border: solid 1px #DDEEEE;
+        color: #336B6B;
+        padding: 10px;
+        text-align: left;
+        text-shadow: 1px 1px 1px #fff;
+        }
+
+        .simple-table td {
+        border: solid 1px #DDEEEE;
+        color: #333;
+        padding: 10px;
+        text-shadow: 1px 1px 1px #fff;
+        }
+    </style>
+
+    <div class="ke-form-header">
+        <table width="100%">
+            <tr>
+                <td>Encounter Date <encounterDate id="encounter-date" showTime="true" /></td>
+                <td>Encounter provider <encounterProvider default="currentUser" role="Provider"/></td>
+                <td>Location <encounterLocation default="GlobalProperty:kenyaemr.defaultLocation" type="autocomplete" /></td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="ke-form-content">
+        <fieldset class="adherence-screening">
+            <legend>
+                <strong>Incident Details</strong>
+            </legend>
+            <table class="simple-table" id="Checklist-tbl1">
+                <tr>
+                   <td>Date &amp; Time of Examination</td>
+                    <td>   <obs conceptId="159948" size="50"  showTime="true"/>
+                   </td>
+                    <td>Date &amp; Time of Incident</td>
+                    <td>    <obs conceptId="162869" size="50"  showTime="true"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Number of perpetrators</td>
+                      <td>  <obs conceptId="1639" size="50"  style="text"/>
+                    </td>
+                    <td>Alleged perpetrators</td>
+                    <td><obs id="alleged-perpetrator" conceptId="165229" answerLabels="Unknown,Known" answerConceptIds="1066,1065" style="radio" /></td>
+                    <td>
+                        <table id="tbl-specify-relationship">
+                            <tr>
+                                <td>Specify the relationship</td>
+                                <td><obs conceptId="164352"
+                                         answerLabels="Grandchild,partner or spouse,Grandparent,Parent,Child,Other family member,Sibling,None"
+                                         answerConceptIds="1529,5617,973,1527,1528,5620,972,1107"
+                                         id="specify-relationship"
+                                         style="radio"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+
+        <!--Location and observations of incidents -->
+        <fieldset class="adherence-screening">
+            <legend>
+                <strong>Where incident occurred</strong>
+            </legend>
+            <table class="simple-table" id="Checklist-tbl">
+                <tr>
+                    <td>County</td><td><obs conceptId="167131" size="30"  style="textarea"/></td>
+                    <td>Sub-county</td><td><obs conceptId="161564" size="30"  style="textarea"/></td>
+                    <td>Landmark</td><td><obs conceptId="159942" size="30"  style=""/></td>
+                </tr>
+                <tr>
+                    <td>Indicate what is observed on the chief complaint</td><td><obs conceptId="160945" size="50"  style="textarea"/></td>
+                    <td>Indicate what is reported by the chief complaint</td><td><obs conceptId="166846" size="50"  style="textarea"/></td>
+                    <td>Circumstances surrounding the incident(survivor account) remember to record penetration(how,where,what was used?Indication of struggle?)<br></br>
+                        <obs conceptId="160303" size="100"  style="textarea"/>
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+
+        <!--Violence detail-->
+        <fieldset class="adherence-screening">
+            <legend>
+                <strong>Nature of violence and action</strong>
+            </legend>
+            <table class="simple-table" id="Checklist-tbl2">
+                <tr>
+                    <td>Type of Sexual Violence<br/><br/>
+                        <obs conceptId="123160" answerLabel="Oral" answerConceptId="166060" style="checkbox"/> <br/>
+                        <obs conceptId="123160" answerLabel="Vaginal" answerConceptId="123385" style="checkbox"/><br/>
+                        <obs conceptId="123160" answerLabel="Anal" answerConceptId="148895" style="checkbox"/><br/>
+                        <obs conceptId="123160" answerLabel="Other (specify)" answerConceptId="5622" id="other-violence" style="checkbox"/>
+                    </td>
+                    <td>
+                        <table id="tbl-other-sex">
+                            <tr>
+                                <td>Specify other sexual violence:<br/><br/><obs conceptId="161011" size="50"  style="textarea"/></td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>Use of condoms</td>
+                    <td><obs required="true" conceptId="1357" answerLabels="Yes,No,Unknown" answerConceptIds="1065,1066,1067" style="radio"/></td>
+                    <td>Attended a health facility before this one?</td>
+                    <td><obs required="true" id="health-facility" conceptId="166484" answerLabels="No,Yes (Indicate name of facility)" answerConceptIds="1066,1065" style="radio"/></td>
+                    <td>
+                        <table id="tbl-facility-detail">
+                            <tr>
+                                <td>Name of the facility</td><td><obs conceptId="162724" rows="2" cols="80"  style="textarea"/></td>
+                                <td>Date and Time</td><td><obs conceptId="164093" size="50"  showTime="true"/></td>
+                                <td>Were you treated?</td><td><obs conceptId="165052" answerLabels="Yes,No" answerConceptIds="1065,1066" style="radio"/></td>
+                                <td>Were you given referral notes?</td><td><obs conceptId="165152" answerLabels="Yes,No" answerConceptIds="1065,1066" style="radio"/></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Incident already reported to police?</td>
+                    <td><obs id="reported-police" conceptId="165193" answerLabels="No,Yes (Indicate name of police station)" answerConceptIds="1066,1065" style="radio"/></td>
+                    <td>
+                      <table id="tbl-police-station-detail">
+                          <tr>
+                              <td>Police station name</td><td><obs conceptId="161550" rows="2" cols="80" style="textarea"/></td>
+                              <td>Date and time of report</td><td><obs conceptId="165144" size="50"  style="date"/></td>
+                          </tr>
+                      </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Significant medical and/or surgical history</td>
+                    <td><obs conceptId="160221" rows="2" cols="80"  style="textarea"/></td>
+                    <td>Indicate additional information provided by the client or observed</td>
+                    <td><obs conceptId="163677"  rows="2" cols="80" style="textarea"/></td>
+                </tr>
+            </table>
+        </fieldset>
+
+        <!-- Physical Examination-->
+        <fieldset id="Assesment-tab4">
+            <legend>
+                <strong>Physical Examination</strong>
+            </legend>
+            <table class="simple-table" id="adherence-1">
+                <tr>
+                    <td>
+                        <h3><strong>Physical Examination: [Indicates sites and nature of injuries bruises and marks outside the genitatalia]</strong></h3>
+                        <p><strong>Please use the body map below to indicate injuries, inflammations, marks on various body parts of the survivor</strong></p></td>
+                   <td>Comment</br> <obs conceptId="1391" size="100" rows="2" cols="80"  style="textarea"/>  </td>
+                </tr>
+            </table>
+        </fieldset>
+
+        <!--OB/GYN History-->
+        <includeIf velocityTest="$patient.gender == 'F'">
+        <fieldset id="Assesment-tab5">
+            <legend>
+                <strong>OB/GYN History</strong>
+            </legend>
+            <table class="simple-table" id="adherence-5">
+                <tr>
+                    <td>Parity</td>
+                    <td> <obs conceptId="1053" size="30"/></td>
+                    <td>Contraception type</td>
+                    <td><obs  conceptId="163400" answerLabels="Yes,No" answerConceptIds="1065,1066" style="radio" /></td>
+                 </tr>
+                <tr>
+                    <td>LMP</td>
+                    <td>
+                        <obs id="lmp-date" conceptId="1427AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    </td>
+                    <td>
+                        <recentObs conceptId="1427AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Known Pregnancy</td>
+                    <td><obs  conceptId="5272" answerLabels="Yes,No" answerConceptIds="1065,1066" style="radio" /></td>
+                    <td>Date of last consensual sexual intercourse</td>
+                    <td><obs  conceptId="160753" size="30"/></td>
+                </tr>
+            </table>
+        </fieldset>
+        </includeIf>
+
+        <!--General condition-->
+        <fieldset id="Assesment-tab6">
+            <legend><strong>Vitals Status</strong>
+            </legend>
+            <table class="simple-table" id="adherence-6">
+                <tr>
+                    <td>Blood pressure</td>
+                    <td>
+                        <obs conceptId="5085AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                        /
+                        <obs conceptId="5086AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                        mmHg
+                    </td>
+                </tr>
+                <tr>
+                    <td>Pulse Rate</td>
+                    <td>
+                        <obs conceptId="5087AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Respiratory Rate</td>
+                    <td>
+                        <obs conceptId="5242AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Temperature</td>
+                    <td>
+                        <obs conceptId="5088AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                        &#176;C
+                    </td>
+                </tr>
+                <tr>
+                    <td>Demeanor/Level of anxiety</td>
+                    <td><obs required="true" conceptId="162056" answerLabels="Calm,Not Calm" answerConceptIds="1065,1066" style="radio" /></td>
+                </tr>
+            </table>
+        </fieldset>
+        <!--Forensic Details-->
+        <fieldset id="Assesment-tab7">
+            <legend><strong>Forensic Details</strong>
+            </legend>
+            <table class="simple-table" id="adherence-7">
+                <tr>
+                    <td>Did survivor change clothes?</td>
+                    <td> <obs  required="true" conceptId="165171" answerLabels="Yes,No" answerConceptIds="1065,1066" style="radio" /></td>
+                    <td>State of clothes (stains,torn,color,where were the worn clothes taken)?</td>
+                    <td><obs required="true" conceptId="163104" rows="2" cols="80" style="textarea"/></td>
+                </tr>
+                <tr>
+                    <td>How were the clothes transported? <br></br>
+
+                        <obs  conceptId="161239" answerLabels="a) Plastic Bag,b) Non Plastic Bag,c) Other (Give details)"
+                                                 answerConceptIds="159310,161240,5622"
+                                                 id="clothes-transported"
+                                                 style="radio" />
+                    </td>
+                    <td>
+                        <table id="tbl-details-cloths-transport">
+                            <tr>
+                                <td>Give details</td>
+                                <td><obs required="true" conceptId="166363" rows="2" cols="100"  style="textarea"/></td>
+                            </tr>
+                        </table>
+                    </td>
+
+                    <td>Were the clothes handed to the police</td>
+                    <td> <obs required="true" conceptId="165180" answerLabels="Yes,No" answerConceptIds="1065,1066" style="radio" /></td>
+                </tr>
+                <tr>
+                    <td>Did the survivor go to toilet?</td>
+                    <td><obs required="true" conceptId="160258" answerLabel="Long call,Short call" answerConceptId="1065,1066" style="radio" /></td>
+                    <td>Did the survivor have a bath or clean themselves?</td>
+                    <td><obs required="true" id="survivor-bath"  conceptId="162997" answerLabels="No,Yes (Give details)" answerConceptIds="1066,1065" style="radio" /></td>
+                    <td>
+                        <table id="tbl-details-survivor-bath">
+                            <tr>
+                                <td>Details of survivor bath </td>
+                                <td><obs required="true" conceptId="163048" rows="2" cols="100"  style="textarea"/></td>
+                            </tr>
+                        </table>
+                    </td>
+                 </tr>
+                <tr>
+                    <td>Did the survivor leave any marks on the perpetrator?</td>
+                    <td><obs required="true" id="mark-on-perpetrator" conceptId="165241" answerLabels="No,Yes" answerConceptIds="1066,1065" style="radio" /></td>
+                    <td>
+                       <table id="tbl-detail-mark-on-perpetrator">
+                           <tr>
+                               <td>Details of marks</td>
+                               <td><obs required="true" conceptId="161031" rows="2" cols="100" style="textarea"/></td>
+                           </tr>
+                       </table>
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+        <!--Genital examination-->
+        <fieldset id="Assesment-tab8">
+            <legend><strong>Genital examination of the survivor:</strong>
+            </legend>
+            <p><strong>Describe in detail the physical status [Indicate in discharges,inflammation,bleeding]</strong></p>
+            <table class="simple-table" id="adherence-8">
+                <tr>
+                    <td>Physical injuries (mark in the body map)</td>
+                    <td><obs conceptId="165035" rows="2" cols="80" style="textarea"/></td>
+                </tr>
+                <tr>
+                    <td>Outer genitalia</td>
+                    <td><obs conceptId="160971" rows="2" cols="80"  style="textarea"/></td>
+                </tr>
+                <includeIf velocityTest="$patient.gender == 'F' ">
+                <tr>
+                    <td>Vagina</td>
+                    <td><obs conceptId="160969" rows="2" cols="80"  style="textarea"/></td>
+                    <td>Hymen</td>
+                    <td><obs conceptId="160981" rows="2" cols="80"  style="textarea"/></td>
+                </tr>
+                </includeIf>
+                <tr>
+                    <td>Anus</td>
+                    <td><obs  conceptId="160962" rows="2" cols="80"  style="textarea"/></td>
+                </tr>
+                <tr>
+                    <td>Other significant orifices</td>
+                    <td><obs conceptId="160943" rows="2" cols="80"  style="textarea"/></td>
+                </tr>
+            </table>
+        </fieldset>
+        <!--Immediate Management-->
+        <fieldset id="Assesment-tab9">
+            <legend>
+                <strong>Immediate Management:</strong>
+            </legend>
+            <table class="simple-table" id="adherence-9">
+                <tr>
+                    <td>PEP 1st dose</td>
+                    <td><obs required="true" conceptId="165060" answerLabels="Yes (No of tablets),No" answerConceptIds="1065,1066" style="radio" />
+                    </td>
+                </tr>
+                <includeIf velocityTest="$patient.gender == 'F' ">
+                <tr>
+                    <td>ECP given</td>
+                    <td><obs required="true" conceptId="374" answerLabels="Yes,No" answerConceptIds="1065,1066" style="radio" />
+                    </td>
+                </tr>
+                </includeIf>
+                <tr>
+                    <td>Stitching/surgical toilet done</td>
+                    <td><obs id="stitching-done"  conceptId="1670" answerLabels="No,Yes(comment)" answerConceptIds="1066,1065" style="radio" /></td>
+                    <td>
+                       <table id="tbl-stitching-done-comment">
+                           <tr>
+                               </td><td>Comment on Stitching/surgical toilet done</td>
+                               <td><obs required="true" conceptId="165440" rows="2" cols="80"  style="textarea"/></td>
+                           </tr>
+                       </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td>STI treatment given</td>
+                    <td><obs required="true" id="sti-trx-done" conceptId="165200" answerLabels="No,Yes(Comment)" answerConceptIds="1066,1065" style="radio" /></td>
+                    <td>
+                        <table id="tbl-sti-trx-done-comment">
+                            <tr>
+                                <td>Comment on STI treatment given</td>
+                                </td><obs required="true" conceptId="167214" rows="2" cols="80"  style="textarea"/></td>
+                             </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Any other treatment/Medication given/management?</td>
+                    <td><obs conceptId="160632" rows="2" cols="80" style="textarea"/></td>
+                </tr>
+            </table>
+        </fieldset>
+        <!--Referral Details-->
+        <fieldset id="Assesment-tab10">
+            <legend>
+                <strong>Referrals Details</strong>
+            </legend>
+            <table class="simple-table" id="adherence-10">
+                <tr>
+                    <td>Referrals  to </td>
+                    <td>
+                        <obs  conceptId="1272" answerLabel="Police station" answerConceptId="165192" style="checkbox" /><br/>
+                        <obs  conceptId="1272" answerLabel="HIV test" answerConceptId="1370" style="checkbox" /><br/>
+                        <obs  conceptId="1272" answerLabel="Laboratory" answerConceptId="164422" style="checkbox" /><br/>
+                        <obs  conceptId="1272" answerLabel="Legal" answerConceptId="135914" style="checkbox" /><br/>
+                        <obs  conceptId="1272" answerLabel="Trauma counselling" answerConceptId="5460" style="checkbox" /><br/>
+                        <obs  conceptId="1272" answerLabel="Safe Shelter" answerConceptId="167254" style="checkbox" /><br/>
+                        <obs  conceptId="1272" answerLabel="OPD/CCC/HIV clinic" answerConceptId="160542" style="checkbox" /><br/>
+                        <obs id="other-referral" conceptId="1272" answerLabel="Other(specify)" answerConceptId="5622" style="checkbox" /><br/>
+                    </td>
+                    <td>
+                        <table id="tbl-other-referral-location">
+                            <tr>
+                                <td>Other referrals</td>
+                                <td><obs required="true" conceptId="165138" rows="2" cols="80" style="textarea"/></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+        <!--Laboratory sample Details-->
+        <fieldset id="Assesment-tab11">
+            <legend>
+                <strong>Laboratory Samples:</strong>
+            </legend>
+            <table class="simple-table" id="adherence-11">
+                <tr>
+                    <th>Sample Type</th>
+                    <th>Test</th>
+                    <th>Please tick as is applicable</th>
+                    <th>Comments</th>
+                </tr>
+                <tr>
+                    <td>
+                        Outer Genital swab<br></br>
+                        Anal swab<br></br>
+                        Skin swab<br></br>
+                        Oral swab<br></br>
+                        Specify
+                    </td>
+                    <td>
+                        Web Prep Microscopy<br></br>
+                        DNA<br></br>
+                        Culture and sensitivity<br></br>
+                    </td>
+                    <td>
+                        <obs  conceptId="164217" answerLabels="National government Lab,Health Facility Lab" answerConceptIds="160480,1537" style="radio" />&nbsp;
+                    </td>
+                    <td>
+                        <obs conceptId="161011" size="50"  style="textarea"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        High vaginal swab
+                    </td>
+                    <td>
+                        Web Prep Microscopy
+                    </td>
+                    <td>
+                        <obs  conceptId="164217" answerLabels="National government Lab,Health Facility Lab" answerConceptIds="160480,1537" style="radio" />&nbsp;
+                    </td>
+                    <td>
+                        <obs conceptId="161011" size="50"  style="textarea"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Urine
+                    </td>
+                    <td>
+                        Pregnancy Test<br></br>
+                        Microscopy<br></br>
+                        Drugs and alcohol<br></br>
+                        Other
+                    </td>
+                    <td>
+                        <obs  conceptId="164217" answerLabels="National government Lab,Health Facility Lab" answerConceptIds="160480,1537" style="radio" />&nbsp;
+                    </td>
+                    <td>
+                        <obs conceptId="161011" size="50"  style="textarea"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Blood
+                    </td>
+                    <td>
+                        Haemoglobin<br></br>
+                        HIV test<br></br>
+                        SGPT/GOT<br></br>
+                        VDRL<br></br>
+                        DNA
+                    </td>
+                    <td>
+                        <obs  conceptId="164217" answerLabels="National government Lab,Health Facility Lab" answerConceptIds="160480,1537" style="radio" />&nbsp;
+                    </td>
+                    <td>
+                        <obs conceptId="161011" size="50"  style="textarea"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Public Hair
+                    </td>
+                    <td>
+                       DNA
+                    </td>
+                    <td>
+                        <obs  conceptId="164217" answerLabels="National government Lab,Health Facility Lab" answerConceptIds="160480,1537" style="radio" />&nbsp;
+
+                    </td>
+                    <td>
+                        <obs conceptId="161011" size="50"  style="textarea"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                       Nail clippings
+                    </td>
+                    <td>
+                        DNA
+                    </td>
+                    <td>
+                        <obs  conceptId="164217" answerLabels="National government Lab,Health Facility Lab" answerConceptIds="160480,1537" style="radio" />&nbsp;
+
+                    </td>
+                    <td>
+                        <obs conceptId="161011" size="50"  style="textarea"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Foreign bodies
+                    </td>
+                    <td>
+                        DNA
+                    </td>
+                    <td>
+                        <obs  conceptId="164217" answerLabels="National government Lab,Health Facility Lab" answerConceptIds="160480,1537" style="radio" />&nbsp;
+
+                    </td>
+                    <td>
+                        <obs conceptId="161011" size="50"  style="textarea"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Other (specify)
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                        <obs  conceptId="164217" answerLabels="National government Lab,Health Facility Lab" answerConceptIds="160480,1537" style="radio" />&nbsp;
+                    </td>
+                    <td>
+                        <obs conceptId="161011" size="50" style="textarea"/>
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+        <!--CHAIN OF CUSTODY-->
+        <fieldset id="Assesment-tab12">
+            <legend>
+                <strong>Chain of custody:</strong>
+            </legend>
+            <table class="simple-table" id="adherence-12">
+                <tr>
+                    <td>These/All/Some of the samples packed and issued:(please specify)</td>
+                    <td><obs conceptId="165435" rows="3" cols="100" style="textarea"/></td>
+                </tr>
+                <tr>
+                    <td>By:&nbsp;Name of Examining officer(Doctor/Nurse/Clinical officer)</td>
+                    <td> <obs required="true" conceptId="165225" /></td>
+                    <td>To:&nbsp;Police Officers Name:</td>
+                    <td><obs required="true" conceptId="165142" /></td>
+                </tr>
+            </table>
+        </fieldset>
+    </div>
+    <div class="ke-form-footer">
+        <submit/>
+    </div>
+</htmlform>
