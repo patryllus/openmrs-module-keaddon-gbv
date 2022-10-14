@@ -332,8 +332,9 @@
                 <tr>
                     <td>
                         <h3><strong>Physical Examination: [Indicates sites and nature of injuries bruises and marks outside the genitatalia]</strong></h3>
-                        <p><strong>Please use the body map below to indicate injuries, inflammations, marks on various body parts of the survivor</strong></p></td>
-                   <td>Comment</br> <obs conceptId="1391" size="100" rows="2" cols="80"  style="textarea"/>  </td>
+                        <p><strong>Please use the body map below to indicate injuries, inflammations, marks on various body parts of the survivor</strong></p>
+                    </td>
+                   <td>Comment<br/> <obs conceptId="1391" size="100" rows="2" cols="80"  style="textarea"/></td>
                 </tr>
             </table>
         </fieldset>
@@ -442,7 +443,7 @@
                 </tr>
                 <tr>
                     <td>Did the survivor go to toilet?</td>
-                    <td><obs required="true" conceptId="160258" answerLabel="Long call,Short call" answerConceptId="1065,1066" style="radio" /></td>
+                    <td><obs required="true" conceptId="160258" answerLabels="Long call,Short call" answerConceptIds="1065,1066" style="radio" /></td>
                     <td>Did the survivor have a bath or clean themselves?</td>
                     <td><obs required="true" id="survivor-bath"  conceptId="162997" answerLabels="No,Yes (Give details)" answerConceptIds="1066,1065" style="radio" /></td>
                     <td>
@@ -524,7 +525,7 @@
                     <td>
                        <table id="tbl-stitching-done-comment">
                            <tr>
-                               </td><td>Comment on Stitching/surgical toilet done</td>
+                               <td>Comment on Stitching/surgical toilet done</td>
                                <td><obs required="true" conceptId="165440" rows="2" cols="80"  style="textarea"/></td>
                            </tr>
                        </table>
@@ -537,7 +538,7 @@
                         <table id="tbl-sti-trx-done-comment">
                             <tr>
                                 <td>Comment on STI treatment given</td>
-                                </td><obs required="true" conceptId="167214" rows="2" cols="80"  style="textarea"/></td>
+                                <td><obs required="true" conceptId="167214" rows="2" cols="80"  style="textarea"/></td>
                              </tr>
                         </table>
                     </td>
@@ -609,6 +610,7 @@
                         <obs conceptId="161011" size="50"  style="textarea"/>
                     </td>
                 </tr>
+                <includeIf velocityTest="$patient.gender == 'F'">
                 <tr>
                     <td>
                         High vaginal swab
@@ -623,6 +625,7 @@
                         <obs conceptId="161011" size="50"  style="textarea"/>
                     </td>
                 </tr>
+                </includeIf>
                 <tr>
                     <td>
                         Urine
