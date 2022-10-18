@@ -285,10 +285,19 @@
             <table class="simple-table" id="adherence-5">
 
                 <tr>
-                    <td><strong>Recommendation following assessment</strong></td><td> <obs conceptId="164359" rows="3" cols="80" style="textarea" /></td>
-                    <td><strong>Referral point</strong></td><td><obs conceptId="166485" rows="3" cols="80"  style="textarea" /></td>
+                    <td>
+                        <table>
+                             <tr>
+                                 <th><strong>Recommendation following assessment</strong></th>
+                                 <th><strong>Referral point</strong></th>
+                             </tr>
+                             <tr>
+                                 <td><obs conceptId="164359" rows="3" cols="80" style="textarea" /></td>
+                                 <td><obs conceptId="166485" rows="3" cols="80"  style="textarea" /></td>
+                             </tr>
+                        </table>
+                    </td>
                 </tr>
-
                 <tr>
                     <td><b>Referral uptake since last visit</b> <p><i>e.g. other medical services, children's department, police, legal aid,shelter e.t.c</i></p>
                     </td><td> <obs conceptId="165000" rows="3" cols="80" style="textarea" /></td>
@@ -297,8 +306,16 @@
                     <td><b>By: &nbsp; Name of Examining officer(Doctor/Nurse/Clinical officer)</b></td>
                         <td><obs conceptId="165225" rows="2" cols="80" style="textarea" />
                     </td>
+                    <td><b>Name of Examining officer signature</b></td>
+                    <td><obs conceptId="165143" rows="2" cols="50" style="textarea" />
+                    </td>
+                </tr>
+                <tr>
                     <td><b>To: &nbsp; Police Officers Name:</b></td>
-                        <td><obs conceptId="165142" rows="2"  cols="80" style="textarea"  />
+                        <td><obs conceptId="165142" rows="2"  cols="50" style="textarea"  />
+                    </td>
+                    <td><b>To: &nbsp; Police Officers signature:</b></td>
+                    <td><obs conceptId="166847" rows="2"  cols="50" style="textarea"  />
                     </td>
                 </tr>
             </table>

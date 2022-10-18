@@ -1,0 +1,286 @@
+<!--
+  ~ The contents of this file are subject to the OpenMRS Public License
+  ~ Version 1.0 (the "License"); you may not use this file except in
+  ~ compliance with the License. You may obtain a copy of the License at
+  ~ http://license.openmrs.org
+  ~
+  ~ Software distributed under the License is distributed on an "AS IS"
+  ~ basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+  ~ License for the specific language governing rights and limitations
+  ~ under the License.
+  ~
+  ~ Copyright (C) OpenMRS, LLC.  All Rights Reserved.
+  -->
+<htmlform>
+    <script type="text/javascript" src="../moduleResources/kenyaemr/scripts/moment.js"></script>
+    <script type="text/javascript">
+       $(document).ready(function () {
+            //Defaults
+            jq("#row-pep-completed").hide();
+            jq("#row-hiv-test").hide();
+            jq("#row-hbag-test").hide();
+            jq("#row-lfts").hide();
+            jq("#row-creatinine").hide();
+            jq("#row-hiv-serology").hide();
+            jq("#row-tca").hide();
+            jq("#tbl-pep-not-completed").hide();
+            jq("#tbl-hiv-test-result").hide();
+            jq("#tbl-hbag-test-result").hide();
+
+
+
+            //Referred by selected
+            jq("#pep-completed :input[type=radio]").change(onPePCompletedSelected);
+            jq("#hiv-test-done :input[type=radio]").change(onHIVTestDoneSelected);
+            jq("#hbag-test :input[type=radio]").change(onhbagTestSelected);
+            jq("#visit-number select").change(onSelectVisit);
+          });
+
+          var onhbagTestSelected = function () {
+            var val = jq(this).val();
+            if (val == 1065 ){
+                jq("#tbl-hbag-test-result").show();
+            }else {
+                jq("#tbl-hbag-test-result").hide();
+                clearHiddenSections(jq("#tbl-hbag-test-result"));
+            }
+        };
+
+         var onHIVTestDoneSelected = function () {
+            var val = jq(this).val();
+            if (val == 1065 ){
+                jq("#tbl-hiv-test-result").show();
+            }else {
+                jq("#tbl-hiv-test-result").hide();
+                clearHiddenSections(jq("#tbl-hiv-test-result"));
+            }
+        };
+
+         var onSelectVisit = function () {
+            var val = jq(this).val();
+            if (val == 1722 ){
+                jq("#row-lfts").show();
+                jq("#row-creatinine").show();
+                jq("#row-tca").show();
+           }
+           else if (val == 165307){
+                jq("#row-pep-completed").show();
+                jq("#row-hiv-test").show();
+                jq("#row-tca").show();
+            }
+          else if (val == 1721){
+                jq("#row-hbag-test").show();
+                jq("#row-tca").show();
+            }
+          else if (val == 1723){
+                jq("#row-hiv-serology").show();
+            }
+         else {
+                jq("#row-pep-completed").hide();
+                clearHiddenSections(jq("#row-pep-completed"));
+
+                jq("#row-hiv-test").hide();
+                clearHiddenSections(jq("#row-hiv-test"));
+
+                jq("#row-hbag-test").hide();
+                clearHiddenSections(jq("#row-hbag-test"));
+
+                 jq("#row-lfts").hide();
+                clearHiddenSections(jq("#row-lfts"));
+
+                 jq("#row-creatinine").hide();
+                clearHiddenSections(jq("#row-creatinine"));
+
+                 jq("#row-hiv-serology").hide();
+                clearHiddenSections(jq("#row-hiv-serology"));
+
+                 jq("#row-tca").hide();
+                clearHiddenSections(jq("#row-tca"));
+            }
+        };
+          var onPePCompletedSelected = function () {
+            var val = jq(this).val();
+            if (val == 1066 ){
+                jq("#tbl-pep-not-completed").show();
+            }else {
+                jq("#tbl-pep-not-completed").hide();
+                clearHiddenSections(jq("#tbl-pep-not-completed"));
+            }
+        };
+
+
+        //Before Submit
+        beforeSubmit.push(function() {
+            var referredBy = getValue('referral-by.value');
+            var clientType = getValue('client-type.value');
+            var otherReferred = jq('#other-referral input[type=text]').val();
+            var infoSource = getValue('information-source.value');
+            var otherInfoSource = jq('#other-information-source input[type=text]').val();
+            var county = getField('county.value').val();
+            if(referredBy == ""){
+                getField('referral-by.error').html('Please specify referral source').show();
+                return false;
+            }else {
+                getField('referral-by.error').html('Please specify referral source').hide();
+            }
+
+
+            return true;
+        });
+
+        //Clear hidden sections
+        clearHiddenSections = function(parentObj) {
+            parentObj.find('input[type=radio]').each(function() {
+                this.checked = false;
+            });
+            parentObj.find('input[type=checkbox]').each(function() {
+                this.checked = false;
+            });
+            parentObj.find('input[type=text]').each(function() {
+                jq(this).val("");
+            });
+            parentObj.find('select').each(function() {
+                this.selectedIndex =0;
+            });
+        }
+    </script>
+    <style>
+        .simple-table {
+        border: solid 1px #DDEEEE;
+        border-collapse: collapse;
+        border-spacing: 0;
+        font: normal 13px Arial, sans-serif;
+        }
+
+        .simple-table thead th {
+        background-color: #DDEFEF;
+        border: solid 1px #DDEEEE;
+        color: #336B6B;
+        padding: 10px;
+        text-align: left;
+        text-shadow: 1px 1px 1px #fff;
+        }
+
+        .simple-table td {
+        border: solid 1px #DDEEEE;
+        color: #333;
+        padding: 10px;
+        text-shadow: 1px 1px 1px #fff;
+        }
+    </style>
+
+    <div class="ke-form-header">
+        <table width="100%">
+            <tr>
+                <td>Encounter Date <encounterDate id="encounter-date" showTime="true" /></td>
+                <td>Provider <encounterProvider default="currentUser" role="Provider"/></td>
+                <td>Location <encounterLocation default="GlobalProperty:kenyaemr.defaultLocation" type="autocomplete" /></td>
+                <td>Visit number &nbsp; <obs conceptId="1724"
+                     answerLabels="2nd-Visit(2 weeks),3rd-Visit(4 weeks),4th-Visit(6 weeks),5th-Visit(3 months)"
+                     answerConceptIds="1722,165307,1721,1723"
+                     style="dropdown"
+                     id="visit-number"
+                     required="true"/></td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="ke-form-content">
+        <!--Laboratory Investigation -->
+        <fieldset id="Assesment-tab7">
+            <legend>
+                <strong>Visit Details</strong>
+            </legend>
+            <table class="simple-table" id="adherence-7">
+                <tr id="row-pep-completed">
+                    <td><b>PEP completed?</b></td>
+                    <td>
+                        <obs required="true" id="pep-completed" conceptId="165171" answerLabels="Yes,No" answerConceptIds="1065,1066" style="radio" />
+                    </td>
+                    <td>
+                        <table class="simple-table" id="tbl-pep-not-completed">
+                            <tr id="row-pep-not-completed">
+                                <td><b>Why the PEP dose was not completed?</b></td>
+                                <td>
+                                    <obs required="true" id="pep-not-completed" conceptId="161011" rows="3" cols="60" style="textarea"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr id="row-hiv-test">
+                    <td><b>HIV Test done?</b></td>
+                    <td><obs required="true" id="hiv-test-done" conceptId="164848" answerLabels="Yes,No" answerConceptIds="1065,1066" style="radio" /></td>
+
+                    <td>
+                        <table class="simple-table" id="tbl-hiv-test-result">
+                            <tr>
+                                <td><b>HIV test result</b></td>
+                                <td><obs required="true" conceptId="159427" answerLabels="Negative,Positive" answerConceptIds="664,703" style="radio" /></td>
+
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr id="row-hbag-test">
+                    <td><b>HBsAG Test done?</b></td>
+                    <td><obs id="hbag-test"  conceptId="161472" answerLabels="Yes,No" answerConceptIds="1065,1066" style="radio" /></td>
+                    <td>
+                        <table class="simple-table" id="tbl-hbag-test-result">
+                            <tr>
+                                <td><b>HBsAG Test result?</b></td>
+                                <td><obs  conceptId="165384" answerLabels="Negative,Positive" answerConceptIds="664,703" style="radio" /></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr id="row-lfts">
+                    <td><b>LFTs: ALT</b></td>
+                    <td><obs conceptId="654" size="30" /></td>
+                </tr>
+                <tr id="row-creatinine">
+                    <td><b>RFTs: Creatinine</b></td>
+                    <td><obs conceptId="790" size="30" /></td>
+                </tr>
+                <tr id="row-hiv-serology">
+                    <td>
+                        <table class="simple-table">
+                            <tr>
+                                <th></th>
+                                <th>HIV serology result</th>
+                            </tr>
+                            <tr>
+                                <td><b>Three months Post Exposure prophylaxis</b></td>
+                                <td><obs  conceptId="161472" answerLabels="Non Reactive,Reactive" answerConceptIds="664,703" style="radio" /></td>
+
+                            </tr>
+                            <tr>
+                                <td colspan="2"><p align="center"><strong>NB: Discharge from follow-up at 3 months</strong></p></td>
+                            </tr>
+
+
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+        <!-- Patient Assessment -->
+        <fieldset>
+            <legend><strong>Assessment Details</strong></legend>
+            <table class="simple-table" id="Checklist-tbl">
+                <tr id="row-patient-assessment">
+                    <td><strong>Patient Assessment</strong></td>
+                    <td><obs required="true" conceptId="160632"  rows="4" cols="100" style="textarea" /></td>
+                </tr>
+                <tr id="row-tca">
+                    <td><b>TCA Date</b></td>
+                    <td><obs conceptId="160753" required="true" size="50" allowFutureDates="true" /></td>
+                </tr>
+            </table>
+        </fieldset>
+    </div>
+    <div class="ke-form-footer">
+        <submit />
+    </div>
+
+</htmlform>

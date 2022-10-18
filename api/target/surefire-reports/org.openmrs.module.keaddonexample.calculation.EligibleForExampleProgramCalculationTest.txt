@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: org.openmrs.module.keaddonexample.calculation.EligibleForExampleProgramCalculationTest
--------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 67.491 sec

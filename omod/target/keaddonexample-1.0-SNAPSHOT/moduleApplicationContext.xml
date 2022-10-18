@@ -37,6 +37,35 @@
                 </property>-
 	</bean>-->
 
+	<!-- PEPFOLLOWUPENCOUNTER  app -->
+
+	<bean id="keaddonexample.form.pepffollowupencounterform" class="org.openmrs.module.kenyacore.form.FormDescriptor">
+		<property name="targetUuid" value="839f3bb3-0b93-4afa-a2fc-739fd7012d18"/>
+		<property name="apps">
+			<set>
+				<ref bean="keaddonexample.app.example"/>
+				<ref bean="kenyaemr.app.chart"/>
+				<!--<ref bean="kenyaemr.app.clinician" />-->
+			</set>
+		</property>
+		<property name="icon" value="keaddonexample:forms/example.png"/>
+		<property name="htmlform" value="keaddonexample:pepffollowupencounterform.html"/>
+	</bean>
+	<!-- PEPFOROCCUPATIONALEXPOSUREform app -->
+
+	<bean id="keaddonexample.form.pepforoccupationalexposurepatientform" class="org.openmrs.module.kenyacore.form.FormDescriptor">
+		<property name="targetUuid" value="11a880ec-cbb6-40c8-811d-2c9e057c534a"/>
+		<property name="apps">
+			<set>
+				<ref bean="keaddonexample.app.example"/>
+				<ref bean="kenyaemr.app.chart"/>
+				<!--<ref bean="kenyaemr.app.clinician" />-->
+			</set>
+		</property>
+		<property name="icon" value="keaddonexample:forms/example.png"/>
+		<property name="htmlform" value="keaddonexample:pepforoccupationalexposurepatientform.html"/>
+	</bean>
+
 	<!-- GBVPEPFORMFORMANAGEMENTOFSURVIVOR app -->
 
 	<bean id="keaddonexample.form.pepformformanagementofsurvivors"
@@ -194,6 +223,8 @@
 				<ref bean="keaddonexample.form.gbvtraumacounsellingform"/>
 				<ref bean="keaddonexample.form.gbvpostrapecareform"/>
 				<ref bean="keaddonexample.form.gbvpsychologicalassessmentform"/>
+				<ref bean="keaddonexample.form.pepforoccupationalexposurepatientform"/>
+				<ref bean="keaddonexample.form.pepffollowupencounterform"/>
 			</set>
 		</property>
 

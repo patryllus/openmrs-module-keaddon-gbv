@@ -47,6 +47,11 @@ public class ExampleMetadata extends AbstractMetadataBundle {
 		public  static final String GBVPOSTRAPECAREFORM ="e571c807-8fcc-4bc3-bc64-4ed372b348e4";
 		//GBVPSYCHOLOGICALASSESSMENTFORM ENCOUNTER
 		public  static final String GBVPSYCHOLOGICALASSESSMENTFORM ="b5ab0a6b-9425-44da-b0d9-242f609f1605";
+		//PEPFOROCCUPATINALEXPOSURE ENCOUNTER
+		public static final String GBVPEPFOROCCUPATIONALEXPOSUREFORM ="49aa596e-bf4a-4e99-ad25-3ba3c587b592";
+
+		//PEPFOLLOWUPMANAGEMENT ENCOUNTER
+		public static final String PEPFOLLOWUPENCOUNTERFORM = "dcbf096f-a218-45b4-8d0d-2782a51d94f5";
 
 	}
 
@@ -73,6 +78,10 @@ public class ExampleMetadata extends AbstractMetadataBundle {
 		public  static final String GBVPOSTRAPECAREFORM ="c46aa4fd-8a5a-4675-90a7-a6f2119f61d8";
 		//GBVPSYCHOLOGICALASSESSMENTFORM
 		public  static final String GBVPSYCHOLOGICALASSESSMENTFORM ="9d21275a-7657-433a-b305-a736423cc496";
+		//GBVPEPFOROCCUPATINALEXPOSURE FORM
+		public  static final String GBVPEPFOROCCUPATIONALEXPOSUREFORM ="11a880ec-cbb6-40c8-811d-2c9e057c534a";
+		//PEPFOLLOWUPMANAGEMENT FORM
+		public static final String PEPFOLLOWUPENCOUNTERFORM = "839f3bb3-0b93-4afa-a2fc-739fd7012d18";
 
 
 	}
@@ -82,6 +91,7 @@ public class ExampleMetadata extends AbstractMetadataBundle {
 	 */
 	@Override
 	public void install() {
+
 
 		//GBVPHYSICALEMOTIONALFORM
 		install(encounterType("GBVPHYSICALEMOTIONALFORM Encounter", "GBVPHYSICALEMOTIONALFORM Encounter", _EncounterType.GBVPHYSICALEMOTIONALFORM));
@@ -122,6 +132,15 @@ public class ExampleMetadata extends AbstractMetadataBundle {
 		//GBVPSYCHOLOGICALASSESSMENTFORM
 		install(encounterType("GBV Psychological Assessment", "GBVPSYCHOLOGICALASSESSMENTFORM Encounter", _EncounterType.GBVPSYCHOLOGICALASSESSMENTFORM));
 		install(form("SGBV PSYCHOLOGICAL ASSESSMENT (PART B MOH-363 )", null, _EncounterType.GBVPSYCHOLOGICALASSESSMENTFORM, "1", _Form.GBVPSYCHOLOGICALASSESSMENTFORM));
+
+		//PEPFOROCCUPATIONALEXPOSURE
+		install(encounterType("PEP OCCUPATIONAL EXPOSURE Encounter", "GBVPEPFOROCCUPATIONALEXPOSUREFORM Encounter", _EncounterType.GBVPEPFOROCCUPATIONALEXPOSUREFORM));
+		install(form("PEP FOR OCCUPPATIONAL EXPOSURE FORM", null, _EncounterType.GBVPEPFOROCCUPATIONALEXPOSUREFORM, "1", _Form.GBVPEPFOROCCUPATIONALEXPOSUREFORM));
+
+		//PEPFOLLOWUP
+		install(encounterType("PEP FOLLOW UP Encounter", "PEPFOLLOWUPENCOUNTERFORM Encounter", _EncounterType.PEPFOLLOWUPENCOUNTERFORM));
+		install(form("PEP FOLLOWUP ENCOUNTER", null, _EncounterType.PEPFOLLOWUPENCOUNTERFORM, "1", _Form.PEPFOLLOWUPENCOUNTERFORM));
+
 
 	}
 }

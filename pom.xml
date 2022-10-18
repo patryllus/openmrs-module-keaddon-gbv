@@ -6,11 +6,11 @@
 	<artifactId>keaddonexample</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	<name>CIHEB Module</name>
-	<description>CIHEB Kenya Add-on  Module</description>
+	<name>GBV</name>
+	<description>GBV Module</description>
 
 	<organization>
-		<name>CIHEB KENYA</name>
+		<name>GBVRC</name>
 
 	</organization>
 

@@ -10,8 +10,8 @@
 
 	<artifactId>keaddonexample-api</artifactId>
 	<packaging>jar</packaging>
-	<name>CIHEB Kenya</name>
-	<description>CIHEB Kenya Module</description>
+	<name>GBV</name>
+	<description>GBV Module</description>
 
 	<dependencies>
 
