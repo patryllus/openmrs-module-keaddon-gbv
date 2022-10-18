@@ -14,128 +14,102 @@
 <htmlform>
     <script type="text/javascript" src="../moduleResources/kenyaemr/scripts/moment.js"></script>
     <script type="text/javascript">
-        var LATEST_SESSION = "<lookup expression="fn.latestObs(1639).valueNumeric"/>"
-        var LATEST_SESSION_START_DATE = "<lookup expression="fn.earliestObs(1639).getObsDatetime()"/>"
-        jQuery(function($) {
-        //Defaults
-        var adherenceResponses1=jq('#adherence-1');
-        var adherenceResponses2=jq('#adherence-2');
-        jq('#adherence-2').hide();
-        clearHiddenSections([adherenceResponses1, adherenceResponses2]);
-        jq("#adherence-1").change(adherenceAssessment);
-        //Process flow
-        jq("#has-vl :input[type=radio]").change(hasViralLoadResult);
-        jq("#result-status :input[type=radio]").change(hasHighViralLoadResult);
-        jq("#session-number :input[type=text]").change(sessionNumberChange);
-        hasViralLoadResult();
-        hasHighViralLoadResult();
-        if(LATEST_SESSION == "") {
-        jq('#review').hide();
-        jq('#viral-load-tab').show();
-        jq('#adherence-barriers-tab').show();
-        }else{
-        jq('#review').show();
-        jq('#viral-load-tab').show();
-        jq('#adherence-barriers-tab').hide();
-        }
-        console.log("LATEST SESSION==>"+LATEST_SESSION);
-        console.log("LATEST SESSION START DATE==>"+LATEST_SESSION_START_DATE);
-        if(LATEST_SESSION &gt; 0) {
-        var formattedSessionStartDate =moment(moment(LATEST_SESSION_START_DATE,'DD/MMM/YYYY').toDate()).format("DD-MMM-YYYY");
-        getField('session-startdate.value').val(formattedSessionStartDate);
-        }else{
-        getField('session-startdate.value').val("");
-        }
+      $(document).ready(function () {
+            //Defaults
+            jq("#tbl-other-exposure-type").hide();
+            jq("#type-assault").hide();
+
+
+
+            //Referred by selected
+            jq("#other-specify :input[type=checkbox]").change(otherTypeOfExposureSelected);
+            jq("#sex-assault-type :input[type=checkbox]").change(sexualTypeOfExposureSelected);
+            jq("#hiv-test-result :input[type=radio]").change(unknownHIVTestSelected);
+            jq("#visit-number select").change(onSelectInitialVisit);
+          });
+
+
+         var onSelectInitialVisit = function () {
+            var val = jq(this).val();
+            if (val == 162080 ){
+                jq("#row-hiv-test").show();
+                jq("#row-exposure-type").show();
+                jq("#tbl-prc-number").show();
+            }else {
+                jq("#row-hiv-test").hide();
+                clearHiddenSections(jq("#row-hiv-test"));
+
+                jq("#row-exposure-type").hide();
+                clearHiddenSections(jq("#row-exposure-type"));
+
+                jq("#tbl-prc-number").hide();
+                clearHiddenSections(jq("#tbl-prc-number"));
+            }
+        };
+
+
+         var unknownHIVTestSelected = function () {
+            var val = jq(this).val();
+            if (val == 1067 ){
+                jq("#tbl-hiv-test-result").show();
+            }else {
+                jq("#tbl-hiv-test-result").hide();
+                clearHiddenSections(jq("#tbl-hiv-test-result"));
+            }
+        };
+        var otherTypeOfExposureSelected = function () {
+            var val = jq(this).val();
+            if (val == 5622 ){
+                jq("#tbl-other-exposure-type").show();
+            }else {
+                jq("#tbl-other-exposure-type").hide();
+                clearHiddenSections(jq("#tbl-other-exposure-type"));
+            }
+        };
+          var sexualTypeOfExposureSelected = function () {
+            var val = jq(this).val();
+            if (val == 167085 ){
+                jq("#type-assault").show();
+            }else {
+                jq("#type-assault").hide();
+                clearHiddenSections(jq("#type-assault"));
+            }
+        };
+
+
+        //Before Submit
         beforeSubmit.push(function() {
+            var referredBy = getValue('referral-by.value');
+            var clientType = getValue('client-type.value');
+            var otherReferred = jq('#other-referral input[type=text]').val();
+            var infoSource = getValue('information-source.value');
+            var otherInfoSource = jq('#other-information-source input[type=text]').val();
+            var county = getField('county.value').val();
+            if(referredBy == ""){
+                getField('referral-by.error').html('Please specify referral source').show();
+                return false;
+            }else {
+                getField('referral-by.error').html('Please specify referral source').hide();
+            }
+
+
+            return true;
         });
-        });
-        //Morisky assessment
-        var adherenceAssessment  = function () {
-        var val = jq(this).val();
-        const YES_CONCEPT_ID = 1065;
-        const NO_CONCEPT_ID = 1066;
-        var assessmentRadios = jq('#adherence-1').find('input[type=radio]');
-        var assessmentYesResponses = [];
-        var assessmentNoResponses = [];
-        //Fetch responses for the assessment questions
-        jq.each(assessmentRadios, function(){
-        //Push any responses to the respective assessmentYesResponses and assessmentNoResponses array
-        if (this.value == YES_CONCEPT_ID &amp;&amp; this.checked == true) {
-        assessmentYesResponses.push(this);
-        }
-        if (this.value == NO_CONCEPT_ID &amp;&amp; this.checked == true) {
-        assessmentNoResponses.push(this);
-        }
-        });
-        //If no responses have been recorded then prompt since this assessment is mandatory
-        if (assessmentYesResponses.length == 0 &amp;&amp; assessmentNoResponses.length == 0 ) {
-        //Prompt to complete assessment
-        }else{
-        if(assessmentYesResponses.length &gt; 0) {
-        jq('#adherence-2').show();
-        }
-        if(assessmentYesResponses.length == 0) {
-        jq("#arv-adherence input[value=159405]").prop("checked", true);
-        jq('#adherence-2').hide();
-        }
-        if(assessmentYesResponses.length == 1 || assessmentYesResponses.length == 2 ) {
-        jq("#arv-adherence input[value=163794]").prop("checked", true);
-        jq('#adherence-2').show();
-        }
-        if(assessmentYesResponses.length == 3 || assessmentYesResponses.length == 4 ) {
-        jq("#arv-adherence input[value=159407]").prop("checked", true);
-        jq('#adherence-2').show();
-        }
-        }
-        }
-        function sessionNumberChange(){
-        var val = getValue('session-number.value');
-        if(val == 1) {
-        getField('session-startdate.value').val("");
-        jq('#review').hide();
-        jq('#viral-load-tab').show();
-        jq('#adherence-barriers-tab').show();
-        }else{
-        jq('#review').show();
-        jq('#viral-load-tab').show();
-        jq('#adherence-barriers-tab').hide();
-        }
-        }
-        function hasViralLoadResult(){
-        var val = getValue('has-vl.value');
-        if(val == 1065) {
-        jq('#vl-status').show();
-        jq('#vl-feeling').show();
-        jq('#vl-high').show();
-        }else{
-        jq('#vl-status').hide();
-        jq('#vl-feeling').hide();
-        jq('#vl-high').hide();
-        }
-        }
-        function hasHighViralLoadResult(){
-        var val = getValue('result-status.value');
-        if(val == 1066) {
-        jq('#vl-high-txt textarea').prop("disabled", false);
-        }else{
-        jq('#vl-high-txt textarea').prop("disabled", true);
-        }
-        }
+
+        //Clear hidden sections
         clearHiddenSections = function(parentObj) {
-        for(var i=0; i &lt; parentObj.length; i++){
-        parentObj[i].find('input[type=radio]').each(function() {
-        this.checked = false;
-        });
-        parentObj[i].find('input[type=checkbox]').each(function() {
-        this.checked = false;
-        });
-        parentObj[i].find('input[type=text]').each(function() {
-        this.val("");
-        });
-        parentObj[i].find('select').each(function() {
-        this.selectedIndex =0;
-        });
-        }
+            parentObj.find('input[type=radio]').each(function() {
+                this.checked = false;
+            });
+            parentObj.find('input[type=checkbox]').each(function() {
+                this.checked = false;
+            });
+            parentObj.find('input[type=text]').each(function() {
+                jq(this).val("");
+            });
+            parentObj.find('select').each(function() {
+                this.selectedIndex =0;
+            });
         }
     </script>
     <style>
@@ -166,9 +140,9 @@
     <div class="ke-form-header">
         <table width="100%">
             <tr>
-                <td>Encounter Date: <encounterDate id="encounter-date" showTime="true" /></td>
-                <td>Encounter provider: <encounterProvider role="Provider"/></td>
-                <td>Location: <encounterLocation default="GlobalProperty:kenyaemr.defaultLocation" type="autocomplete" /></td>
+                <td>Encounter Date <encounterDate id="encounter-date" showTime="true" /></td>
+                <td>Encounter provider <encounterProvider default="currentUser" role="Provider"/></td>
+                <td>Location <encounterLocation default="GlobalProperty:kenyaemr.defaultLocation" type="autocomplete" /></td>
             </tr>
         </table>
     </div>
@@ -181,84 +155,84 @@
             </legend>
             <table class="simple-table" id="Checklist-tbl1">
                 <tr>
-                    <td><strong>General appearance and behavior:</strong> Note appearance<br></br>
-                        <obs  conceptId="1119" answerLabels="Appear older or younger than stated age,
-                                                             Gait,
-                                                             Dressing,
-                                                             Grooming (unkempt),
-                                                             Grooming (Neat)"
-                                            answerConceptIds="460,5201,5243,136443,159438" style="checkbox" /><br></br>
+                    <td><strong>General appearance and behavior</strong> <i><b>Note appearance</b></i></td>
+                    <td>
+                      <obs conceptId="1119" answerLabel="Appear older or younger than stated age" answerConceptId="460" style="checkbox" /><br/>
+                      <obs conceptId="1119" answerLabel="Gait" answerConceptId="5201" style="checkbox" /><br/>
+                      <obs conceptId="1119" answerLabel="Dressing" answerConceptId="5243" style="checkbox" /><br/>
+                      <obs conceptId="1119" answerLabel="Grooming (unkempt)" answerConceptId="136443" style="checkbox" /><br/>
+                      <obs conceptId="1119" answerLabel="Grooming (Neat)" answerConceptId="159438" style="checkbox" />
                     </td>
                     <td>
-                        <strong>Rapport:</strong><br></br>
-                        <obs  conceptId="122943" answerLabels="Easy to establish,
+                        <strong>Rapport</strong><br/>
+                        <obs required="true"  conceptId="122943" answerLabels="Easy to establish,
                                                         Initially difficult but easier over time,
                                                         Difficult to establish"
-                                                 answerConceptIds="160281,160282,141762" style="radio" /><br></br>
+                                                 answerConceptIds="160281,160282,141762" style="dropdown" />
 
                     </td>
                     <td>
-                        <strong>Mood:</strong>How he/she feels most days<br></br>
-                        <obs  conceptId="165159" answerLabels="Happy,Sad,Hopeless,Euphoric,Elevated,Depressed,Irritable,Anxious,Angry,Easily upset"
-                              answerConceptIds="140487,119539,163468,141611,166050,165536,118296,140468,122996,118879" style="radio" />
+                        <strong>Mood</strong> <b><i>(How he/she feels most days)</i></b> <br/><br/>
+                        <obs required="true" conceptId="165159" answerLabels="Happy,Sad,Hopeless,Euphoric,Elevated,Depressed,Irritable,Anxious,Angry,Easily upset"
+                              answerConceptIds="140487,119539,163468,141611,166050,165536,118296,140468,122996,118879" style="dropdown" />
                     </td>
                     <td>
-                        <strong>Affect:</strong>Physical manifestation of the mood e.g<br></br>
-                        <obs  conceptId="167099" answerLabels="labile (emotions that are freely expressed and tend to alter quickly and spontaneously like sobbing and laughing at the same time),
+                        <strong>Affect:</strong> <b><i>(Physical manifestation of the mood e.t.c) </i></b><br/>
+                        <obs required="true"  conceptId="167099" answerLabels="labile (emotions that are freely expressed and tend to alter quickly and spontaneously like sobbing and laughing at the same time),
                                                            Blunt/flat,
                                                            Appropriate to content,
                                                            Inappropriate to content"
-                              answerConceptIds="136204,153557,162980,137668" style="radio" /><br></br>
+                              answerConceptIds="136204,153557,162980,137668" style="dropdown" /><br/>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <strong>Speech:</strong>Rate,volume,speed,pressured,quality and impoverished<br></br>
-                        <obs  conceptId="167201" answerLabels="Tends to speak rapidly and frenziedly,
+                        <strong>Speech:</strong> <b><i> (Rate,volume,speed,pressured,quality and impoverished)</i></b><br/>
+                        <obs required="true" conceptId="167201" answerLabels="Tends to speak rapidly and frenziedly,
                                                                Speak clearly,
                                                                Mumbling,
                                                                Monosyllables,
                                                                Hesitant"
-                              answerConceptIds="145046,159539,126351,137646,112842" style="radio" />
+                              answerConceptIds="145046,159539,126351,137646,112842" style="dropdown" />
                     </td>
                     <td>
-                        <strong>Perception:</strong>Disturbances e.g.<br></br>
-                        <obs  conceptId="159707" answerLabels="Hallucination,
+                        <strong>Perception:</strong> <b><i> (Disturbances etc)</i></b><br/>
+                        <obs required="true" conceptId="159707" answerLabels="Hallucination,
                                                               Feeling of unreality (corroborative history may be needed to ascertain details),
                                                               Hesitant"
-                              answerConceptIds="139146,126456,150881" style="radio" /><br></br>
+                              answerConceptIds="139146,126456,150881" style="dropdown" />
                     </td>
                     <td>
-                        <strong>Thought content</strong>Suicidal and Homicidal; or any preoccupying thoughts.<br></br>
-                        <obs  conceptId="167112" answerLabels="Ideas but no plan or intent,
+                        <strong>Thought content</strong> <b><i> Suicidal and Homicidal; or any preoccupying thoughts.</i></b><br/><br/>
+                        <obs required="true" conceptId="167112" answerLabels="Ideas but no plan or intent,
                                                             Clear plan but no intent,
                                                             Unclear plan but no intent,
                                                             Ideas coupled with clear plan and intent to carry it out"
-                              answerConceptIds="160847,160848,160849,160844" style="radio" /><br></br>
+                              answerConceptIds="160847,160848,160849,160844" style="dropdown" />
                     </td>
                     <td>
-                        <strong>Thought process</strong>.<br></br>
-                        <obs  conceptId="167106" answerLabels="Goal-directed/logical ideas,
+                        <strong>Thought process</strong><br/><br/>
+                        <obs required="true"  conceptId="167106" answerLabels="Goal-directed/logical ideas,
                                                           Loosened association/flight ideas/illogical ideas,
                                                          Relevant,
                                                          Circumstantial (drifting but often coming back to the point),
                                                          Ability to abstract,
-                                                         Perseveration(constant repetition,
+                                                         Perseveration (constant repetition,
                                                          lacking ability to switch ideas)"
-                              answerConceptIds="167108,1097,1099,1090,1100,1098" style="checkbox" /><br></br>
+                              answerConceptIds="167108,1097,1099,1090,1100,1098" style="dropdown" /><br/>
 
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <p><i>For children use wishes and dreams, and art/play therapy to assess the thought process and content.</i></p>
-                        <p>Through drawing and play(e.g. use of toys). Allow the child to comment on the drawing and report verbatim</p><br></br>
-                        <obs conceptId="167020" size="100" style="textarea" />
+                        <p><b><i>For children use wishes and dreams, and art/play therapy to assess the thought process and content.</i></b></p>
+                        <p>Through drawing and play(e.g. use of toys). Allow the child to comment on the drawing and report verbatim</p><br/>
+                        <obs conceptId="167020" rows="3" cols="80" style="textarea" />
                     </td>
                     <td>
-                        <p>Assess the unconscious world of the child by asking about feelings e.g. ask the child to report the feeling that he/she commonly
-                        experiences and ask what makes him/her feel that way</p><br></br>
-                        <obs conceptId="165427" size="100" style="textarea" />
+                        <p><b>Assess the unconscious world of the child by asking about feelings e.g.</b> <i>ask the child to report the feeling that he/she commonly
+                        experiences and ask what makes him/her feel that way</i></p><br/><br/>
+                        <obs conceptId="165427" rows="3" cols="80" style="textarea" />
                     </td>
                 </tr>
             </table>
@@ -273,31 +247,32 @@
             <table class="simple-table" id="adherence-1">
                 <tr>
                     <td>
-                        <strong>a. Memory:</strong> (past several days, months, years)<br></br>
-                        <obs  conceptId="165295" answerLabels="Recent Memory,Long-term memory,Short-term memory" answerConceptIds="129507,121657,134145" style="radio" /><br></br>
+                        <strong>a. Memory:</strong> <p><i>(past several days, months, years)</i></p></td>
+                       <td> <obs required="true" conceptId="165295" answerLabels="Recent Memory,Long-term memory,Short-term memory" answerConceptIds="129507,121657,134145" style="radio" /><br/>
                     </td>
                     <td>
-                        <strong>b. Orientation:</strong> to time,place,person i.e. ability to recognize time,where they are, people around e.t.c.<br></br>
-                        <obs  conceptId="167084" answerLabels="Verily oriented,Oriented,Poorly Oriented" answerConceptIds="167083,167081,167082" style="radio" /><br></br>
+                        <strong>b. Orientation:</strong> <p><i>to time,place,person i.e. ability to recognize time,where they are, people around e.t.c.</i></p></td>
+                        <td><obs required="true" conceptId="167084" answerLabels="Verily oriented,Oriented,Poorly Oriented" answerConceptIds="167083,167081,167082" style="radio" /><br/>
+                    </td>
+                    <td>
+                        <strong>c. Concentration:</strong> <p><i>ability to pay attention e.g. counting or spelling backward,small tasks</i></p></td>
+                        <td><obs required="true" conceptId="161427" answerLabels="Above average,Average,Below Average" answerConceptIds="161565,114412,161427" style="radio" /><br/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong>d. Intelligence:</strong> <p><i>use of vocabulary (compare level of education with case presentation)</i></p></td>
+                        <td><obs required="true" conceptId="165241" answerLabels="Above average,Average,Below Average" answerConceptIds="161565,114412,161427" style="radio" /><br/>
 
                     </td>
                     <td>
-                        <strong>c. Concentration:</strong> ability to pay attention e.g. counting or spelling backward,small tasks<br></br>
-                        <obs  conceptId="161427" answerLabels="Above average,Average,Below Average" answerConceptIds="161565,114412,161427" style="radio" /><br></br>
+                        <strong>e. Judgement:</strong> <p><i>Ability to understand relations between facts and to draw conclusions; responses in social situation</i></p></td>
+                        <td><obs required="true"  conceptId="167116" answerLabels="Poor,Fair,Good" answerConceptIds="159407,159406,164077" style="radio" /><br/>
                     </td>
                     <td>
-                        <strong>d. Intelligence:</strong> use of vocabulary (compare level of education with case presentation)<br></br>
-                        <obs  conceptId="165241" answerLabels="Above average,Average,Below Average" answerConceptIds="161565,114412,161427" style="radio" /><br></br>
-
-                    </td>
-                    <td>
-                        <strong>e. Judgement:</strong> Ability to understand relations between facts and to draw conclusions; responses in social situation<br></br>
-                        <obs  conceptId="167116" answerLabels="Poor,Fair,Good" answerConceptIds="159407,159406,164077" style="radio" /><br></br>
-                    </td>
-                    <td>
-                        <strong>f. Insight level:</strong> Realizing that there are physical or mental problems; denial of illness, ascribing blame to outside factors;
-                        recognizing need for treatment (Indicate whether inisght level as either the below)<br></br>
-                        <obs  conceptId="167115" answerLabels="Present,Fair,Not present" answerConceptIds="159405,159406,1107" style="radio" /><br></br>
+                        <strong>f. Insight level:</strong> <p><i>Realizing that there are physical or mental problems; denial of illness, ascribing blame to outside factors;
+                        recognizing need for treatment (Indicate whether inisght level as either the below)</i></p></td>
+                        <td><obs required="true" conceptId="167115" answerLabels="Present,Fair,Not present" answerConceptIds="159405,159406,1107" style="radio" /><br/>
                     </td>
                 </tr>
             </table>
@@ -305,25 +280,25 @@
         <!-- Recommendation and Refferal point/s-->
         <fieldset id="Assesment-tab5">
             <legend>
-                <strong>Recommendation and Refferal point</strong>
+                <strong>Recommendation and Referral Details</strong>
             </legend>
             <table class="simple-table" id="adherence-5">
 
                 <tr>
-                    <td>Recommendation following assessment<br></br> <obs conceptId="164359" size="100" style="textarea" /></td>
-                    <td>Referral point<br></br> <obs conceptId="166485" size="100"  style="textarea" /></td>
+                    <td><strong>Recommendation following assessment</strong></td><td> <obs conceptId="164359" rows="3" cols="80" style="textarea" /></td>
+                    <td><strong>Referral point</strong></td><td><obs conceptId="166485" rows="3" cols="80"  style="textarea" /></td>
                 </tr>
 
                 <tr>
-                    <td>Referral uptake since last visit e.g. other medical services, children's department, police, legal aid,shelter e.t.c <br></br>
-                        <obs conceptId="165171" rows="5" cols="7" style="textarea" /></td>
+                    <td><b>Referral uptake since last visit</b> <p><i>e.g. other medical services, children's department, police, legal aid,shelter e.t.c</i></p>
+                    </td><td> <obs conceptId="165000" rows="3" cols="80" style="textarea" /></td>
                 </tr>
                 <tr>
-                    <td>By: &nbsp; Name of Examining officer(Doctor/Nurse/Clinical officer)<br></br>
-                        <obs conceptId="165225" />
+                    <td><b>By: &nbsp; Name of Examining officer(Doctor/Nurse/Clinical officer)</b></td>
+                        <td><obs conceptId="165225" rows="2" cols="80" style="textarea" />
                     </td>
-                    <td>To: &nbsp; Police Officers Name:<br></br>
-                        <obs conceptId="165142"  />
+                    <td><b>To: &nbsp; Police Officers Name:</b></td>
+                        <td><obs conceptId="165142" rows="2"  cols="80" style="textarea"  />
                     </td>
                 </tr>
             </table>
@@ -333,5 +308,4 @@
     <div class="ke-form-footer">
         <submit />
     </div>
-
 </htmlform>

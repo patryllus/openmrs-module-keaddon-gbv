@@ -255,14 +255,13 @@
                 <tr>
                     <td>County</td><td><obs conceptId="167131" size="30"  style="textarea"/></td>
                     <td>Sub-county</td><td><obs conceptId="161564" size="30"  style="textarea"/></td>
-                    <td>Landmark</td><td><obs conceptId="159942" size="30"  style=""/></td>
+                    <td>Landmark</td><td><obs conceptId="159942" size="30"  style="textarea"/></td>
                 </tr>
                 <tr>
                     <td>Indicate what is observed on the chief complaint</td><td><obs conceptId="160945" size="50"  style="textarea"/></td>
                     <td>Indicate what is reported by the chief complaint</td><td><obs conceptId="166846" size="50"  style="textarea"/></td>
-                    <td>Circumstances surrounding the incident(survivor account) remember to record penetration(how,where,what was used?Indication of struggle?)<br></br>
-                        <obs conceptId="160303" size="100"  style="textarea"/>
-                    </td>
+                    <td>Circumstances surrounding the incident(survivor account) remember to record penetration(how,where,what was used?Indication of struggle?)</td>
+                    <td><obs conceptId="160303" rows="2"  cols="60" style="textarea"/></td>
                 </tr>
             </table>
         </fieldset>
@@ -289,7 +288,8 @@
                         </table>
                     </td>
                     <td>Use of condoms</td>
-                    <td><obs required="true" conceptId="1357" answerLabels="Yes,No,Unknown" answerConceptIds="1065,1066,1067" style="radio"/></td>
+                    <td><obs required="true" conceptId="1357" answerLabels="Yes,No,Unknown" answerConceptIds="1065,1066,1067" style="radio"/>
+                    <br/></td>
                 </tr>
                 <tr>
                     <td>Attended a health facility before this one?</td>
@@ -737,8 +737,14 @@
                 <tr>
                     <td>By:&nbsp;Name of Examining officer(Doctor/Nurse/Clinical officer)</td>
                     <td> <obs required="true" conceptId="165225" /></td>
-                    <td>To:&nbsp;Police Officers Name:</td>
+                    <td>Signature of Examining Office</td>
+                    <td> <obs required="true" conceptId="165143" /></td>
+                </tr>
+                <tr>
+                    <td>To:&nbsp;Police officer name</td>
                     <td><obs required="true" conceptId="165142" /></td>
+                    <td>Signature of police officer</td>
+                    <td><obs required="true" conceptId="166847" /></td>
                 </tr>
             </table>
         </fieldset>

@@ -85,11 +85,11 @@ public class ExampleMetadata extends AbstractMetadataBundle {
 
 		//GBVPHYSICALEMOTIONALFORM
 		install(encounterType("GBVPHYSICALEMOTIONALFORM Encounter", "GBVPHYSICALEMOTIONALFORM Encounter", _EncounterType.GBVPHYSICALEMOTIONALFORM));
-		install(form("PHYSICAL/EMOTIONAL Violence Encounter Form", null, _EncounterType.GBVPHYSICALEMOTIONALFORM, "1", _Form.GBVPHYSICALEMOTIONALFORM));
+		install(form("PHYSICAL/EMOTIONAL VIOLENCE FORM", null, _EncounterType.GBVPHYSICALEMOTIONALFORM, "1", _Form.GBVPHYSICALEMOTIONALFORM));
 
 		//GBVLEGALFORM
 		install(encounterType("GBVLEGALFORM Encounter", "GBVLEGALFORM Encounter", _EncounterType.GBVLEGALFORM));
-		install(form("GBV Legal Encounter Form", null, _EncounterType.GBVLEGALFORM, "1", _Form.GBVLEGALFORM));
+		install(form("GBV LEGAL ENCOUNTER FORM", null, _EncounterType.GBVLEGALFORM, "1", _Form.GBVLEGALFORM));
 
 		//GBVPEPFORMFORMANAGEMENTOFSURVIVORS
 		install(encounterType("GBVPEPFORMFORMANAGEMENTOFSURVIVOR Form Encounter", "GBVPEPFORMFORMANAGEMENTOFSURVIVORS Encounter", _EncounterType.GBVPEPFORMMANAGEMENTOFSURVIVORS));
@@ -101,27 +101,27 @@ public class ExampleMetadata extends AbstractMetadataBundle {
 
 		//GBVLINKAGEFORM
 		install(encounterType("GBVLINKAGE Form Encounter", "GBVLINKAGE Encounter", _EncounterType.GBVLINKAGEFORM));
-		install(form("GBV COMMUNITY LINKAGE Form", null, _EncounterType.GBVLINKAGEFORM, "1", _Form.GBVLINKAGEFORM));
+		install(form("GBV COMMUNITY LINKAGE FORM", null, _EncounterType.GBVLINKAGEFORM, "1", _Form.GBVLINKAGEFORM));
 
 		//GBVCONSENTFORM
 		install(encounterType("GBVCONSENT Form Encounter", "GBVCONSENT Encounter", _EncounterType.GBVCONSENTFORM));
-		install(form("GBV PRC Consent Form", null, _EncounterType.GBVCONSENTFORM, "1", _Form.GBVCONSENTFORM));
+		install(form("GBV PRC CONSENT FORM", null, _EncounterType.GBVCONSENTFORM, "1", _Form.GBVCONSENTFORM));
 
 		//GBVPERPETRATORDETAILFORM
 		install(encounterType("GBV Perpetrator Details", "GBVPERPETRATORDETAILFORM Encounter", _EncounterType.GBVPERPETRATORDETAILFORM ));
-		install(form("GBV PERPETRATOR Details Form", null, _EncounterType.GBVPERPETRATORDETAILFORM, "1", _Form.GBVPERPETRATORDETAILFORM));
+		install(form("GBV PERPETRATOR DETAILS FORM", null, _EncounterType.GBVPERPETRATORDETAILFORM, "1", _Form.GBVPERPETRATORDETAILFORM));
 
 		//GBVTRAUMACOUNSELLINGFORM
 		install(encounterType("GBV Trauma Counselling", "GBVTRAUMACOUNSELLINGFORM Encounter", _EncounterType.GBVTRAUMACOUNSELLINGFORM));
-		install(form("SGBV TRAUMA Counselling Form", null, _EncounterType.GBVTRAUMACOUNSELLINGFORM, "1", _Form.GBVTRAUMACOUNSELLINGFORM));
+		install(form("SGBV TRAUMA COUNSELLING FORM", null, _EncounterType.GBVTRAUMACOUNSELLINGFORM, "1", _Form.GBVTRAUMACOUNSELLINGFORM));
 
 		//GBVPOSTRAPECAREFORM
 		install(encounterType("GBV Post Rape Care", "GBVPOSTRAPECAREFORM Encounter", _EncounterType.GBVPOSTRAPECAREFORM));
-		install(form("SBVG POST RAPE CARE Form (MOH 363 part A", null, _EncounterType.GBVPOSTRAPECAREFORM, "1", _Form.GBVPOSTRAPECAREFORM));
+		install(form("SGBV POST RAPE CARE FORM (PART A MOH-363)", null, _EncounterType.GBVPOSTRAPECAREFORM, "1", _Form.GBVPOSTRAPECAREFORM));
 
 		//GBVPSYCHOLOGICALASSESSMENTFORM
 		install(encounterType("GBV Psychological Assessment", "GBVPSYCHOLOGICALASSESSMENTFORM Encounter", _EncounterType.GBVPSYCHOLOGICALASSESSMENTFORM));
-		install(form("SGBV PSYCHOLOGICAL ASSESSMENT Form (MOH 363 part B)", null, _EncounterType.GBVPSYCHOLOGICALASSESSMENTFORM, "1", _Form.GBVPSYCHOLOGICALASSESSMENTFORM));
+		install(form("SGBV PSYCHOLOGICAL ASSESSMENT (PART B MOH-363 )", null, _EncounterType.GBVPSYCHOLOGICALASSESSMENTFORM, "1", _Form.GBVPSYCHOLOGICALASSESSMENTFORM));
 
 	}
 }

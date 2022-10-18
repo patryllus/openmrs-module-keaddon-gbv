@@ -199,48 +199,16 @@
 
     <div class="ke-form-content">
         <fieldset class="adherence-screening">
+            <legend><strong>Exposure Location Detail</strong></legend>
             <table class="simple-table" id="Checklist-tbl1">
                 <tr>
-                    <td>OCN Number<b>(format OCN#-10-2022-00001)</b></td>
+                    <td><b>Cadre</b></td>
                     <td><obs required="true" conceptId="162086" size="30" /></td>
-                    <td>
-                        <table class="simple-table" >
-                            <tr>
-                                <th></th>
-                                <th>Current</th>
-                                <th>Recent</th>
-                            </tr>
-                            <tr>
-                                <td>Weight</td>
-                                <td>
-                                    <obs id="weight" conceptId="5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" required="true"/>
-                                    kg
-                                </td>
-                                <td>
-                                    <recentObs conceptId="5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Height</td>
-                                <td>
-                                    <obs id="height" conceptId="5090AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" required="true"/>
-                                    cm
-                                </td>
-                                <td>
-                                    <recentObs conceptId="5090AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
+                    <td><b>Location during exposure</b></td>
+                    <td><obs required="true" conceptId="162086" size="30" /></td>
+                    <td><b>Date and Time of Exposure</b></td>
+                    <td><obs required="true" conceptId="162086" size="30" /></td>
                 </tr>
-            </table>
-        </fieldset>
-        <!--Exposure and HIV Test History-->
-        <fieldset id="Assesment-tab3">
-            <legend>
-                <strong>Exposure and HIV Test History</strong>
-            </legend>
-            <table class="simple-table" id="adherence-3">
                 <tr>
                     <td>Type of Exposure</td>
                     <td>
@@ -258,67 +226,180 @@
                             </tr>
                         </table>
                     </td>
-                    <td>HIV Test Result</td>
+                </tr>
+                <tr>
+                    <td>Severity of exposure</td>
                     <td>
-                        <obs id="hiv-test-result" required="true" conceptId="159427" answerLabels="Negative,Positive" answerConceptIds="703,664" style="radio" /><br></br>
+                        <obs required="true" conceptId="165060"
+                             answerLabels="Superficial,Deep"
+                             answerConceptIds="127910,145691"
+                             style="radio"
+                             id="other-violence"/><br/>
                     </td>
+                    <td>Device causing exposure</td>
+                    <td>
+                        <obs required="true" conceptId="165060"
+                             answerLabels="Hollow bore needle,Solid needle,Scalpel,Glass, Other (specify)"
+                             answerConceptIds="127910,145691127910,145691,145691"
+                             style="radio"
+                             id="device-causing-exposure"/><br/>
+                    </td>
+                    <td>
+                        <table class="simple-table" id="tbl-specify-other-device">
+                            <tr>
+                                <td> Specify other device causing exposure</td>
+                                <td><obs conceptId="165138" style="textarea" rows="2"  cols="60" /></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Was the device safety designed (with sliding sheath/sleeve,guards,retractable)</td>
+                    <td>
+                        <obs required="true" conceptId="165060"
+                             answerLabels="Yes,No"
+                             answerConceptIds="1065,1066"
+                             style="radio"
+                             id="device-desisgned-safety"/><br/>
+                    </td>
+                    <td>Procedure device was used for</td>
+                    <td><obs conceptId="165138" style="textarea" rows="4"  cols="80" /></td>
+                </tr>
+                <tr>
+                    <td>Describe how the injury occurred</td>
+                    <td><obs conceptId="165138" style="textarea" rows="4"  cols="80" /></td>
                 </tr>
             </table>
         </fieldset>
 
-        <!--HCP details-->
+        <!--Exposure and HIV Test History-->
+        <fieldset id="Assesment-tab3">
+            <legend>
+                <strong>Previous Lab tests results and Exposure</strong>
+            </legend>
+            <table class="simple-table" id="adherence-3">
+                <tr>
+                    <td><b>HIV</b></td>
+                    <td><obs  conceptId="161472" answerLabels="Non Reactive,Reactive" answerConceptIds="664,703" style="radio" /></td>
+                </tr>
+                <tr>
+                    <td><b>HBsAG</b></td>
+                    <td><obs  conceptId="161472" answerLabels="Non Reactive,Reactive" answerConceptIds="664,703" style="radio" /></td>
+                </tr>
+                <tr>
+                    <td><b>HCV</b></td>
+                    <td><obs  conceptId="161472" answerLabels="Non Reactive,Reactive" answerConceptIds="664,703" style="radio" /></td>
+                </tr>
+                <tr>
+                    <td><b>Have you previously had an accident exposure to blood or body fluidS?</b></td>
+                    <td><obs  conceptId="161472" answerLabels="Yes,No" answerConceptIds="1065,1066" style="radio" /></td>
+                </tr>
+            </table>
+        </fieldset>
+
+        <!--PEP HISTORY-->
         <fieldset id="Assesment-tab4">
             <legend>
-                <strong>PEP Regimen</strong>
+                <strong>PEP and Immunization Detail</strong>
             </legend>
             <table class="simple-table" id="adherence-1">
                 <tr>
-                    <td><b>Starter Pack given</b></td>
+                    <td><b>Did you take PEP for your last exposure</b></td>
                     <td>
                         <obs required="true" id="starter-pack-issued" conceptId="1263" answerLabels="Yes,No" answerConceptIds="1065,1066" style="radio" />
                     </td>
+                    <td>
+                        <table>
+                            <tr>
+                                <td><b>What regimen did you take?</b></td>
+                                <td>
+                                    <obs required="true" id="starter-pack-issued" conceptId="1263" answerLabels="Yes,No" answerConceptIds="1065,1066" style="radio" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><b>For how many days?</b></td>
+                                <td>
+                                    <obs required="true" id="starter-pack-issued" conceptId="1263" size="50"/> <span><strong>days</strong></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><b>If less than 28 days, give reason why the dose was not completed?</b></td>
+                                <td>
+                                    <obs required="true" id="starter-pack-issued" conceptId="1263" rows="3" cols="80"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                  <td>Have you had Hepatitis B immunization</td>
+                  <td><obs required="true" id="starter-pack-issued" conceptId="1263" answerLabels="Yes fully (3 doses),Yes partially (1-2 doses),No" answerConceptIds="1065,1066" style="radio" /></td>
+                </tr>
+                <tr>
+                    <p align="left"><strong>STARTER PACK FOR PEP</strong></p>
+                    <hr/>
+                    <td>Regimen of ARVs provided</td>
+                    <td>
+                        <obs required="true" id="starter-pack-issued" conceptId="1263" rows="3" cols="80"/>
+                    </td>
+                    <td><b>Date Given</b></td>
+                    <td><obs conceptId="166865" size="50" /></td>
+                    <td><b>I do not wish to take PEP</b></td>
+                    <td><obs required="true" id="starter-pack-issued" conceptId="1263" answerLabels="Yes,No" answerConceptIds="1065,1066" style="radio" /></td>
                 </tr>
             </table>
-           <table class="simple-table" id="tbl-date-given-starter-pack">
-               <p align="left"><strong>Regimen Category Prescribed</strong></p>
-                        <tr>
-                            <td>Adults and Children &gt; 34.9Kg: TDF/3TC-300mg/300mg OD + ATV/r -300mg/100mg OD OR TDF/3TC-300mg/300mg OD + LPV/r -200mg/50mg 2 BD x 28 days</td>
-                            <td><obs  conceptId="166655" answerLabel="Yes"  answerConceptId="164512" style="checkbox" /><br></br></td>
-                            <td>Children 25-34.9kg :{ABC 300mg + 3TC 150mg BD+(LPV/r 200/50mg 2tabs am and 1tab pm OR LPV/r 80/20mg 4mls BD)}x28days</td>
-                            <td><obs  conceptId="166655" answerLabel="Yes" answerConceptId="162200"  style="checkbox" /><br></br></td>
-                            <td>Children 20-24.9kg :{ABC/3TC-60/30mg 3 BD+(LPV/r 200/50mg 1 BD OR LPV/r 80/20mg 3mls BD)}x28days.</td>
-                            <td><obs  conceptId="166655" answerLabel="Yes" answerConceptId="164976"  style="checkbox" /><br></br></td>
-                            <td>Children &lt; 20kg: <strong>Consult Pharmacist OR Refer to the guidelines</strong> </td>
-                            <td><obs  conceptId="166655" answerLabel="Yes" answerConceptId="160521" style="checkbox" /><br></br></td>
-                        </tr>
-                        <tr>
-                            <td>Specify regimen and dose given</td>
-                            <td><obs conceptId="163104" style="textarea" rows="2" cols="60" /></td>
-                        </tr>
-           </table>
         </fieldset>
 
         <!-- Baseline -->
         <fieldset id="Assesment-tab7">
             <legend>
-                <strong>Baseline Tests</strong>
+                <strong>Clinical History</strong>
             </legend>
             <table class="simple-table" id="adherence-7">
                 <tr>
-                    <td><b>1. HBsAG</b></td>
-                    <td><obs  conceptId="161472" answerLabels="Non Reactive,Reactive" answerConceptIds="664,703" style="radio" /></td>
+                    <td><b>Is the health care worker pregnant?</b></td>
+                    <td><obs  conceptId="161472" answerLabels="Yes,No" answerConceptIds="1065,1065" style="radio" /></td>
                 </tr>
                 <tr>
-                    <td><b>2. LFTs: ALT</b></td>
-                    <td><obs conceptId="654" size="30" /></td>
+                    <td><b>Is the health care worker Breastfeeding?</b></td>
+                    <td><obs  conceptId="161472" answerLabels="Yes,No" answerConceptIds="1065,1065" style="radio" /></td>
                 </tr>
                 <tr>
-                    <td><b>3. RFTs: Creatinine</b></td>
-                    <td><obs conceptId="790" size="30" /></td>
+                    <td><b>Does the health care worker have any underlying health problems?</b></td>
+                    <td><obs  conceptId="161472" answerLabels="Yes,No" answerConceptIds="1065,1065" style="radio" /></td>
+                    <td>
+                        <table class="simple-table">
+                            <tr>
+                                <td><b>What regimen did you take?</b></td>
+                                <td>
+                                    <obs required="true" id="starter-pack-issued" conceptId="1263" style="textarea" />
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
                 </tr>
                 <tr>
-                    <td><b>4. Other test (Specify)</b></td>
-                    <td><obs conceptId="160987" style="textarea" rows="2" cols="60" /></td>
+                    <td><b>Is the health care worker on any medication?</b></td>
+                    <td><obs  conceptId="161472" answerLabels="Yes,No" answerConceptIds="1065,1065" style="radio" /></td>
+                </tr>
+                <tr>
+                    <td><b><p>Baseline Investigations for Exposed Health Care Worker</p></b></td>
+                </tr>
+                <tr>
+                    <td><b>Preliminary Classification?</b></td>
+                    <td><obs  conceptId="161472" answerLabels="Low,Risk" answerConceptIds="1065,1065" style="radio" /></td>
+                </tr>
+                <tr>
+                    <td><b>ARV regimen provided after assessment?</b></td>
+                    <td><obs  conceptId="161472" answerLabels="Low,Risk" answerConceptIds="1065,1065" style="radio" /></td>
+                    <td><b>Date provided regimen</b></td>
+                    <td><obs  conceptId="161472" size="50" /></td>
+                </tr>
+                <tr>
+                    <td><b>Date ARVs are completed</b></td>
+                    <td><obs  conceptId="161472" size="50" /></td>
+                    <td><b>Reason for not completing PEP</b></td>
+                    <obs required="true" id="starter-pack-issued" conceptId="1263" style="textarea" />
                 </tr>
                 <tr>
                     <td><b>TCA Date</b></td>

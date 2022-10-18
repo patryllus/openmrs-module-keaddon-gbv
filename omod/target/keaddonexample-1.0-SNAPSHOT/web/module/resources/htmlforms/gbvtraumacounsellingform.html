@@ -16,19 +16,66 @@
     <script type="text/javascript">
        $(document).ready(function () {
             //Defaults
-            jq("#tbl-other-referral-source").hide();
+            jq("#tbl-other-exposure-type").hide();
+            jq("#type-assault").hide();
+            jq("#tbl-hiv-test-result").hide();
+            jq("#row-hiv-test").hide();
+            jq("#row-exposure-type").hide();
+            jq("#tbl-prc-number").hide();
+
 
             //Referred by selected
-            jq("#referred-from :input[type=radio]").change(otherReferralSelected);
+            jq("#other-specify :input[type=checkbox]").change(otherTypeOfExposureSelected);
+            jq("#sex-assault-type :input[type=checkbox]").change(sexualTypeOfExposureSelected);
+            jq("#hiv-test-result :input[type=radio]").change(unknownHIVTestSelected);
+            jq("#visit-number select").change(onSelectInitialVisit);
           });
 
-        var otherReferralSelected = function () {
+
+         var onSelectInitialVisit = function () {
+            var val = jq(this).val();
+            if (val == 162080 ){
+                jq("#row-hiv-test").show();
+                jq("#row-exposure-type").show();
+                jq("#tbl-prc-number").show();
+            }else {
+                jq("#row-hiv-test").hide();
+                clearHiddenSections(jq("#row-hiv-test"));
+
+                jq("#row-exposure-type").hide();
+                clearHiddenSections(jq("#row-exposure-type"));
+
+                jq("#tbl-prc-number").hide();
+                clearHiddenSections(jq("#tbl-prc-number"));
+            }
+        };
+
+
+         var unknownHIVTestSelected = function () {
+            var val = jq(this).val();
+            if (val == 1067 ){
+                jq("#tbl-hiv-test-result").show();
+            }else {
+                jq("#tbl-hiv-test-result").hide();
+                clearHiddenSections(jq("#tbl-hiv-test-result"));
+            }
+        };
+        var otherTypeOfExposureSelected = function () {
             var val = jq(this).val();
             if (val == 5622 ){
-                jq("#tbl-other-referral-source").show();
+                jq("#tbl-other-exposure-type").show();
             }else {
-                jq("#tbl-other-referral-source").hide();
-                clearHiddenSections(jq("#tbl-other-referral-source"));
+                jq("#tbl-other-exposure-type").hide();
+                clearHiddenSections(jq("#tbl-other-exposure-type"));
+            }
+        };
+          var sexualTypeOfExposureSelected = function () {
+            var val = jq(this).val();
+            if (val == 167085 ){
+                jq("#type-assault").show();
+            }else {
+                jq("#type-assault").hide();
+                clearHiddenSections(jq("#type-assault"));
             }
         };
 
@@ -96,9 +143,9 @@
     <div class="ke-form-header">
         <table width="100%">
             <tr>
-                <td>Encounter Date: <encounterDate id="encounter-date" showTime="true" /></td>
-                <td>Encounter provider: <encounterProvider default="currentUser" role="Provider"/></td>
-                <td>Location: <encounterLocation default="GlobalProperty:kenyaemr.defaultLocation" type="autocomplete" /></td>
+                <td>Encounter Date <encounterDate id="encounter-date" showTime="true" /></td>
+                <td>Encounter provider <encounterProvider default="currentUser" role="Provider"/></td>
+                <td>Location <encounterLocation default="GlobalProperty:kenyaemr.defaultLocation" type="autocomplete" /></td>
             </tr>
         </table>
     </div>
@@ -110,23 +157,96 @@
             </legend>
             <table class="simple-table" id="Checklist-tbl1">
                 <tr>
-                    <td>OCN Number</td>
-                    <td><obs conceptId="165416" size="30"/></td>
-                    <td>Type of Exposure</td>
-                    <td><obs  conceptId="165248" style="textarea" size="30" /></td>
+                    <td>Visit number</td>
+                    <td><obs conceptId="1724"
+                                      answerLabels="Initial visit,Week-2 visit,Week-3 visit,Week-4 visit,Week-6 visit,week-12 visit"
+                                      answerConceptIds="162080,1722,165307,1721,1723"
+                                      style="dropdown"
+                                      id="visit-number"
+                                      required="true"/>
+                    </td>
+                    <td>
+                        <table id="tbl-prc-number">
+                            <tr>
+                                <td>PRC Number <strong>(format:PRC#-10-2022-00001 )</strong></td>
+                                <td><obs required="true" id="prc-number" conceptId="165416" size="30"/></td>
+                            </tr>
+                        </table>
+                    </td>
+
                 </tr>
-                <tr>
-                    <td>Visit No</td>
-                    <td><obs conceptId="162086" size="25"/></td>
-                    <td>Presenting Issues</td>
-                    <td><obs conceptId="165138" size="50"  style="textarea"/></td>
-                    <td>HIV Test Results</td>
-                    <td><obs  conceptId="165171" answerLabels="Yes,No" answerConceptIds="1065,1066" style="radio" /></td>
-                    <td>TCA</td>
-                    <td><obs conceptId="162549" allowFutureDates="true" size="50" /></td>
+                <tr id="row-exposure-type">
+                    <td>Type of Exposure</td>
+                    <td>
+                        <obs  conceptId="167165" answerConceptId="158358" answerLabels="Physical Violence" style="checkbox"/><br/>
+                        <obs  conceptId="167165" answerConceptId="118688" answerLabels="Emotional Violence" style="checkbox"/><br/>
+                        <obs  conceptId="167165" answerConceptId="167085" answerLabels="Sexual Assault (SGBV)" id="sex-assault-type" style="checkbox"/><br/>
+                        <obs  conceptId="167165" answerConceptId="164843" answerLabels="Occupational exposure" style="checkbox"/><br/>
+                        <obs  conceptId="167165" answerConceptId="164837" answerLabels="Non-occupational exposure" style="checkbox"/><br/>
+                        <obs  conceptId="167165" answerConceptId="5622" answerLabels="other (specify)" id="other-specify" style="checkbox"/><br/>
+                    </td>
+                    <td>
+                        <table id="tbl-other-exposure-type">
+                            <tr>
+                                <td>Specify type of exposure</td>
+                                <td><obs conceptId="160716" rows="2" cols="80" required="true"/></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr id="type-assault">
+                    <td>Type of Assault</td>
+                    <td>
+                        <obs conceptId="123160" answerLabel="Oral" answerConceptId="166060" style="checkbox"/> <br/>
+                        <obs conceptId="123160" answerLabel="Vaginal" answerConceptId="123385" style="checkbox"/><br/>
+                        <obs conceptId="123160" answerLabel="Anal" answerConceptId="148895" style="checkbox"/><br/>
+                        <obs conceptId="123160" answerLabel="Other (specify)" answerConceptId="5622" id="type-assault-select" style="checkbox"/>
+                    </td>
+                    <td>
+                        <table id="tbl-assault-other">
+                            <tr>
+                                <td>Specify other Assault</td>
+                                <td><obs conceptId="164879" style="textarea" rows="2" cols="80" /></td>
+                            </tr>
+                        </table>
+                    </td>
                 </tr>
             </table>
         </fieldset>
+        <fieldset>
+            <legend><strong>Presenting and Emerging Issues</strong></legend>
+            <table class="simple-table" id="Checklist-tbl">
+                <tr>
+                    <td><strong>Presenting Issues</strong></td>
+                    <td><obs required="true" conceptId="160632"  rows="4" cols="100" style="textarea" /></td>
+                </tr>
+                <tr id="row-hiv-test">
+                    <td>HIV Test Results</td>
+                    <td><obs id="hiv-test-result" conceptId="159427" answerLabels="Non Reactive,Reactive,Unknown" answerConceptIds="664,703,1067" style="radio" /></td>
+                    <td>
+                        <table id="tbl-hiv-test-result">
+                            <tr>
+                                <td>Why HIV test unknown?</td>
+                                <td><obs conceptId="162169" style="textarea" rows="2" cols="80"/></td>
+                            </tr>
+                        </table>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td><strong>Emerging Issues</strong></td>
+                    <td><obs conceptId="161011" rows="4" cols="100" required="true"/></td>
+                </tr>
+                <tr>
+                    <td><strong>Plan of Action</strong></td>
+                    <td><obs conceptId="163104" rows="4" cols="100" required="true"/></td>
+                    <td>TCA</td>
+                    <td><obs conceptId="162549" required="true" allowFutureDates="true" size="50" /></td>
+                </tr>
+            </table>
+        </fieldset>
+
+
     </div>
     <div class="ke-form-footer">
         <submit />

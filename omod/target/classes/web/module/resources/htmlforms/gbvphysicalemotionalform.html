@@ -97,7 +97,7 @@
       <tr>
         <td>Date of Incident <encounterDate id="encounter-date" showTime="true" /></td>
         <td>Encounter provider  <encounterProvider default="currentUser" role="Provider"/></td>
-        <td>Location: <encounterLocation default="GlobalProperty:kenyaemr.defaultLocation" type="autocomplete" /></td>
+        <td>Location <encounterLocation default="GlobalProperty:kenyaemr.defaultLocation" type="autocomplete" /></td>
       </tr>
     </table>
   </div>
@@ -112,7 +112,7 @@
         <tr>
           <td>GBV Number <i><strong>(format: GBV#-10-2022-00001)</strong></i></td>
           <td><obs required="true" conceptId="1646" size="30" /></td>
-          <td>Referred From: <br></br>
+            <td><strong>Referred From</strong><br></br>
             <obs id="referred-from"  conceptId="1272" answerLabels="Police,
                                                 Health Facility,
                                                 Self,
@@ -125,12 +125,12 @@
            <td>
                <table id="tbl-other-referral-source">
                    <tr>
-                       <td>Specify other referral source</td>
+                       <td><strong>Specify other referral source</strong></td>
                        <td><obs required="true" conceptId="165092" style="textarea" size="50" /></td>
                    </tr>
                </table>
            </td>
-            <td>Type of Violence</td> &nbsp;
+            <td><strong>Type of Violence</strong></td> &nbsp;
             <td>
                 <obs  conceptId="165205" answerLabel="Physical Violence" answerConceptId="158358"  style="checkbox"/><br/>
                 <obs  conceptId="165205" answerLabel="Emotional Violence" answerConceptId="117510"  style="checkbox"/><br/>
@@ -151,7 +151,7 @@
               </td>
               <td>
                 Trauma counselling comments <br></br>
-                <obs conceptId="161011" style="textarea" size="50" />
+                <obs conceptId="161011" style="textarea" rows="2" cols="80" />
               </td>
           </tr>
           <tr>
@@ -161,7 +161,7 @@
               </td>
               <td>
                 STI screening/treatment comments <br></br>
-                <obs conceptId="160632" style="textarea" size="50" />
+                <obs conceptId="160632" style="textarea" rows="2" cols="80" />
               </td>
           </tr>
         <tr>
@@ -171,37 +171,27 @@
               </td>
               <td>
                 Lab test comments <br></br>
-                <obs conceptId="165435" style="textarea" size="50" />
+                <obs conceptId="165435" style="textarea" rows="2" cols="80"/>
               </td>
           </tr>
           <tr>
-              <td>Rapid HIV Testing</td>
+              <td>Rapid HIV Testing Done</td>
               <td>
                 <obs required="true" conceptId="1356" answerLabels="Yes,No" answerConceptIds="1065,1066" style="yes_no" /> <br></br>
               </td>
               <td>
                 Rapid HIV testing comments<br></br>
-                <obs conceptId="160716" style="textarea" size="50" />
+                <obs conceptId="160716" style="textarea" rows="2" cols="80" />
               </td>
           </tr>
         <tr>
-              <td>Rapid HIV Testing:</td>
-              <td>
-                <obs  conceptId="164848" answerLabels="Yes,No" answerConceptIds="1065,1066" style="radio" /> <br></br>
-              </td>
-              <td>
-                Rapid HIV testing comments<br></br>
-                <obs conceptId="164963" style="textarea" size="50" />
-              </td>
-        </tr>
-        <tr>
               <td>Legal Counsel</td>
               <td>
-                <obs  conceptId="1379" answerLabels="Yes,No" answerConceptIds="1065,1066" style="radio" /> <br></br>
+                <obs required="true" conceptId="1379" answerLabels="Yes,No" answerConceptIds="1065,1066" style="radio" /> <br></br>
               </td>
               <td>
                 Legal counsel comments<br></br>
-                <obs conceptId="165426" style="textarea" size="50" />
+                <obs conceptId="165426" style="textarea" rows="2" cols="80" />
               </td>
         </tr>
         <tr>
@@ -211,7 +201,7 @@
                 </td>
                 <td>
                     Child Protection services comments<br></br>
-                    <obs conceptId="167214" style="textarea" size="50" />
+                    <obs conceptId="167214" style="textarea" rows="2" cols="80" />
                 </td>
         </tr>
         <tr>

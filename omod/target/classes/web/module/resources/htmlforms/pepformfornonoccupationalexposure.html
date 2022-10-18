@@ -14,128 +14,152 @@
 <htmlform>
     <script type="text/javascript" src="../moduleResources/kenyaemr/scripts/moment.js"></script>
     <script type="text/javascript">
-        var LATEST_SESSION = "<lookup expression="fn.latestObs(1639).valueNumeric"/>"
-        var LATEST_SESSION_START_DATE = "<lookup expression="fn.earliestObs(1639).getObsDatetime()"/>"
-        jQuery(function($) {
-        //Defaults
-        var adherenceResponses1=jq('#adherence-1');
-        var adherenceResponses2=jq('#adherence-2');
-        jq('#adherence-2').hide();
-        clearHiddenSections([adherenceResponses1, adherenceResponses2]);
-        jq("#adherence-1").change(adherenceAssessment);
-        //Process flow
-        jq("#has-vl :input[type=radio]").change(hasViralLoadResult);
-        jq("#result-status :input[type=radio]").change(hasHighViralLoadResult);
-        jq("#session-number :input[type=text]").change(sessionNumberChange);
-        hasViralLoadResult();
-        hasHighViralLoadResult();
-        if(LATEST_SESSION == "") {
-        jq('#review').hide();
-        jq('#viral-load-tab').show();
-        jq('#adherence-barriers-tab').show();
-        }else{
-        jq('#review').show();
-        jq('#viral-load-tab').show();
-        jq('#adherence-barriers-tab').hide();
-        }
-        console.log("LATEST SESSION==>"+LATEST_SESSION);
-        console.log("LATEST SESSION START DATE==>"+LATEST_SESSION_START_DATE);
-        if(LATEST_SESSION &gt; 0) {
-        var formattedSessionStartDate =moment(moment(LATEST_SESSION_START_DATE,'DD/MMM/YYYY').toDate()).format("DD-MMM-YYYY");
-        getField('session-startdate.value').val(formattedSessionStartDate);
-        }else{
-        getField('session-startdate.value').val("");
-        }
+        $(document).ready(function () {
+            //Defaults
+            jq("#tbl-sti-trx-not-issued").hide();
+            jq("#tbl-ecp-not-issued").hide();
+            jq("#tbl-date-given-starter-pack").hide();
+            jq("#row-starter-pack").hide();
+            jq("#tbl-pep-regimen-not-issued").hide();
+            jq("#tbl-prc-number").hide();
+            jq("#row-pep-negative-result").hide();
+            jq("#row-ccc-positive-result").hide();
+            jq("#tbl-assault-type-other").hide();
+            jq("#tbl-other-violence").hide();
+
+
+            //Referred by selected
+            jq("#sti-trx :input[type=radio]").change(stiTrxNotIssuedSelected);
+            jq("#pep-regimen :input[type=radio]").change(pepRegimenNotIssuedSelected);
+            jq("#starter-pack-issued :input[type=radio]").change(starterpckIssuedSelected);
+            jq("#ecp-issued :input[type=radio]").change(ecpNotIssuedSelected);
+            jq("#other-violence :input[type=radio]").change(otherViolenceSelected);
+            jq("#hiv-test-result :input[type=radio]").change(hivTestResultSelected);
+            jq("#other-assault :input[type=checkbox]").change(otherAssaultSelected);
+          });
+
+
+            var otherViolenceSelected = function () {
+            var val = jq(this).val();
+            if (val == 5622 ){
+                jq("#tbl-other-violence").show();
+            }else {
+                jq("#tbl-other-violence").hide();
+                clearHiddenSections(jq("#tbl-other-violence"));
+            }
+        };
+
+            var hivTestResultSelected = function () {
+            var val = jq(this).val();
+            if (val == 664 ){
+                jq("#row-pep-negative-result").show();
+            }
+            else if(val == 703){
+                jq("#row-ccc-positive-result").show();
+            }
+            else {
+                jq("#row-pep-negative-result").hide();
+                clearHiddenSections(jq("#row-pep-negative-result"));
+
+                jq("#row-ccc-positive-result").hide();
+                clearHiddenSections(jq("#row-ccc-positive-result"));
+            }
+        };
+
+          var otherAssaultSelected= function () {
+            var val = jq(this).val();
+            if (val == 5622 ){
+                jq("#tbl-assault-type-other").show();
+            }else {
+                jq("#tbl-assault-type-other").hide();
+                clearHiddenSections(jq("#tbl-assault-type-other"));
+            }
+        };
+
+
+
+         var stiTrxNotIssuedSelected = function () {
+            var val = jq(this).val();
+            if (val == 1066 ){
+                jq("#tbl-sti-trx-not-issued").show();
+            }else {
+                jq("#tbl-sti-trx-not-issued").hide();
+                clearHiddenSections(jq("#tbl-sti-trx-not-issued"));
+            }
+        };
+
+
+         var pepRegimenNotIssuedSelected = function () {
+            var val = jq(this).val();
+            if (val == 1066 ){
+                jq("#tbl-pep-regimen-not-issued").show();
+            }
+            else if(val == 1065 ) {
+                jq("#row-starter-pack").show();
+            }
+            else{
+                 jq("#row-starter-pack").hide();
+                 clearHiddenSections(jq("#row-starter-pack"));
+
+                jq("#tbl-pep-regimen-not-issued").hide();
+                clearHiddenSections(jq("#tbl-pep-regimen-not-issued"));
+            }
+        };
+
+
+        var starterpckIssuedSelected = function () {
+            var val = jq(this).val();
+            if (val == 1065){
+                jq("#tbl-date-given-starter-pack").show();
+            }else {
+                jq("#tbl-date-given-starter-pack").hide();
+                clearHiddenSections(jq("#tbl-date-given-starter-pack"));
+            }
+        };
+          ecpNotIssuedSelected = function () {
+            var val = jq(this).val();
+            if (val == 1066 ){
+                jq("#tbl-ecp-not-issued").show();
+            }else {
+                jq("#tbl-ecp-not-issued").hide();
+                clearHiddenSections(jq("#tbl-ecp-not-issued"));
+            }
+        };
+
+
+        //Before Submit
         beforeSubmit.push(function() {
+            var referredBy = getValue('referral-by.value');
+            var clientType = getValue('client-type.value');
+            var otherReferred = jq('#other-referral input[type=text]').val();
+            var infoSource = getValue('information-source.value');
+            var otherInfoSource = jq('#other-information-source input[type=text]').val();
+            var county = getField('county.value').val();
+            if(referredBy == ""){
+                getField('referral-by.error').html('Please specify referral source').show();
+                return false;
+            }else {
+                getField('referral-by.error').html('Please specify referral source').hide();
+            }
+
+
+            return true;
         });
-        });
-        //Morisky assessment
-        var adherenceAssessment  = function () {
-        var val = jq(this).val();
-        const YES_CONCEPT_ID = 1065;
-        const NO_CONCEPT_ID = 1066;
-        var assessmentRadios = jq('#adherence-1').find('input[type=radio]');
-        var assessmentYesResponses = [];
-        var assessmentNoResponses = [];
-        //Fetch responses for the assessment questions
-        jq.each(assessmentRadios, function(){
-        //Push any responses to the respective assessmentYesResponses and assessmentNoResponses array
-        if (this.value == YES_CONCEPT_ID &amp;&amp; this.checked == true) {
-        assessmentYesResponses.push(this);
-        }
-        if (this.value == NO_CONCEPT_ID &amp;&amp; this.checked == true) {
-        assessmentNoResponses.push(this);
-        }
-        });
-        //If no responses have been recorded then prompt since this assessment is mandatory
-        if (assessmentYesResponses.length == 0 &amp;&amp; assessmentNoResponses.length == 0 ) {
-        //Prompt to complete assessment
-        }else{
-        if(assessmentYesResponses.length &gt; 0) {
-        jq('#adherence-2').show();
-        }
-        if(assessmentYesResponses.length == 0) {
-        jq("#arv-adherence input[value=159405]").prop("checked", true);
-        jq('#adherence-2').hide();
-        }
-        if(assessmentYesResponses.length == 1 || assessmentYesResponses.length == 2 ) {
-        jq("#arv-adherence input[value=163794]").prop("checked", true);
-        jq('#adherence-2').show();
-        }
-        if(assessmentYesResponses.length == 3 || assessmentYesResponses.length == 4 ) {
-        jq("#arv-adherence input[value=159407]").prop("checked", true);
-        jq('#adherence-2').show();
-        }
-        }
-        }
-        function sessionNumberChange(){
-        var val = getValue('session-number.value');
-        if(val == 1) {
-        getField('session-startdate.value').val("");
-        jq('#review').hide();
-        jq('#viral-load-tab').show();
-        jq('#adherence-barriers-tab').show();
-        }else{
-        jq('#review').show();
-        jq('#viral-load-tab').show();
-        jq('#adherence-barriers-tab').hide();
-        }
-        }
-        function hasViralLoadResult(){
-        var val = getValue('has-vl.value');
-        if(val == 1065) {
-        jq('#vl-status').show();
-        jq('#vl-feeling').show();
-        jq('#vl-high').show();
-        }else{
-        jq('#vl-status').hide();
-        jq('#vl-feeling').hide();
-        jq('#vl-high').hide();
-        }
-        }
-        function hasHighViralLoadResult(){
-        var val = getValue('result-status.value');
-        if(val == 1066) {
-        jq('#vl-high-txt textarea').prop("disabled", false);
-        }else{
-        jq('#vl-high-txt textarea').prop("disabled", true);
-        }
-        }
+
+        //Clear hidden sections
         clearHiddenSections = function(parentObj) {
-        for(var i=0; i &lt; parentObj.length; i++){
-        parentObj[i].find('input[type=radio]').each(function() {
-        this.checked = false;
-        });
-        parentObj[i].find('input[type=checkbox]').each(function() {
-        this.checked = false;
-        });
-        parentObj[i].find('input[type=text]').each(function() {
-        this.val("");
-        });
-        parentObj[i].find('select').each(function() {
-        this.selectedIndex =0;
-        });
-        }
+            parentObj.find('input[type=radio]').each(function() {
+                this.checked = false;
+            });
+            parentObj.find('input[type=checkbox]').each(function() {
+                this.checked = false;
+            });
+            parentObj.find('input[type=text]').each(function() {
+                jq(this).val("");
+            });
+            parentObj.find('select').each(function() {
+                this.selectedIndex =0;
+            });
         }
     </script>
     <style>
@@ -167,7 +191,7 @@
         <table width="100%">
             <tr>
                 <td>Date of Incident: <encounterDate id="encounter-date" showTime="true" /></td>
-                <td>Encounter provider: <encounterProvider role="Provider"/></td>
+                <td>Encounter provider: <encounterProvider default="currentUser" role="Provider"/></td>
                 <td>Location: <encounterLocation default="GlobalProperty:kenyaemr.defaultLocation" type="autocomplete" /></td>
             </tr>
         </table>
@@ -177,12 +201,37 @@
         <fieldset class="adherence-screening">
             <table class="simple-table" id="Checklist-tbl1">
                 <tr>
-                    <td>OCN No:</td>
-                    <td><obs conceptId="165143" size="30" /></td>
-                    <td>Weight(kg):</td>
-                    <td><obs conceptId="165143" size="30" /></td>
-                    <td>Height(cm):</td>
-                    <td><obs conceptId="165143" size="30" /></td>
+                    <td>OCN Number<b>(format OCN#-10-2022-00001)</b></td>
+                    <td><obs required="true" conceptId="162086" size="30" /></td>
+                    <td>
+                        <table class="simple-table" >
+                            <tr>
+                                <th></th>
+                                <th>Current</th>
+                                <th>Recent</th>
+                            </tr>
+                            <tr>
+                                <td>Weight</td>
+                                <td>
+                                    <obs id="weight" conceptId="5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" required="true"/>
+                                    kg
+                                </td>
+                                <td>
+                                    <recentObs conceptId="5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Height</td>
+                                <td>
+                                    <obs id="height" conceptId="5090AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" required="true"/>
+                                    cm
+                                </td>
+                                <td>
+                                    <recentObs conceptId="5090AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
                 </tr>
             </table>
         </fieldset>
@@ -193,18 +242,30 @@
             </legend>
             <table class="simple-table" id="adherence-3">
                 <tr>
-                    <td>Type of Exposure (specify):</td>
+                    <td>Type of Exposure</td>
                     <td>
-                        <obs conceptId="165248" style="textarea" size="30" />
+                        <obs required="true" conceptId="165060"
+                             answerLabels="Rape,Defilement,Condom Burst,Unprotected sex,Human bite,Cut wound,Needle prick,Other"
+                             answerConceptIds="127910,145691,165059,159218,147273,137655,1536,5622"
+                             style="radio"
+                             id="other-violence"/><br/>
                     </td>
-                    <td>HIV Test Result:</td>
                     <td>
-                        <obs  conceptId="159427" answerLabel="Negative" answerConceptId="703" style="radio" /><br></br>
-                        <obs  conceptId="159427" answerLabel="Positive" answerConceptId="664" style="radio" /><br></br>
+                        <table class="simple-table" id="tbl-other-violence">
+                            <tr>
+                                <td> Specify other exposure</td>
+                                <td><obs conceptId="165138" style="textarea" rows="2"  cols="60" /></td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>HIV Test Result</td>
+                    <td>
+                        <obs id="hiv-test-result" required="true" conceptId="159427" answerLabels="Negative,Positive" answerConceptIds="703,664" style="radio" /><br></br>
                     </td>
                 </tr>
             </table>
         </fieldset>
+
         <!--HCP details-->
         <fieldset id="Assesment-tab4">
             <legend>
@@ -212,44 +273,58 @@
             </legend>
             <table class="simple-table" id="adherence-1">
                 <tr>
-                    <td>Starter Pack given:</td>
-                    <td><obs  conceptId="1263" answerLabels="Yes,No" answerConceptIds="1065,1066" style="radio" /></td>
-                </tr>
-                <tr>
-                    <fieldset id="Assesment-tab12">
-                        <legend>
-                            <strong>Regimen Category Prescribed</strong>
-                        </legend>
-                    <table>
-                        <tr>
-                            <td>Adults and Children &gt; 34.9Kg: TDF/3TC-300mg/300mg OD + ATV/r -300mg/100mg OD OR TDF/3TC-300mg/300mg OD + LPV/r -200mg/50mg 2 BD x 28 days</td>
-                            <td><obs  conceptId="166655" answerLabel="Yes"  answerConceptId="162326" style="checkbox" /><br></br></td>
-                            <td>Children 25-34.9kg :{ABC 300mg + 3TC 150mg BD+(LPV/r 200/50mg 2tabs am and 1tab pm OR LPV/r 80/20mg 4mls BD)}x28days</td>
-                            <td><obs  conceptId="166655" answerLabel="Yes" answerConceptId="162323"  style="checkbox" /><br></br></td>
-                            <td>Children 20-24.9kg :{ABC/3TC-60/30mg 3 BD+(LPV/r 200/50mg 1 BD OR LPV/r 80/20mg 3mls BD)}x28days.</td>
-                            <td><obs  conceptId="1691" answerLabel="Yes" answerConceptId="162321"  style="checkbox" /><br></br></td>
-                            <td>Children &lt; 20kg: <strong>Consult Pharmacist OR Refer to the guidelines</strong> </td>
-                            <td><obs  conceptId="166655" answerLabel="Yes" answerConceptId="162322" style="checkbox" /><br></br></td>
-                            <td>Specify regimen and dose given: <br></br><obs conceptId="163104" style="textarea" size="30" /></td>
-                        </tr>
-                    </table>
-                    </fieldset>
+                    <td><b>Starter Pack given</b></td>
+                    <td>
+                        <obs required="true" id="starter-pack-issued" conceptId="1263" answerLabels="Yes,No" answerConceptIds="1065,1066" style="radio" />
+                    </td>
                 </tr>
             </table>
+           <table class="simple-table" id="tbl-date-given-starter-pack">
+               <p align="left"><strong>Regimen Category Prescribed</strong></p>
+                        <tr>
+                            <td>Adults and Children &gt; 34.9Kg: TDF/3TC-300mg/300mg OD + ATV/r -300mg/100mg OD OR TDF/3TC-300mg/300mg OD + LPV/r -200mg/50mg 2 BD x 28 days</td>
+                            <td><obs  conceptId="166655" answerLabel="Yes"  answerConceptId="164512" style="checkbox" /><br></br></td>
+                            <td>Children 25-34.9kg :{ABC 300mg + 3TC 150mg BD+(LPV/r 200/50mg 2tabs am and 1tab pm OR LPV/r 80/20mg 4mls BD)}x28days</td>
+                            <td><obs  conceptId="166655" answerLabel="Yes" answerConceptId="162200"  style="checkbox" /><br></br></td>
+                            <td>Children 20-24.9kg :{ABC/3TC-60/30mg 3 BD+(LPV/r 200/50mg 1 BD OR LPV/r 80/20mg 3mls BD)}x28days.</td>
+                            <td><obs  conceptId="166655" answerLabel="Yes" answerConceptId="164976"  style="checkbox" /><br></br></td>
+                            <td>Children &lt; 20kg: <strong>Consult Pharmacist OR Refer to the guidelines</strong> </td>
+                            <td><obs  conceptId="166655" answerLabel="Yes" answerConceptId="160521" style="checkbox" /><br></br></td>
+                        </tr>
+                        <tr>
+                            <td>Specify regimen and dose given</td>
+                            <td><obs conceptId="163104" style="textarea" rows="2" cols="60" /></td>
+                        </tr>
+           </table>
         </fieldset>
-        <!--Baseline Tests-->
-        <fieldset id="Assesment-tab5">
+
+        <!-- Baseline -->
+        <fieldset id="Assesment-tab7">
             <legend>
-                <strong>Baseline Tests:</strong>
+                <strong>Baseline Tests</strong>
             </legend>
-            <table class="simple-table" id="adherence-5">
+            <table class="simple-table" id="adherence-7">
                 <tr>
-                    <td>Baseline tests:</td>
-                    <td>1.HBsAG:<br></br><obs  conceptId="161472" answerLabels="Non Reactive,Reactive" answerConceptIds="664,703" style="radio" /></td>
-                    <td>2.LFTs:ALT <obs conceptId="654" size="30" /></td>
-                    <td>3.RFTs:Creatinine <obs conceptId="790" size="30" /></td>
-                    <td>TCA Date: <obs conceptId="162549" allowFutureDates="true" size="30" /></td>
+                    <td><b>1. HBsAG</b></td>
+                    <td><obs  conceptId="161472" answerLabels="Non Reactive,Reactive" answerConceptIds="664,703" style="radio" /></td>
                 </tr>
+                <tr>
+                    <td><b>2. LFTs: ALT</b></td>
+                    <td><obs conceptId="654" size="30" /></td>
+                </tr>
+                <tr>
+                    <td><b>3. RFTs: Creatinine</b></td>
+                    <td><obs conceptId="790" size="30" /></td>
+                </tr>
+                <tr>
+                    <td><b>4. Other test (Specify)</b></td>
+                    <td><obs conceptId="160987" style="textarea" rows="2" cols="60" /></td>
+                </tr>
+                <tr>
+                    <td><b>TCA Date</b></td>
+                    <td><obs conceptId="160753" required="true" size="50" allowFutureDates="true" /></td>
+                </tr>
+
             </table>
         </fieldset>
     </div>
