@@ -1,4 +1,4 @@
-/home/obunge/Documents/Project/KenyaEMRDEV/openmrs-module-keaddon-gbv/api/src/main/java/org/openmrs/module/keaddonsocialwork/ExampleConstants.java
-/home/obunge/Documents/Project/KenyaEMRDEV/openmrs-module-keaddon-gbv/api/src/main/java/org/openmrs/module/keaddonsocialwork/metadata/ExampleMetadata.java
-/home/obunge/Documents/Project/KenyaEMRDEV/openmrs-module-keaddon-gbv/api/src/main/java/org/openmrs/module/keaddonsocialwork/calculation/EligibleForExampleProgramCalculation.java
-/home/obunge/Documents/Project/KenyaEMRDEV/openmrs-module-keaddon-gbv/api/src/main/java/org/openmrs/module/keaddonsocialwork/ExampleActivator.java
+/home/obunge/Documents/Project/KenyaEMRDEV/openmrs-module-keaddon-gbv/api/src/main/java/org/openmrs/module/keaddonexample/ExampleActivator.java
+/home/obunge/Documents/Project/KenyaEMRDEV/openmrs-module-keaddon-gbv/api/src/main/java/org/openmrs/module/keaddonexample/calculation/EligibleForExampleProgramCalculation.java
+/home/obunge/Documents/Project/KenyaEMRDEV/openmrs-module-keaddon-gbv/api/src/main/java/org/openmrs/module/keaddonexample/ExampleConstants.java
+/home/obunge/Documents/Project/KenyaEMRDEV/openmrs-module-keaddon-gbv/api/src/main/java/org/openmrs/module/keaddonexample/metadata/ExampleMetadata.java

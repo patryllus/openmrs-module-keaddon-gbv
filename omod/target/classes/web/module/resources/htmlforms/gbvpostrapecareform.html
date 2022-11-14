@@ -139,25 +139,6 @@
             }
         };
 
-        //Before Submit
-        beforeSubmit.push(function() {
-            var referredBy = getValue('referral-by.value');
-            var clientType = getValue('client-type.value');
-            var otherReferred = jq('#other-referral input[type=text]').val();
-            var infoSource = getValue('information-source.value');
-            var otherInfoSource = jq('#other-information-source input[type=text]').val();
-            var county = getField('county.value').val();
-            if(referredBy == ""){
-                getField('referral-by.error').html('Please specify referral source').show();
-                return false;
-            }else {
-                getField('referral-by.error').html('Please specify referral source').hide();
-            }
-
-
-            return true;
-        });
-
         //Clear hidden sections
         clearHiddenSections = function(parentObj) {
             parentObj.find('input[type=radio]').each(function() {
@@ -174,6 +155,134 @@
             });
         }
     </script>
+    <ifMode mode="EDIT">
+        <script type="text/javascript">
+                     $(document).ready(function () {
+            //Defaults
+            jq("#tbl-specify-relationship").hide();
+            jq("#tbl-other-sex").hide();
+            jq("#tbl-facility-detail").hide();
+            jq("#tbl-police-station-detail").hide();
+            jq("#tbl-details-survivor-bath").hide();
+            jq("#tbl-details-cloths").hide();
+            jq("#tbl-detail-mark-on-perpetrator").hide();
+            jq("#tbl-stitching-done-comment").hide();
+            jq("#tbl-sti-trx-done-comment").hide();
+            jq("#tbl-other-referral-location").hide();
+
+
+            //Referred by selected
+            jq("#alleged-perpetrator :input[type=radio]").change(allegedPerpetratorKnownSelected);
+            jq("#other-violence :input[type=checkbox]").change(otherSexualViolenceSelected);
+            jq("#health-facility :input[type=radio]").change(reportedToHCYesSelected);
+            jq("#reported-police :input[type=radio]").change(reportedToPSYesSelected);
+            jq("#mark-on-perpetrator :input[type=radio]").change(reportedMarkonPerpetratorSelected);
+            jq("#survivor-bath :input[type=radio]").change(reportedSurvivorBathSelected);
+            jq("#clothes-transported :input[type=radio]").change(reportedClotheTransportedSelected);
+            jq("#other-referral :input[type=checkbox]").change(reportedOtherReferralLocation);
+            jq("#stitching-done :input[type=radio]").change(reportedStitchingDone);
+            jq("#sti-trx-done :input[type=radio]").change(reportedStiTrxDone);
+
+          });
+
+            var reportedStiTrxDone = function () {
+            var val = jq(this).val();
+            if (val == 1065 ){
+                jq("#tbl-sti-trx-done-comment").show();
+            }else {
+                jq("#tbl-sti-trx-done-comment").hide();
+                clearHiddenSections(jq("#tbl-sti-trx-done-comment"));
+            }
+        };
+           var reportedStitchingDone = function () {
+            var val = jq(this).val();
+            if (val == 1065 ){
+                jq("#tbl-stitching-done-comment").show();
+            }else {
+                jq("#tbl-stitching-done-comment").hide();
+                clearHiddenSections(jq("#tbl-stitching-done-comment"));
+            }
+        };
+
+         var reportedOtherReferralLocation = function () {
+            var val = jq(this).val();
+            if (val == 5622 ){
+                jq("#tbl-other-referral-location").show();
+            }else {
+                jq("#tbl-other-referral-location").hide();
+                clearHiddenSections(jq("#tbl-other-referral-location"));
+            }
+        };
+
+          var reportedClotheTransportedSelected = function () {
+            var val = jq(this).val();
+            if (val == 5622 ){
+                jq("#tbl-details-cloths-transport").show();
+            }else {
+                jq("#tbl-details-cloths-transport").hide();
+                clearHiddenSections(jq("#tbl-details-cloths-transport"));
+            }
+        };
+
+          var reportedSurvivorBathSelected = function () {
+            var val = jq(this).val();
+            if (val == 1065 ){
+                jq("#tbl-details-survivor-bath").show();
+            }else {
+                jq("#tbl-details-survivor-bath").hide();
+                clearHiddenSections(jq("#tbl-details-survivor-bath"));
+            }
+        };
+
+         var reportedMarkonPerpetratorSelected = function () {
+            var val = jq(this).val();
+            if (val == 1065 ){
+                jq("#tbl-detail-mark-on-perpetrator").show();
+            }else {
+                jq("#tbl-detail-mark-on-perpetrator").hide();
+                clearHiddenSections(jq("#tbl-detail-mark-on-perpetrator"));
+            }
+        };
+          var reportedToPSYesSelected = function () {
+            var val = jq(this).val();
+            if (val == 1065 ){
+                jq("#tbl-police-station-detail").show();
+            }else {
+                jq("#tbl-police-station-detail").hide();
+                clearHiddenSections(jq("#tbl-police-station-detail"));
+            }
+        };
+        var allegedPerpetratorKnownSelected = function () {
+            var val = jq(this).val();
+            if (val == 1065 ){
+                jq("#tbl-specify-relationship").show();
+            }else {
+                jq("#tbl-specify-relationship").hide();
+                clearHiddenSections(jq("#tbl-specify-relationship"));
+            }
+        };
+
+          var otherSexualViolenceSelected = function () {
+            var val = jq(this).val();
+            if (val == 5622 ){
+                jq("#tbl-other-sex").show();
+            }else {
+                jq("#tbl-other-sex").hide();
+                clearHiddenSections(jq("#tbl-other-sex"));
+            }
+        };
+
+            var reportedToHCYesSelected = function () {
+            var val = jq(this).val();
+            if (val == 1065 ){
+                jq("#tbl-facility-detail").show();
+            }else {
+                jq("#tbl-facility-detail").hide();
+                clearHiddenSections(jq("#tbl-facility-detail"));
+            }
+        };
+        </script>
+    </ifMode>
     <style>
         .simple-table {
         border: solid 1px #DDEEEE;
@@ -225,7 +334,7 @@
                 </tr>
                 <tr>
                     <td>Number of perpetrators</td>
-                      <td>  <obs conceptId="1639" size="50"  style="text"/>
+                      <td>  <obs conceptId="1639" rows="3" cols="40"  style="text"/>
                     </td>
                     <td>Alleged perpetrators</td>
                     <td><obs id="alleged-perpetrator" conceptId="165229" answerLabels="Unknown,Known" answerConceptIds="1066,1065" style="radio" /></td>
@@ -253,15 +362,15 @@
             </legend>
             <table class="simple-table" id="Checklist-tbl">
                 <tr>
-                    <td>County</td><td><obs conceptId="167131" size="30"  style="textarea"/></td>
-                    <td>Sub-county</td><td><obs conceptId="161564" size="30"  style="textarea"/></td>
-                    <td>Landmark</td><td><obs conceptId="159942" size="30"  style="textarea"/></td>
+                    <td>County</td><td><obs required="true" conceptId="167131" rows="3" cols="40"  style="textarea"/></td>
+                    <td>Sub-county</td><td><obs required="true" conceptId="161564" rows="3" cols="40"  style="textarea"/></td>
+                    <td>Landmark</td><td><obs required="true" conceptId="159942" rows="3" cols="40"  style="textarea"/></td>
                 </tr>
                 <tr>
                     <td>Indicate what is observed on the chief complaint</td><td><obs conceptId="160945" size="50"  style="textarea"/></td>
                     <td>Indicate what is reported by the chief complaint</td><td><obs conceptId="166846" size="50"  style="textarea"/></td>
                     <td>Circumstances surrounding the incident(survivor account) remember to record penetration(how,where,what was used?Indication of struggle?)</td>
-                    <td><obs conceptId="160303" rows="2"  cols="60" style="textarea"/></td>
+                    <td><obs required="true" conceptId="160303" rows="3" cols="40" style="textarea"/></td>
                 </tr>
             </table>
         </fieldset>
@@ -283,7 +392,7 @@
                     <td>
                         <table id="tbl-other-sex">
                             <tr>
-                                <td>Specify other sexual violence:<br/><br/><obs conceptId="161011" size="50"  style="textarea"/></td>
+                                <td>Specify other sexual violence:<br/><br/><obs conceptId="161011" rows="3" cols="40"  style="textarea"/></td>
                             </tr>
                         </table>
                     </td>
@@ -297,7 +406,7 @@
                     <td>
                         <table id="tbl-facility-detail">
                             <tr>
-                                <td>Name of the facility</td><td><obs conceptId="162724" rows="2" cols="80"  style="textarea"/></td>
+                                <td>Name of the facility</td><td><obs conceptId="162724" rows="3" cols="40"  style="textarea"/></td>
                                 <td>Date and Time</td><td><obs conceptId="164093" size="50"  showTime="true"/></td>
                                 <td>Were you treated?</td><td><obs conceptId="165052" answerLabels="Yes,No" answerConceptIds="1065,1066" style="radio"/></td>
                                 <td>Were you given referral notes?</td><td><obs conceptId="165152" answerLabels="Yes,No" answerConceptIds="1065,1066" style="radio"/></td>
@@ -307,11 +416,11 @@
                 </tr>
                 <tr>
                     <td>Incident already reported to police?</td>
-                    <td><obs id="reported-police" conceptId="165193" answerLabels="No,Yes (Indicate name of police station)" answerConceptIds="1066,1065" style="radio"/></td>
+                    <td><obs required="true" id="reported-police" conceptId="165193" answerLabels="No,Yes (Indicate name of police station)" answerConceptIds="1066,1065" style="radio"/></td>
                     <td>
                       <table id="tbl-police-station-detail">
                           <tr>
-                              <td>Police station name</td><td><obs conceptId="161550" rows="2" cols="80" style="textarea"/></td>
+                              <td>Police station name</td><td><obs conceptId="161550" rows="3" cols="40" style="textarea"/></td>
                               <td>Date and time of report</td><td><obs conceptId="165144" size="50"  style="date"/></td>
                           </tr>
                       </table>
@@ -321,7 +430,7 @@
                     <td>Significant medical and/or surgical history</td>
                     <td><obs conceptId="160221" rows="2" cols="80"  style="textarea"/></td>
                     <td>Indicate additional information provided by the client or observed</td>
-                    <td><obs conceptId="163677"  rows="2" cols="80" style="textarea"/></td>
+                    <td><obs conceptId="163677"  rows="3" cols="40" style="textarea"/></td>
                 </tr>
             </table>
         </fieldset>
@@ -337,7 +446,7 @@
                         <h3><strong>Physical Examination: [Indicates sites and nature of injuries bruises and marks outside the genitatalia]</strong></h3>
                         <p><strong>Please use the body map below to indicate injuries, inflammations, marks on various body parts of the survivor</strong></p>
                     </td>
-                   <td>Comment<br/> <obs conceptId="1391" size="100" rows="2" cols="80"  style="textarea"/></td>
+                   <td>Comment<br/> <obs conceptId="1391" size="100" rows="4" cols="40"  style="textarea"/></td>
                 </tr>
             </table>
         </fieldset>
@@ -422,7 +531,7 @@
                     <td>Did survivor change clothes?</td>
                     <td> <obs  required="true" conceptId="165171" answerLabels="Yes,No" answerConceptIds="1065,1066" style="radio" /></td>
                     <td>State of clothes (stains,torn,color,where were the worn clothes taken)?</td>
-                    <td><obs required="true" conceptId="163104" rows="2" cols="80" style="textarea"/></td>
+                    <td><obs required="true" conceptId="163104" rows="3" cols="40" style="textarea"/></td>
                 </tr>
                 <tr>
                     <td>How were the clothes transported?</td>
@@ -436,7 +545,7 @@
                         <table id="tbl-details-cloths-transport">
                             <tr>
                                 <td>Give details</td>
-                                <td><obs required="true" conceptId="166363" rows="2" cols="100"  style="textarea"/></td>
+                                <td><obs  conceptId="166363" rows="3" cols="40"  style="textarea"/></td>
                             </tr>
                         </table>
                     </td>
@@ -453,7 +562,7 @@
                         <table id="tbl-details-survivor-bath">
                             <tr>
                                 <td>Details of survivor bath </td>
-                                <td><obs required="true" conceptId="163048" rows="2" cols="100"  style="textarea"/></td>
+                                <td><obs  conceptId="163048" rows="3" cols="40"  style="textarea"/></td>
                             </tr>
                         </table>
                     </td>
@@ -465,7 +574,7 @@
                        <table id="tbl-detail-mark-on-perpetrator">
                            <tr>
                                <td>Details of marks</td>
-                               <td><obs required="true" conceptId="161031" rows="2" cols="100" style="textarea"/></td>
+                               <td><obs  conceptId="161031" rows="2" cols="100" style="textarea"/></td>
                            </tr>
                        </table>
                     </td>
@@ -480,7 +589,7 @@
             <table class="simple-table" id="adherence-8">
                 <tr>
                     <td>Physical injuries (mark in the body map)</td>
-                    <td><obs conceptId="165035" rows="2" cols="80" style="textarea"/></td>
+                    <td><obs conceptId="165035" rows="3" cols="40" style="textarea"/></td>
                 </tr>
                 <tr>
                     <td>Outer genitalia</td>
@@ -489,18 +598,18 @@
                 <includeIf velocityTest="$patient.gender == 'F' ">
                 <tr>
                     <td>Vagina</td>
-                    <td><obs conceptId="160969" rows="2" cols="80"  style="textarea"/></td>
+                    <td><obs conceptId="160969" rows="3" cols="40"  style="textarea"/></td>
                     <td>Hymen</td>
-                    <td><obs conceptId="160981" rows="2" cols="80"  style="textarea"/></td>
+                    <td><obs conceptId="160981" rows="3" cols="40"  style="textarea"/></td>
                 </tr>
                 </includeIf>
                 <tr>
                     <td>Anus</td>
-                    <td><obs  conceptId="160962" rows="2" cols="80"  style="textarea"/></td>
+                    <td><obs  conceptId="160962" rows="3" cols="40"  style="textarea"/></td>
                 </tr>
                 <tr>
                     <td>Other significant orifices</td>
-                    <td><obs conceptId="160943" rows="2" cols="80"  style="textarea"/></td>
+                    <td><obs conceptId="160943" rows="3" cols="40"  style="textarea"/></td>
                 </tr>
             </table>
         </fieldset>
@@ -518,7 +627,7 @@
                 <includeIf velocityTest="$patient.gender == 'F' ">
                 <tr>
                     <td>ECP given</td>
-                    <td><obs required="true" conceptId="374" answerLabels="Yes,No" answerConceptIds="1065,1066" style="radio" />
+                    <td><obs conceptId="374" answerLabels="Yes,No" answerConceptIds="1065,1066" style="radio" />
                     </td>
                 </tr>
                 </includeIf>
@@ -529,7 +638,7 @@
                        <table id="tbl-stitching-done-comment">
                            <tr>
                                <td>Comment on Stitching/surgical toilet done</td>
-                               <td><obs required="true" conceptId="165440" rows="2" cols="80"  style="textarea"/></td>
+                               <td><obs  conceptId="165440" rows="3" cols="40"  style="textarea"/></td>
                            </tr>
                        </table>
                     </td>
@@ -541,14 +650,14 @@
                         <table id="tbl-sti-trx-done-comment">
                             <tr>
                                 <td>Comment on STI treatment given</td>
-                                <td><obs required="true" conceptId="167214" rows="2" cols="80"  style="textarea"/></td>
+                                <td><obs  conceptId="167214" rows="3" cols="40" style="textarea"/></td>
                              </tr>
                         </table>
                     </td>
                 </tr>
                 <tr>
                     <td>Any other treatment/Medication given/management?</td>
-                    <td><obs conceptId="160632" rows="2" cols="80" style="textarea"/></td>
+                    <td><obs conceptId="160632" rows="3" cols="40" style="textarea"/></td>
                 </tr>
             </table>
         </fieldset>
@@ -574,7 +683,7 @@
                         <table id="tbl-other-referral-location">
                             <tr>
                                 <td>Other referrals</td>
-                                <td><obs required="true" conceptId="165138" rows="2" cols="80" style="textarea"/></td>
+                                <td><obs  conceptId="165138" rows="3" cols="40" style="textarea"/></td>
                             </tr>
                         </table>
                     </td>
@@ -610,7 +719,7 @@
                         <obs  conceptId="164217" answerLabels="National government Lab,Health Facility Lab" answerConceptIds="160480,1537" style="radio" />&nbsp;
                     </td>
                     <td>
-                        <obs conceptId="161011" size="50"  style="textarea"/>
+                        <obs conceptId="161011" rows="3" cols="40"  style="textarea"/>
                     </td>
                 </tr>
                 <includeIf velocityTest="$patient.gender == 'F'">
@@ -625,7 +734,7 @@
                         <obs  conceptId="164217" answerLabels="National government Lab,Health Facility Lab" answerConceptIds="160480,1537" style="radio" />&nbsp;
                     </td>
                     <td>
-                        <obs conceptId="161011" size="50"  style="textarea"/>
+                        <obs conceptId="161011" rows="3" cols="40"  style="textarea"/>
                     </td>
                 </tr>
                 </includeIf>
@@ -643,7 +752,7 @@
                         <obs  conceptId="164217" answerLabels="National government Lab,Health Facility Lab" answerConceptIds="160480,1537" style="radio" />&nbsp;
                     </td>
                     <td>
-                        <obs conceptId="161011" size="50"  style="textarea"/>
+                        <obs conceptId="161011" rows="3" cols="40"  style="textarea"/>
                     </td>
                 </tr>
                 <tr>
@@ -661,7 +770,7 @@
                         <obs  conceptId="164217" answerLabels="National government Lab,Health Facility Lab" answerConceptIds="160480,1537" style="radio" />&nbsp;
                     </td>
                     <td>
-                        <obs conceptId="161011" size="50"  style="textarea"/>
+                        <obs conceptId="161011" rows="3" cols="40"  style="textarea"/>
                     </td>
                 </tr>
                 <tr>
@@ -676,7 +785,7 @@
 
                     </td>
                     <td>
-                        <obs conceptId="161011" size="50"  style="textarea"/>
+                        <obs conceptId="161011" rows="3" cols="40"  style="textarea"/>
                     </td>
                 </tr>
                 <tr>
@@ -691,7 +800,7 @@
 
                     </td>
                     <td>
-                        <obs conceptId="161011" size="50"  style="textarea"/>
+                        <obs conceptId="161011" rows="3" cols="40" style="textarea"/>
                     </td>
                 </tr>
                 <tr>
@@ -706,7 +815,7 @@
 
                     </td>
                     <td>
-                        <obs conceptId="161011" size="50"  style="textarea"/>
+                        <obs conceptId="161011" rows="3" cols="40"  style="textarea"/>
                     </td>
                 </tr>
                 <tr>
@@ -719,7 +828,7 @@
                         <obs  conceptId="164217" answerLabels="National government Lab,Health Facility Lab" answerConceptIds="160480,1537" style="radio" />&nbsp;
                     </td>
                     <td>
-                        <obs conceptId="161011" size="50" style="textarea"/>
+                        <obs conceptId="161011" rows="3" cols="40" style="textarea"/>
                     </td>
                 </tr>
             </table>
@@ -732,7 +841,7 @@
             <table class="simple-table" id="adherence-12">
                 <tr>
                     <td>These/All/Some of the samples packed and issued:(please specify)</td>
-                    <td><obs conceptId="165435" rows="3" cols="100" style="textarea"/></td>
+                    <td><obs conceptId="165435" rows="3" cols="40" style="textarea"/></td>
                 </tr>
                 <tr>
                     <td>By:&nbsp;Name of Examining officer(Doctor/Nurse/Clinical officer)</td>

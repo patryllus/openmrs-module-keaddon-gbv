@@ -49,6 +49,88 @@
                 clearHiddenSections(jq("#tbl-prc-number"));
             }
         };
+         var unknownHIVTestSelected = function () {
+            var val = jq(this).val();
+            if (val == 1067 ){
+                jq("#tbl-hiv-test-result").show();
+            }else {
+                jq("#tbl-hiv-test-result").hide();
+                clearHiddenSections(jq("#tbl-hiv-test-result"));
+            }
+        };
+        var otherTypeOfExposureSelected = function () {
+            var val = jq(this).val();
+            if (val == 5622 ){
+                jq("#tbl-other-exposure-type").show();
+            }else {
+                jq("#tbl-other-exposure-type").hide();
+                clearHiddenSections(jq("#tbl-other-exposure-type"));
+            }
+        };
+          var sexualTypeOfExposureSelected = function () {
+            var val = jq(this).val();
+            if (val == 167085 ){
+                jq("#type-assault").show();
+            }else {
+                jq("#type-assault").hide();
+                clearHiddenSections(jq("#type-assault"));
+            }
+        };
+
+
+        //Clear hidden sections
+        clearHiddenSections = function(parentObj) {
+            parentObj.find('input[type=radio]').each(function() {
+                this.checked = false;
+            });
+            parentObj.find('input[type=checkbox]').each(function() {
+                this.checked = false;
+            });
+            parentObj.find('input[type=text]').each(function() {
+                jq(this).val("");
+            });
+            parentObj.find('select').each(function() {
+                this.selectedIndex =0;
+            });
+        }
+    </script>
+    <ifMode mode="EDIT">
+        <script type="text/javascript">
+     $(document).ready(function () {
+            //Defaults
+            jq("#tbl-other-exposure-type").hide();
+            jq("#type-assault").hide();
+            jq("#tbl-hiv-test-result").hide();
+            jq("#row-hiv-test").hide();
+            jq("#row-exposure-type").hide();
+            jq("#tbl-prc-number").hide();
+
+
+            //Referred by selected
+            jq("#other-specify :input[type=checkbox]").change(otherTypeOfExposureSelected);
+            jq("#sex-assault-type :input[type=checkbox]").change(sexualTypeOfExposureSelected);
+            jq("#hiv-test-result :input[type=radio]").change(unknownHIVTestSelected);
+            jq("#visit-number select").change(onSelectInitialVisit);
+          });
+
+
+         var onSelectInitialVisit = function () {
+            var val = jq(this).val();
+            if (val == 162080 ){
+                jq("#row-hiv-test").show();
+                jq("#row-exposure-type").show();
+                jq("#tbl-prc-number").show();
+            }else {
+                jq("#row-hiv-test").hide();
+                clearHiddenSections(jq("#row-hiv-test"));
+
+                jq("#row-exposure-type").hide();
+                clearHiddenSections(jq("#row-exposure-type"));
+
+                jq("#tbl-prc-number").hide();
+                clearHiddenSections(jq("#tbl-prc-number"));
+            }
+        };
 
 
          var unknownHIVTestSelected = function () {
@@ -79,42 +161,8 @@
             }
         };
 
-
-        //Before Submit
-        beforeSubmit.push(function() {
-            var referredBy = getValue('referral-by.value');
-            var clientType = getValue('client-type.value');
-            var otherReferred = jq('#other-referral input[type=text]').val();
-            var infoSource = getValue('information-source.value');
-            var otherInfoSource = jq('#other-information-source input[type=text]').val();
-            var county = getField('county.value').val();
-            if(referredBy == ""){
-                getField('referral-by.error').html('Please specify referral source').show();
-                return false;
-            }else {
-                getField('referral-by.error').html('Please specify referral source').hide();
-            }
-
-
-            return true;
-        });
-
-        //Clear hidden sections
-        clearHiddenSections = function(parentObj) {
-            parentObj.find('input[type=radio]').each(function() {
-                this.checked = false;
-            });
-            parentObj.find('input[type=checkbox]').each(function() {
-                this.checked = false;
-            });
-            parentObj.find('input[type=text]').each(function() {
-                jq(this).val("");
-            });
-            parentObj.find('select').each(function() {
-                this.selectedIndex =0;
-            });
-        }
-    </script>
+     </script>
+    </ifMode>
     <style>
         .simple-table {
         border: solid 1px #DDEEEE;
@@ -169,7 +217,7 @@
                         <table id="tbl-prc-number">
                             <tr>
                                 <td>PRC Number <strong>(format:PRC#-10-2022-00001 )</strong></td>
-                                <td><obs required="true" id="prc-number" conceptId="165416" size="30"/></td>
+                                <td><obs  id="prc-number" conceptId="1646" size="30"/></td>
                             </tr>
                         </table>
                     </td>
@@ -189,7 +237,7 @@
                         <table id="tbl-other-exposure-type">
                             <tr>
                                 <td>Specify type of exposure</td>
-                                <td><obs conceptId="160716" rows="2" cols="80" required="true"/></td>
+                                <td><obs conceptId="160716" style="textarea" id="specify-exposure" rows="3" cols="40"/></td>
                             </tr>
                         </table>
                     </td>
@@ -206,7 +254,7 @@
                         <table id="tbl-assault-other">
                             <tr>
                                 <td>Specify other Assault</td>
-                                <td><obs conceptId="164879" style="textarea" rows="2" cols="80" /></td>
+                                <td><obs conceptId="164879" style="textarea" id="specify-assault" rows="3" cols="40" /></td>
                             </tr>
                         </table>
                     </td>
@@ -218,7 +266,7 @@
             <table class="simple-table" id="Checklist-tbl">
                 <tr>
                     <td><strong>Presenting Issues</strong></td>
-                    <td><obs required="true" conceptId="160632"  rows="4" cols="100" style="textarea" /></td>
+                    <td><obs required="true" conceptId="160632"  rows="4" cols="40" style="textarea" /></td>
                 </tr>
                 <tr id="row-hiv-test">
                     <td>HIV Test Results</td>
@@ -227,26 +275,23 @@
                         <table id="tbl-hiv-test-result">
                             <tr>
                                 <td>Why HIV test unknown?</td>
-                                <td><obs conceptId="162169" style="textarea" rows="2" cols="80"/></td>
+                                <td><obs conceptId="162169" style="textarea" rows="3" cols="40"/></td>
                             </tr>
                         </table>
                     </td>
-
                 </tr>
                 <tr>
                     <td><strong>Emerging Issues</strong></td>
-                    <td><obs conceptId="161011" rows="4" cols="100" required="true"/></td>
+                    <td><obs conceptId="161011" rows="4" cols="40" id="emerging-issue"/></td>
                 </tr>
                 <tr>
                     <td><strong>Plan of Action</strong></td>
-                    <td><obs conceptId="163104" rows="4" cols="100" required="true"/></td>
+                    <td><obs conceptId="163104" rows="4" cols="40" style="textarea" id="action-plan"/></td>
                     <td>TCA</td>
                     <td><obs conceptId="162549" required="true" allowFutureDates="true" size="50" /></td>
                 </tr>
             </table>
         </fieldset>
-
-
     </div>
     <div class="ke-form-footer">
         <submit />

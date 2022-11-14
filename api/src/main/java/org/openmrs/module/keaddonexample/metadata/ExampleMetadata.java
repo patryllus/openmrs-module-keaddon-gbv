@@ -25,6 +25,17 @@ import static org.openmrs.module.metadatadeploy.bundle.CoreConstructors.*;
 @Component
 public class ExampleMetadata extends AbstractMetadataBundle {
 
+	public static final class _Program {
+
+		public static final String GBV_CARE ="c56118cb-cae5-4d05-b12f-da199cee4883";
+	}
+
+	//public static final class _Concept {
+
+		//public static final String GBV = "126311AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+	//}
+
+
 	public static class _EncounterType {
 
 		//GBVPHYSICALEMOTIONALFORM Encounter
@@ -123,7 +134,7 @@ public class ExampleMetadata extends AbstractMetadataBundle {
 
 		//GBVTRAUMACOUNSELLINGFORM
 		install(encounterType("GBV Trauma Counselling", "GBVTRAUMACOUNSELLINGFORM Encounter", _EncounterType.GBVTRAUMACOUNSELLINGFORM));
-		install(form("SGBV TRAUMA COUNSELLING FORM", null, _EncounterType.GBVTRAUMACOUNSELLINGFORM, "1", _Form.GBVTRAUMACOUNSELLINGFORM));
+		install(form("GBV TRAUMA COUNSELLING FORM", null, _EncounterType.GBVTRAUMACOUNSELLINGFORM, "1", _Form.GBVTRAUMACOUNSELLINGFORM));
 
 		//GBVPOSTRAPECAREFORM
 		install(encounterType("GBV Post Rape Care", "GBVPOSTRAPECAREFORM Encounter", _EncounterType.GBVPOSTRAPECAREFORM));

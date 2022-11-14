@@ -3,7 +3,7 @@
 	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-	<!-- CIHEB Kenya modules App -->
+	<!-- GBV modules App -->
 
 	<bean id="keaddonexample.app.example" factory-bean="kenyacore.appFactoryBean" factory-method="createInstance">
 		<constructor-arg value="keaddonexample.example"/>
@@ -11,6 +11,38 @@
 		<constructor-arg value="keaddonexample/example/home.page"/>
 		<constructor-arg value="keaddonexample:apps/medical.png"/>
 		<constructor-arg value="700"/>
+	</bean>
+
+
+	<!-- ===================== Program ===================== -->
+
+	<bean id="kenyaemr.gbv.care.program" class="org.openmrs.module.kenyacore.program.ProgramDescriptor">
+		<property name="targetUuid" value="c56118cb-cae5-4d05-b12f-da199cee4883" />
+		<!--<property name="eligibilityCalculation" value="org.openmrs.module.kenyaemr.calculation.library.hiv.EligibleForHivProgramCalculation" />-->
+		<property name="defaultEnrollmentForm" ref="kenyaemr.gbv.care.form.enrollment" />
+		<property name="defaultCompletionForm" ref="kenyaemr.gbv.care.form.outcome" />
+		<property name="visitForms" >
+			<set>
+				<ref bean="kenyaemr.gbv.care.form.followup"/>
+			</set>
+		</property>
+
+		<!--<property name="reports">
+			<set>
+				<ref bean="kenyaemr.cca.pcr.tests.report"/>
+				<ref bean="kenyaemr.cca.rdt.tests.report"/>
+				<ref bean="kenyaemr.cca.daily.qa.report" />
+				<ref bean="kenyaemr.cca.covid.enrollment.report"/>
+			</set>
+		</property>
+		<property name="fragments">
+			<map>
+				<entry key="enrollment-summary" value="gbv:program/covid/covidInitiationSummary" />
+				<entry key="care-panel" value="covid19:program/covid/covidCarePanel" />
+				<entry key="completion-summary" value="covid19:program/covid/covidOutcomeSummary" />
+			</map>
+		</property> -->
+		<property name="order" value="300" />
 	</bean>
 
 	<!-- ETL Configuration

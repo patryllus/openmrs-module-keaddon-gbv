@@ -33,25 +33,6 @@
         };
 
 
-        //Before Submit
-        beforeSubmit.push(function() {
-            var referredBy = getValue('referral-by.value');
-            var clientType = getValue('client-type.value');
-            var otherReferred = jq('#other-referral input[type=text]').val();
-            var infoSource = getValue('information-source.value');
-            var otherInfoSource = jq('#other-information-source input[type=text]').val();
-            var county = getField('county.value').val();
-            if(referredBy == ""){
-                getField('referral-by.error').html('Please specify referral source').show();
-                return false;
-            }else {
-                getField('referral-by.error').html('Please specify referral source').hide();
-            }
-
-
-            return true;
-        });
-
         //Clear hidden sections
         clearHiddenSections = function(parentObj) {
             parentObj.find('input[type=radio]').each(function() {
@@ -68,6 +49,29 @@
             });
         }
     </script>
+<ifMode mode="EDIT">
+    <script type="text/javascript">
+             $(document).ready(function () {
+            //Defaults
+            jq("#tbl-other-referral-source").hide();
+
+            //Referred by selected
+            jq("#referred-from :input[type=radio]").change(otherReferralSelected);
+          });
+
+        var otherReferralSelected = function () {
+            var val = jq(this).val();
+            if (val == 5622 ){
+                jq("#tbl-other-referral-source").show();
+            }else {
+                jq("#tbl-other-referral-source").hide();
+                clearHiddenSections(jq("#tbl-other-referral-source"));
+            }
+        };
+
+
+    </script>
+</ifMode>
   <style>
         .simple-table {
         border: solid 1px #DDEEEE;
@@ -126,7 +130,7 @@
                <table id="tbl-other-referral-source">
                    <tr>
                        <td><strong>Specify other referral source</strong></td>
-                       <td><obs required="true" conceptId="165092" style="textarea" size="50" /></td>
+                       <td><obs conceptId="165092" style="textarea" rows="3" cols="40" /></td>
                    </tr>
                </table>
            </td>
@@ -151,7 +155,7 @@
               </td>
               <td>
                 Trauma counselling comments <br></br>
-                <obs conceptId="161011" style="textarea" rows="2" cols="80" />
+                <obs conceptId="161011" style="textarea" rows="3" cols="40" />
               </td>
           </tr>
           <tr>
@@ -161,7 +165,7 @@
               </td>
               <td>
                 STI screening/treatment comments <br></br>
-                <obs conceptId="160632" style="textarea" rows="2" cols="80" />
+                <obs conceptId="160632" style="textarea" rows="3" cols="40" />
               </td>
           </tr>
         <tr>
@@ -171,7 +175,7 @@
               </td>
               <td>
                 Lab test comments <br></br>
-                <obs conceptId="165435" style="textarea" rows="2" cols="80"/>
+                <obs conceptId="165435" style="textarea" rows="3" cols="40"/>
               </td>
           </tr>
           <tr>
@@ -181,7 +185,7 @@
               </td>
               <td>
                 Rapid HIV testing comments<br></br>
-                <obs conceptId="160716" style="textarea" rows="2" cols="80" />
+                <obs conceptId="160716" style="textarea" rows="3" cols="40" />
               </td>
           </tr>
         <tr>
@@ -191,7 +195,7 @@
               </td>
               <td>
                 Legal counsel comments<br></br>
-                <obs conceptId="165426" style="textarea" rows="2" cols="80" />
+                <obs conceptId="165426" style="textarea" rows="3" cols="40" />
               </td>
         </tr>
         <tr>
@@ -201,19 +205,19 @@
                 </td>
                 <td>
                     Child Protection services comments<br></br>
-                    <obs conceptId="167214" style="textarea" rows="2" cols="80" />
+                    <obs conceptId="167214" style="textarea" rows="3" cols="40" />
                 </td>
         </tr>
         <tr>
               <td colspan="2">Referrals to (Tick all that apply)</td>
               <td>
-                  <obs  conceptId="1885" answerLabel="Police station" answerConceptId="165192" style="checkbox" />&nbsp;<br/>
+                <obs  conceptId="1885" answerLabel="Police station" answerConceptId="165192" style="checkbox" />&nbsp;<br/>
                 <obs  conceptId="1885" answerLabel="Safe space" answerConceptId="165227" style="checkbox" /> <br/>
                 <obs  conceptId="1885" answerLabel="Alternative dispute resolution" answerConceptId="165227" style="checkbox" /><br/><br/>
               </td>
               <td>
                 Scheduled Appointments (Date)</td>
-               <td> <obs conceptId="162549" required="true" allowFutureDates="true" size="50" />
+               <td> <obs conceptId="162549" required="" allowFutureDates="true" size="50" />
               </td>
         </tr>
       </table>

@@ -3,11 +3,11 @@ SET SQL_MODE='' $$
 
 -- --------------------------------------------------- adding egpaf CCA form procedures ---------------------------------------------
 -- gbvrc_consent_prc data
-DROP PROCEDURE IF EXISTS sp_update_etl_gbvrc_consent_prc $$
-CREATE PROCEDURE sp_update_etl_gbvrc_consent_prc(IN last_update_time DATETIME)
+DROP PROCEDURE IF EXISTS sp_update_etl_gbv_consenting $$
+CREATE PROCEDURE sp_update_etl_gbv_consenting(IN last_update_time DATETIME)
   BEGIN
-    SELECT "Processing gbvrc_consent_prc data ", CONCAT("Time: ", NOW());
-    insert into kenyaemr_etl.etl_gbvrc_consent_prc(
+    SELECT "Processing gbv_consenting data ", CONCAT("Time: ", NOW());
+    insert into kenyaemr_etl.etl_gbv_consenting(
                       uuid,
                       encounter_id,
                       visit_id,
@@ -610,24 +610,28 @@ insert into kenyaemr_etl.etl_gbvrc_physicalemotional_violence(
 -- ----------------------------  scheduled updates ---------------------
 
 
-DROP PROCEDURE IF EXISTS sp_gbvrc_scheduled_updates $$
-CREATE PROCEDURE sp_gbvrc_scheduled_updates()
+DROP PROCEDURE IF EXISTS sp_gbv_scheduled_updates $$
+CREATE PROCEDURE sp_gbv_scheduled_updates()
   BEGIN
     DECLARE update_script_id INT(11);
     DECLARE last_update_time DATETIME;
     SELECT max(start_time) into last_update_time from kenyaemr_etl.etl_script_status where stop_time is not null or stop_time !="";
 
-    INSERT INTO kenyaemr_etl.etl_script_status(script_name, start_time) VALUES('ciheb_module_gbvrc_scheduled_updates', NOW());
+    INSERT INTO kenyaemr_etl.etl_script_status(script_name, start_time) VALUES('gbv_scheduled_updates', NOW());
     SET update_script_id = LAST_INSERT_ID();
 
-    CALL sp_update_etl_gbvrc_consent_prc(last_update_time);
-    CALL sp_update_etl_gbvrc_legal(last_update_time);
-    CALL sp_update_etl_gbvrc_pepmanagementforsurvivors(last_update_time);
-    CALL sp_update_etl_gbvrc_pepmanagement_nonoccupationalexposure(last_update_time);
-    CALL sp_update_etl_gbvrc_linkage(last_update_time);
-    CALL sp_update_etl_gbvrc_physicalemotional_violence(last_update_time);
-    CALL sp_update_etl_gbvrc_postrapecare(last_update_time);
-    CALL sp_update_etl_gbvrc_psychologicalassessment(last_update_time);
+    CALL sp_update_etl_gbv_consenting(last_update_time);
+    CALL sp_update_etl_gbv_legal_encounter(last_update_time);
+    CALL sp_update_etl_gbv_pepmanagementforsurvivor(last_update_time);
+    CALL sp_update_etl_gbv_pepmanagement_nonoccupationalexposure(last_update_time);
+    CALL sp_update_etl_gbv_pepmanagement_occupationalexposure(last_update_time);
+    CALL sp_update_etl_gbv_pepmanagement_followup(last_update_time);
+    CALL sp_update_etl_gbv_perpetratorencounter(last_update_time);
+    CALL sp_update_etl_gbv_counsellingencounter(last_update_time);
+    CALL sp_update_etl_gbv_linkage(last_update_time);
+    CALL sp_update_etl_gbv_physicalemotional_violence(last_update_time);
+    CALL sp_update_etl_gbv_postrapecare(last_update_time);
+    CALL sp_update_etl_gbv_psychologicalassessment(last_update_time);
 
     UPDATE kenyaemr_etl.etl_script_status SET stop_time=NOW() where id=update_script_id;
     SELECT update_script_id;

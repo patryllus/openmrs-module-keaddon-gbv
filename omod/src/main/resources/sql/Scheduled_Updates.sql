@@ -1,54 +1,136 @@
 SET @OLD_SQL_MODE=@@SQL_MODE $$
 SET SQL_MODE='' $$
 
--- --------------------------------------------------- adding egpaf CCA form procedures ---------------------------------------------
+-- --------------------------------------------------- adding gbv form procedures ---------------------------------------------
 -- gbvrc_consent_prc data
-DROP PROCEDURE IF EXISTS sp_update_etl_gbvrc_consent_prc $$
-CREATE PROCEDURE sp_update_etl_gbvrc_consent_prc(IN last_update_time DATETIME)
+DROP PROCEDURE IF EXISTS sp_update_etl_gbv_consenting $$
+CREATE PROCEDURE sp_update_etl_gbv_consenting(IN last_update_time DATETIME)
   BEGIN
-    SELECT "Processing gbvrc_consent_prc data ", CONCAT("Time: ", NOW());
-    insert into kenyaemr_etl.etl_gbvrc_consent_prc(
-                      uuid,
-                      encounter_id,
-                      visit_id,
-                      patient_id,
-                      location_id,
-                      visit_date,
-                      encounter_provider,
-                      date_created,
-                      medical_examination,
-                      collect_sample,
-                      provide_evidence,
-                      witness_name,
-                      witness_signature,
-                      date_consented,
-                      voided
+    SELECT "Processing gbv_consenting data ", CONCAT("Time: ", NOW());
+    insert into kenyaemr_etl.etl_gbv_consenting(
+                                       uuid,
+                                       encounter_id,
+                                       visit_id,
+                                       patient_id,
+                                       location_id,
+                                       visit_date,
+                                       encounter_provider,
+                                       date_created,
+                                       medical_examination,
+                                       collect_sample,
+                                       provide_evidence,
+                                       client_signature,
+                                       witness_name,
+                                       witness_signature,
+                                       provider_name,
+                                       provider_signature,
+                                       date_consented,
+                                       voided
     )
-    select
-    	e.uuid,
-    	e.encounter_id as encounter_id,
-    	e.visit_id as visit_id,
-    	e.patient_id,
-    	e.location_id,
-    	date(e.encounter_datetime) as visit_date,
-    	e.creator as encounter_provider,
-    	e.date_created as date_created,
-      max(if(o.concept_id=165176,(case o.value_coded when 1065 then "Yes" when 1066 then "No" else "" end),null)) as medical_examination,
-      max(if(o.concept_id=161934,(case o.value_coded when 1065 then "Yes" when 1066 then "No" else "" end),null)) as collect_sample,
-      max(if(o.concept_id=165180,(case o.value_coded when 1065 then "Yes" when 1066 then "No" else "" end),null)) as provide_evidence,
-      max(if(o.concept_id=165143,o.value_text,null)) as witness_name,
-      max(if(o.concept_id=163258,o.value_text,null)) as witness_signature,
-      max(if(o.concept_id=162869,date(o.value_datetime),null)) as date_consented,
-      e.voided as voided
-    from encounter e
-    	inner join person p on p.person_id=e.patient_id and p.voided=0
-    	inner join
-    	(
-    		select form_id from form where
-    			uuid in('d720a8b3-52cc-41e2-9a75-3fd0d67744e5')
-    	) f on f.form_id=e.form_id
-    	left outer join obs o on o.encounter_id=e.encounter_id and o.voided=0
-    	and o.concept_id in (165176,161934,165180,165143,163258,162869)
+select
+	e.uuid,
+	e.encounter_id as encounter_id,
+	e.visit_id as visit_id,
+	e.patient_id,
+	e.location_id,
+	date(e.encounter_datetime) as visit_date,
+	e.creator as encounter_provider,
+	e.date_created as date_created,
+    max(if(o.concept_id=165176,(case o.value_coded when 1065 then "Yes" when 1066 then "No" else "" end),null)) as medical_examination,
+    max(if(o.concept_id=161934,(case o.value_coded when 1065 then "Yes" when 1066 then "No" else "" end),null)) as collect_sample,
+    max(if(o.concept_id=165180,(case o.value_coded when 1065 then "Yes" when 1066 then "No" else "" end),null)) as provide_evidence,
+     max(if(o.concept_id=167018,o.value_text,null)) as client_signature,
+    max(if(o.concept_id=165143,o.value_text,null)) as witness_name,
+    max(if(o.concept_id=166847,o.value_text,null)) as witness_signature,
+    max(if(o.concept_id=1473,o.value_text,null)) as provider_name,
+    max(if(o.concept_id=163258,o.value_text,null)) as provider_signature,
+    max(if(o.concept_id=1711,date(o.value_datetime),null)) as date_consented,
+    e.voided as voided
+from encounter e
+	inner join person p on p.person_id=e.patient_id and p.voided=0
+	inner join
+	(
+		select form_id from form where
+			uuid in('d720a8b3-52cc-41e2-9a75-3fd0d67744e5')
+	) f on f.form_id=e.form_id
+	left outer join obs o on o.encounter_id=e.encounter_id and o.voided=0
+	and o.concept_id in (165176,161934,165180,167018,165143,166847,1473,163258,1711)
+where e.voided=0 and (e.date_created >= last_update_time
+            or e.date_changed >= last_update_time
+            or e.date_voided >= last_update_time
+            or o.date_created >= last_update_time
+            or o.date_voided >= last_update_time)
+    group by e.patient_id, e.encounter_id
+    ON DUPLICATE KEY UPDATE
+                             encounter_provider=VALUES(encounter_provider),
+                             visit_date=VALUES(visit_date),
+                             medical_examination=VALUES(medical_examination),
+                             collect_sample=VALUES(collect_sample),
+                             provide_evidence=VALUES(provide_evidence),
+                             client_signature=VALUES(client_signature),
+                             witness_name=VALUES(witness_name),
+                             witness_signature=VALUES(witness_signature),
+                             provider_name=VALUES(provider_name),
+                             provider_signature=VALUES(provider_signature),
+                             date_consented=VALUES(date_consented),
+                             voided=VALUES(voided);
+    END $$
+
+-- gbv counselling encounter --
+DROP PROCEDURE IF EXISTS sp_update_etl_gbv_counsellingencounter $$
+CREATE PROCEDURE sp_update_etl_gbv_counsellingencounter(IN last_update_time DATETIME)
+  BEGIN
+    SELECT "Processing gbv_counsellingencounter data ", CONCAT("Time: ", NOW());
+    insert into kenyaemr_etl.etl_gbv_counsellingencounter(
+                                                                     uuid,
+                                                                     encounter_id,
+                                                                     visit_id,
+                                                                     patient_id,
+                                                                     location_id,
+                                                                     visit_date,
+                                                                     encounter_provider,
+                                                                     date_created,
+                                                                     prc_number,
+                                                                     type_of_exposure,
+                                                                     visit_no,
+                                                                     presenting_issue,
+                                                                     emerging_issue,
+                                                                     hiv_test_result,
+                                                                     plan_of_action,
+                                                                     tca_date,
+                                                                     voided
+    )
+select
+	e.uuid,
+	e.encounter_id as encounter_id,
+	e.visit_id as visit_id,
+	e.patient_id,
+	e.location_id,
+	date(e.encounter_datetime) as visit_date,
+	e.creator as encounter_provider,
+	e.date_created as date_created,
+	max(if(o.concept_id=1646,o.value_text,null)) as prc_number,
+    max(if(o.concept_id=167165,(case o.value_coded when 158358 then "physical violence" when 118688 then "emotional violence"
+     when 167085 then "sgbv" when 164843 then "occupational exposure" when 164837 then "non-occupational exposure"
+     else "" end),null)) as type_of_exposure,
+    max(if(o.concept_id=1724,(case o.value_coded when 162080 then "Initial visit" when 1722 then "2nd visit"
+        when 165307 then "3rd visit" when 1721 then "4th visit" when 1723 then "5th visit"
+        else "" end),null)) as visit_no,
+    max(if(o.concept_id=165138,o.value_text,null)) as presenting_issue,
+    max(if(o.concept_id=160629,o.value_text,null)) as emerging_issue,
+    max(if(o.concept_id=165171,(case o.value_coded when 703 then "Reactive" when 664 then "Non reactive"  else "" end),null)) as hiv_test_result,
+    max(if(o.concept_id=163104,o.value_text,null)) as plan_of_action,
+    max(if(o.concept_id=160753,date(o.value_datetime),null)) as tca_date,
+    e.voided as voided
+from encounter e
+	inner join person p on p.person_id=e.patient_id and p.voided=0
+	inner join
+	(
+		select form_id from form where
+			uuid in('"e983d758-5adf-4917-8172-0f4be4d8116a')
+	) f on f.form_id=e.form_id
+	left outer join obs o on o.encounter_id=e.encounter_id and o.voided=0
+	and o.concept_id in (1646,167165,1724,163104,165138,160629,160753)
     where e.voided=0 and (e.date_created >= last_update_time
             or e.date_changed >= last_update_time
             or e.date_voided >= last_update_time
@@ -56,25 +138,110 @@ CREATE PROCEDURE sp_update_etl_gbvrc_consent_prc(IN last_update_time DATETIME)
             or o.date_voided >= last_update_time)
     group by e.patient_id, e.encounter_id
     ON DUPLICATE KEY UPDATE
-
-
-                                         encounter_provider=VALUES(encounter_provider),
-                                         visit_date=VALUES(visit_date),
-                                         medical_examination=VALUES(medical_examination),
-                                         collect_sample=VALUES(collect_sample),
-                                         provide_evidence=VALUES(provide_evidence),
-                                         witness_name=VALUES(witness_name),
-                                         witness_signature=VALUES(witness_signature),
-                                         date_consented=VALUES(date_consented),
-                                         voided=VALUES(voided);
+                             encounter_provider=VALUES(encounter_provider),
+                             visit_date=VALUES(visit_date),
+                             prc_number=VALUES(prc_number),
+                             type_of_exposure=VALUES(type_of_exposure),
+                             visit_no=VALUES(visit_no),
+                             presenting_issue=VALUES(presenting_issue),
+                             emerging_issue=VALUES(emerging_issue),
+                             hiv_test_result=VALUES(hiv_test_result),
+                             plan_of_action=VALUES(plan_of_action),
+                             tca_date=VALUES(tca_date),
+                             voided=VALUES(voided);
+    END $$
+-- sp_update_etl_gbv_perpetratorencounter --
+DROP PROCEDURE IF EXISTS sp_update_etl_gbv_perpetratorencounter $$
+CREATE PROCEDURE sp_update_etl_gbv_perpetratorencounter(IN last_update_time DATETIME)
+  BEGIN
+    SELECT "Processing sp_update_etl_gbv_perpetratorencounter data ", CONCAT("Time: ", NOW());
+    insert into kenyaemr_etl.sp_update_etl_gbv_perpetratorencounter(
+                                                                                                 uuid,
+                                                                                                 encounter_id ,
+                                                                                                 visit_id,
+                                                                                                 patient_id,
+                                                                                                 location_id,
+                                                                                                 visit_date,
+                                                                                                 encounter_provider,
+                                                                                                 date_created,
+                                                                                                 perpetrator_number,
+                                                                                                 phonenumber,
+                                                                                                 residence,
+                                                                                                 occupation,
+                                                                                                 other_occupation_specify,
+                                                                                                 presenting_issue,
+                                                                                                 action_plan_presenting_issue,
+                                                                                                 pep_given,
+                                                                                                 pep_given_no,
+                                                                                                 ecp_given,
+                                                                                                 ecp_given_no,
+                                                                                                 sti_treatment_given,
+                                                                                                 voided
+    )
+select
+	    e.uuid,
+    	e.encounter_id as encounter_id,
+    	e.visit_id as visit_id,
+    	e.patient_id,
+    	e.location_id,
+    	date(e.encounter_datetime) as visit_date,
+    	e.creator as encounter_provider,
+    	e.date_created as date_created,
+    	max(if(o.concept_id=163151,o.value_text,null)) as perpetrator_number,
+    	max(if(o.concept_id=163152,o.value_text,null)) as phonenumber,
+    	max(if(o.concept_id=167131,o.value_text,null)) as residence,
+        max(if(o.concept_id=1542,(case o.value_coded when 123801 then "unemployed" when 1538 then "farmer"
+         when 1539 then "trader" when 1540 then "employee" when 159464 then "Housework"
+         when 159465 then "Student" when 159466 then "Driver" when 162946 then "Teacher"
+         when 1067 then "Other" else "" end),null)) as occupation,
+        max(if(o.concept_id=160632,o.value_text,null)) as other_occupation_specify,
+        max(if(o.concept_id=165138,o.value_text,null)) as presenting_issue,
+        max(if(o.concept_id=163104,o.value_text,null)) as action_plan_presenting_issue,
+        max(if(o.concept_id=165171,(case o.value_coded when 1065 then "Yes" when 1066 then "No"  else "" end),null)) as pep_given,
+        max(if(o.concept_id=162169,o.value_text,null)) as pep_given_no,
+        max(if(o.concept_id=160570,(case o.value_coded when 1065 then "Yes" when 1066 then "No"  else "" end),null)) as ecp_given,
+        max(if(o.concept_id=160845,o.value_text,null)) as ecp_given_no,
+        max(if(o.concept_id=165200,(case o.value_coded when 1065 then "Yes" when 1066 then "No"  else "" end),null)) as sti_treatment_given,
+        e.voided as voided
+    from encounter e
+    	inner join person p on p.person_id=e.patient_id and p.voided=0
+    	inner join
+    	(
+    		select form_id from form where
+    			uuid in('f37d7e0e-95e8-430d-96a3-8e22664f74d6')
+    	) f on f.form_id=e.form_id
+    	left outer join obs o on o.encounter_id=e.encounter_id and o.voided=0
+    	and o.concept_id in (163151,163152,167131,1542,160632,165138,163104,165171,162169,160570,160845,165200)
+    where e.voided=0 and (e.date_created >= last_update_time
+            or e.date_changed >= last_update_time
+            or e.date_voided >= last_update_time
+            or o.date_created >= last_update_time
+            or o.date_voided >= last_update_time)
+    group by e.patient_id, e.encounter_id
+    ON DUPLICATE KEY UPDATE
+                             encounter_provider=VALUES(encounter_provider),
+                             visit_date=VALUES(visit_date),
+                             perpetrator_number=VALUES(perpetrator_number),
+                             phonenumber=VALUES(phonenumber),
+                             residence=VALUES(residence),
+                             occupation=VALUES(occupation),
+                             other_occupation_specify=VALUES(other_occupation_specify),
+                             presenting_issue=VALUES(presenting_issue),
+                             action_plan_presenting_issue=VALUES(action_plan_presenting_issue),
+                             pep_given=VALUES(pep_given),
+                             pep_given_no=VALUES(pep_given_no),
+                             ecp_given=VALUES(ecp_given),
+                             ecp_given_no=VALUES(ecp_given_no),
+                             sti_treatment_given=VALUES(sti_treatment_given),
+                             voided=VALUES(voided);
     END $$
 
--- gbvrc_legal
-DROP PROCEDURE IF EXISTS sp_update_etl_gbvrc_legal $$
-CREATE PROCEDURE sp_update_etl_gbvrc_legal(IN last_update_time DATETIME)
+-- gbv_legal--
+DROP PROCEDURE IF EXISTS sp_update_etl_gbv_legal $$
+CREATE PROCEDURE sp_update_etl_gbv_legal(IN last_update_time DATETIME)
   BEGIN
     SELECT "Processing legal data ", CONCAT("Time: ", NOW());
- insert into kenyaemr_etl.etl_gbvrc_legal(
+ insert into kenyaemr_etl.etl_gbv_legal(
                  uuid ,
                  encounter_id ,
                  visit_id,
@@ -610,24 +777,28 @@ insert into kenyaemr_etl.etl_gbvrc_physicalemotional_violence(
 -- ----------------------------  scheduled updates ---------------------
 
 
-DROP PROCEDURE IF EXISTS sp_gbvrc_scheduled_updates $$
-CREATE PROCEDURE sp_gbvrc_scheduled_updates()
+DROP PROCEDURE IF EXISTS sp_gbv_scheduled_updates $$
+CREATE PROCEDURE sp_gbv_scheduled_updates()
   BEGIN
     DECLARE update_script_id INT(11);
     DECLARE last_update_time DATETIME;
     SELECT max(start_time) into last_update_time from kenyaemr_etl.etl_script_status where stop_time is not null or stop_time !="";
 
-    INSERT INTO kenyaemr_etl.etl_script_status(script_name, start_time) VALUES('ciheb_module_gbvrc_scheduled_updates', NOW());
+    INSERT INTO kenyaemr_etl.etl_script_status(script_name, start_time) VALUES('gbv_scheduled_updates', NOW());
     SET update_script_id = LAST_INSERT_ID();
 
-    CALL sp_update_etl_gbvrc_consent_prc(last_update_time);
-    CALL sp_update_etl_gbvrc_legal(last_update_time);
-    CALL sp_update_etl_gbvrc_pepmanagementforsurvivors(last_update_time);
-    CALL sp_update_etl_gbvrc_pepmanagement_nonoccupationalexposure(last_update_time);
-    CALL sp_update_etl_gbvrc_linkage(last_update_time);
-    CALL sp_update_etl_gbvrc_physicalemotional_violence(last_update_time);
-    CALL sp_update_etl_gbvrc_postrapecare(last_update_time);
-    CALL sp_update_etl_gbvrc_psychologicalassessment(last_update_time);
+    CALL sp_update_etl_gbv_consenting(last_update_time);
+    CALL sp_update_etl_gbv_legal_encounter(last_update_time);
+    CALL sp_update_etl_gbv_pepmanagementforsurvivor(last_update_time);
+    CALL sp_update_etl_gbv_pepmanagement_nonoccupationalexposure(last_update_time);
+    CALL sp_update_etl_gbv_pepmanagement_occupationalexposure(last_update_time);
+    CALL sp_update_etl_gbv_pepmanagement_followup(last_update_time);
+    CALL sp_update_etl_gbv_perpetratorencounter(last_update_time);
+    CALL sp_update_etl_gbv_counsellingencounter(last_update_time);
+    CALL sp_update_etl_gbv_linkage(last_update_time);
+    CALL sp_update_etl_gbv_physicalemotional_violence(last_update_time);
+    CALL sp_update_etl_gbv_postrapecare(last_update_time);
+    CALL sp_update_etl_gbv_psychologicalassessment(last_update_time);
 
     UPDATE kenyaemr_etl.etl_script_status SET stop_time=NOW() where id=update_script_id;
     SELECT update_script_id;

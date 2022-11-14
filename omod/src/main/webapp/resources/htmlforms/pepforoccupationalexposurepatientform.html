@@ -16,7 +16,6 @@
     <script type="text/javascript">
         $(document).ready(function () {
             //Defaults
-
             jq("#tbl-other-exposure").hide();
             jq("#tbl-specify-other-expo-device").hide();
             jq("#row-pep-previous-exposure").hide();
@@ -95,26 +94,6 @@
         };
 
 
-
-        //Before Submit
-        beforeSubmit.push(function() {
-            var referredBy = getValue('referral-by.value');
-            var clientType = getValue('client-type.value');
-            var otherReferred = jq('#other-referral input[type=text]').val();
-            var infoSource = getValue('information-source.value');
-            var otherInfoSource = jq('#other-information-source input[type=text]').val();
-            var county = getField('county.value').val();
-            if(referredBy == ""){
-                getField('referral-by.error').html('Please specify referral source').show();
-                return false;
-            }else {
-                getField('referral-by.error').html('Please specify referral source').hide();
-            }
-
-
-            return true;
-        });
-
         //Clear hidden sections
         clearHiddenSections = function(parentObj) {
             parentObj.find('input[type=radio]').each(function() {
@@ -131,6 +110,88 @@
             });
         }
     </script>
+    <ifMode mode="EDIT">
+        <script type="text/javascript">
+          $(document).ready(function () {
+            //Defaults
+            jq("#tbl-other-exposure").hide();
+            jq("#tbl-specify-other-expo-device").hide();
+            jq("#row-pep-previous-exposure").hide();
+            jq("#tbl-pep-prev-exposure").hide();
+           jq("#tbl-underlying-health-problem").hide();
+           jq("#row-pep-post-assessment").hide();
+
+
+            //Referred by selected
+            jq("#other-exposure :input[type=radio]").change(otherExposureSelected);
+             jq("#device-causing-exposure :input[type=radio]").change(otherDeviceCausingExposureSelected);
+             jq("#prev-accident-expo :input[type=radio]").change(prevAccidentExpoSelected);
+             jq("#pep-prev :input[type=radio]").change(pepPrevSelected);
+             jq("#underlying-health-pro :input[type=radio]").change(existingHealthProSelected);
+            jq("#wish-not-to-take-pep :input[type=radio]").change(wishNotToTakePepSelected);
+          });
+
+     var wishNotToTakePepSelected= function () {
+            var val = jq(this).val();
+            if (val == 1065 ){
+                jq("#row-pep-post-assessment").show();
+            }else {
+                jq("#row-pep-post-assessment").hide();
+                clearHiddenSections(jq("#row-pep-post-assessment"));
+            }
+        };
+
+        var existingHealthProSelected = function () {
+            var val = jq(this).val();
+            if (val == 1065 ){
+                jq("#tbl-underlying-health-problem").show();
+            }else {
+                jq("#tbl-underlying-health-problem").hide();
+                clearHiddenSections(jq("#tbl-underlying-health-problem"));
+            }
+        };
+
+         var pepPrevSelected = function () {
+            var val = jq(this).val();
+            if (val == 1065 ){
+                jq("#tbl-pep-prev-exposure").show();
+            }else {
+                jq("#tbl-pep-prev-exposure").hide();
+                clearHiddenSections(jq("#tbl-pep-prev-exposure"));
+            }
+        };
+
+         var prevAccidentExpoSelected = function () {
+            var val = jq(this).val();
+            if (val == 1065 ){
+                jq("#row-pep-previous-exposure").show();
+            }else {
+                jq("#row-pep-previous-exposure").hide();
+                clearHiddenSections(jq("#row-pep-previous-exposure"));
+            }
+        };
+
+        var otherDeviceCausingExposureSelected = function () {
+            var val = jq(this).val();
+            if (val == 5622 ){
+                jq("#tbl-specify-other-expo-device").show();
+            }else {
+                jq("#tbl-specify-other-expo-device").hide();
+                clearHiddenSections(jq("#tbl-specify-other-expo-device"));
+            }
+        };
+
+            var otherExposureSelected = function () {
+            var val = jq(this).val();
+            if (val == 5622 ){
+                jq("#tbl-other-exposure").show();
+            }else {
+                jq("#tbl-other-exposure").hide();
+                clearHiddenSections(jq("#tbl-other-exposure"));
+            }
+        };
+        </script>
+    </ifMode>
     <style>
         .simple-table {
         border: solid 1px #DDEEEE;
@@ -284,13 +345,13 @@
                             <tr>
                                 <td><b>What regimen did you take? <strong><i>(use regimen codes)</i></strong></b></td>
                                 <td>
-                                    <obs required="true" id="regimen-taken" conceptId="166086" rows="2" cols="40" />
+                                    <obs  id="regimen-taken" conceptId="166086" rows="2" cols="40" />
                                 </td>
                             </tr>
                             <tr>
                                 <td><b>For how many days?</b></td>
                                 <td>
-                                    <obs required="true" id="pep-prev-duration" conceptId="165170" rows="2" cols="40"/> <span><strong>days</strong></span>
+                                    <obs  id="pep-prev-duration" conceptId="165170" rows="2" cols="40"/> <span><strong>days</strong></span>
                                 </td>
                             </tr>
                             <tr id="row-pep-prev-completed">
@@ -339,7 +400,7 @@
                             <tr>
                                 <td><b>What are the underlying health problem?</b></td>
                                 <td>
-                                    <obs required="true" id="underlying-pro" conceptId="163042" rows="3" cols="40" style="textarea" />
+                                    <obs  id="underlying-pro" conceptId="163042" rows="3" cols="40" style="textarea" />
                                 </td>
                             </tr>
                         </table>
@@ -347,29 +408,30 @@
                 </tr>
                 <tr>
                     <td><b>Is the health care worker on any medication?</b></td>
-                    <td><obs  conceptId="161472" answerLabels="Yes,No" answerConceptIds="1065,1065" style="radio" /></td>
+                    <td><obs required="true"  conceptId="161472" answerLabels="Yes,No" answerConceptIds="1065,1065" style="radio" /></td>
                 </tr>
                 <tr>
                     <td colspan="2"><b><p>NB: Request Baseline Investigations for Exposed Health Care Worker via Lab Request modules</p></b></td>
                 </tr>
                 <tr>
-                    <td><b>Preliminary Classification?</b></td>
-                    <td><obs required="true" conceptId="165053" answerLabels="Low,Risk" answerConceptIds="1065,1066" style="radio" /></td>
+                    <td><b>Preliminary Classification of risk?</b></td>
+                    <td><obs required="true" conceptId="165053" answerLabels="Low risk,High risk" answerConceptIds="1065,1066" style="radio" /></td>
                 </tr>
                 <tr id="row-pep-post-assessment">
                     <td><b>ARV regimen provided after assessment?</b></td>
-                    <td><obs required="true" conceptId="163104" rows="3" cols="60" /></td>
+                    <td><obs  conceptId="163104" rows="3" cols="40" /></td>
                     <td><b>Date provided regimen</b></td>
-                    <td><obs required="true" conceptId="166865" size="50" /></td>
+                    <td><obs  conceptId="166865" size="50" /></td>
                 </tr>
                 <tr>
                     <td><b>TCA Date</b></td>
-                    <td><obs conceptId="160753" required="true" size="50" allowFutureDates="true" /></td>
+                    <td><obs conceptId="160753" required="" size="50" allowFutureDates="true" /></td>
                 </tr>
 
             </table>
         </fieldset>
     </div>
+
     <div class="ke-form-footer">
         <submit />
     </div>

@@ -109,24 +109,6 @@
         };
 
 
-        //Before Submit
-        beforeSubmit.push(function() {
-            var referredBy = getValue('referral-by.value');
-            var clientType = getValue('client-type.value');
-            var otherReferred = jq('#other-referral input[type=text]').val();
-            var infoSource = getValue('information-source.value');
-            var otherInfoSource = jq('#other-information-source input[type=text]').val();
-            var county = getField('county.value').val();
-            if(referredBy == ""){
-                getField('referral-by.error').html('Please specify referral source').show();
-                return false;
-            }else {
-                getField('referral-by.error').html('Please specify referral source').hide();
-            }
-
-
-            return true;
-        });
 
         //Clear hidden sections
         clearHiddenSections = function(parentObj) {
@@ -144,6 +126,103 @@
             });
         }
     </script>
+    <ifMode mode="EDIT">
+        <script type="text/javascript">
+                  $(document).ready(function () {
+            //Defaults
+            jq("#row-pep-completed").hide();
+            jq("#row-hiv-test").hide();
+            jq("#row-hbag-test").hide();
+            jq("#row-lfts").hide();
+            jq("#row-creatinine").hide();
+            jq("#row-hiv-serology").hide();
+            jq("#row-tca").hide();
+            jq("#tbl-pep-not-completed").hide();
+            jq("#tbl-hiv-test-result").hide();
+            jq("#tbl-hbag-test-result").hide();
+
+
+
+            //Referred by selected
+            jq("#pep-completed :input[type=radio]").change(onPePCompletedSelected);
+            jq("#hiv-test-done :input[type=radio]").change(onHIVTestDoneSelected);
+            jq("#hbag-test :input[type=radio]").change(onhbagTestSelected);
+            jq("#visit-number select").change(onSelectVisit);
+          });
+
+          var onhbagTestSelected = function () {
+            var val = jq(this).val();
+            if (val == 1065 ){
+                jq("#tbl-hbag-test-result").show();
+            }else {
+                jq("#tbl-hbag-test-result").hide();
+                clearHiddenSections(jq("#tbl-hbag-test-result"));
+            }
+        };
+
+         var onHIVTestDoneSelected = function () {
+            var val = jq(this).val();
+            if (val == 1065 ){
+                jq("#tbl-hiv-test-result").show();
+            }else {
+                jq("#tbl-hiv-test-result").hide();
+                clearHiddenSections(jq("#tbl-hiv-test-result"));
+            }
+        };
+
+         var onSelectVisit = function () {
+            var val = jq(this).val();
+            if (val == 1722 ){
+                jq("#row-lfts").show();
+                jq("#row-creatinine").show();
+                jq("#row-tca").show();
+           }
+           else if (val == 165307){
+                jq("#row-pep-completed").show();
+                jq("#row-hiv-test").show();
+                jq("#row-tca").show();
+            }
+          else if (val == 1721){
+                jq("#row-hbag-test").show();
+                jq("#row-tca").show();
+            }
+          else if (val == 1723){
+                jq("#row-hiv-serology").show();
+            }
+         else {
+                jq("#row-pep-completed").hide();
+                clearHiddenSections(jq("#row-pep-completed"));
+
+                jq("#row-hiv-test").hide();
+                clearHiddenSections(jq("#row-hiv-test"));
+
+                jq("#row-hbag-test").hide();
+                clearHiddenSections(jq("#row-hbag-test"));
+
+                 jq("#row-lfts").hide();
+                clearHiddenSections(jq("#row-lfts"));
+
+                 jq("#row-creatinine").hide();
+                clearHiddenSections(jq("#row-creatinine"));
+
+                 jq("#row-hiv-serology").hide();
+                clearHiddenSections(jq("#row-hiv-serology"));
+
+                 jq("#row-tca").hide();
+                clearHiddenSections(jq("#row-tca"));
+            }
+        };
+          var onPePCompletedSelected = function () {
+            var val = jq(this).val();
+            if (val == 1066 ){
+                jq("#tbl-pep-not-completed").show();
+            }else {
+                jq("#tbl-pep-not-completed").hide();
+                clearHiddenSections(jq("#tbl-pep-not-completed"));
+            }
+        };
+        </script>
+    </ifMode>
     <style>
         .simple-table {
         border: solid 1px #DDEEEE;
@@ -195,14 +274,14 @@
                 <tr id="row-pep-completed">
                     <td><b>PEP completed?</b></td>
                     <td>
-                        <obs required="true" id="pep-completed" conceptId="165171" answerLabels="Yes,No" answerConceptIds="1065,1066" style="radio" />
+                        <obs  id="pep-completed" conceptId="165171" answerLabels="Yes,No" answerConceptIds="1065,1066" style="radio" />
                     </td>
                     <td>
                         <table class="simple-table" id="tbl-pep-not-completed">
                             <tr id="row-pep-not-completed">
                                 <td><b>Why the PEP dose was not completed?</b></td>
                                 <td>
-                                    <obs required="true" id="pep-not-completed" conceptId="161011" rows="3" cols="60" style="textarea"/>
+                                    <obs id="pep-not-completed" conceptId="161011" rows="3" cols="40" style="textarea"/>
                                 </td>
                             </tr>
                         </table>
@@ -210,13 +289,13 @@
                 </tr>
                 <tr id="row-hiv-test">
                     <td><b>HIV Test done?</b></td>
-                    <td><obs required="true" id="hiv-test-done" conceptId="164848" answerLabels="Yes,No" answerConceptIds="1065,1066" style="radio" /></td>
+                    <td><obs id="hiv-test-done" conceptId="164848" answerLabels="Yes,No" answerConceptIds="1065,1066" style="radio" /></td>
 
                     <td>
                         <table class="simple-table" id="tbl-hiv-test-result">
                             <tr>
                                 <td><b>HIV test result</b></td>
-                                <td><obs required="true" conceptId="159427" answerLabels="Negative,Positive" answerConceptIds="664,703" style="radio" /></td>
+                                <td><obs  conceptId="159427" answerLabels="Negative,Positive" answerConceptIds="664,703" style="radio" /></td>
 
                             </tr>
                         </table>
@@ -274,7 +353,7 @@
                 </tr>
                 <tr id="row-tca">
                     <td><b>TCA Date</b></td>
-                    <td><obs conceptId="160753" required="true" size="50" allowFutureDates="true" /></td>
+                    <td><obs conceptId="160753"  size="50" allowFutureDates="true" /></td>
                 </tr>
             </table>
         </fieldset>

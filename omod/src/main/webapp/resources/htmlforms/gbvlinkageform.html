@@ -47,21 +47,6 @@
             }
         };
 
-        //Before Submit
-        beforeSubmit.push(function() {
-            var infoSource = getValue('information-source.value');
-            var otherInfoSource = jq('#other-information-source input[type=text]').val();
-            var county = getField('county.value').val();
-
-            if(referredBy == ""){
-                getField('referral-by.error').html('Please specify referral source').show();
-                return false;
-            }else {
-                getField('referral-by.error').html('Please specify referral source').hide();
-            }
-
-            return true;
-        });
 
         //Clear hidden sections
         clearHiddenSections = function(parentObj) {
@@ -79,6 +64,43 @@
             });
         }
     </script>
+    <ifMode mode="EDIT">
+        <script type="text/javascript">
+          $(document).ready(function () {
+            //Defaults
+            jq("#tbl-other-action-taken").hide();
+            jq("#tbl-other-special-need").hide();
+
+
+            //Referred by selected
+            jq("#other-action :input[type=checkbox]").change(otherActionSelected);
+            jq("#any-special-need :input[type=radio]").change(otherSpecialNeedSelected);
+          });
+
+        var otherActionSelected = function () {
+            var val = jq(this).val();
+            if (val == 5622 ){
+                jq("#tbl-other-action-taken").show();
+            }else {
+                jq("#tbl-other-action-taken").hide();
+                clearHiddenSections(jq("#tbl-other-action-taken"));
+            }
+        };
+
+
+        var otherSpecialNeedSelected = function () {
+            var val = jq(this).val();
+            if (val == 5622 ){
+                jq("#tbl-other-special-need").show();
+
+            }else {
+                jq("#tbl-other-special-need").hide();
+                clearHiddenSections(jq("#tbl-other-special-need"));
+            }
+        };
+
+        </script>
+    </ifMode>
     <style>
         .simple-table {
         border: solid 1px #DDEEEE;
@@ -143,7 +165,7 @@
                         <table id="tbl-other-action-taken">
                             <tr>
                                 <td>Other action taken, specify</td>
-                                <td><obs required="true" conceptId="166511" style="textarea"/></td>
+                                <td><obs id="action-taken" conceptId="166511" rows="3" cols="40" style="textarea"/></td>
                             </tr>
                         </table>
                     </td>
@@ -165,7 +187,7 @@
                         <table id="tbl-other-special-need">
                             <tr>
                                 <td>Specify other special needs</td>
-                                <td><obs conceptId="161011" style="textarea" size="50" /></td>
+                                <td><obs id="other-special-need" conceptId="161011" style="textarea" rows="3" cols="40"/></td>
                             </tr>
                         </table>
 

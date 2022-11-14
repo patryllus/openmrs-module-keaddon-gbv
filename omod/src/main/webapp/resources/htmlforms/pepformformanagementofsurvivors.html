@@ -127,25 +127,6 @@
         };
 
 
-        //Before Submit
-        beforeSubmit.push(function() {
-            var referredBy = getValue('referral-by.value');
-            var clientType = getValue('client-type.value');
-            var otherReferred = jq('#other-referral input[type=text]').val();
-            var infoSource = getValue('information-source.value');
-            var otherInfoSource = jq('#other-information-source input[type=text]').val();
-            var county = getField('county.value').val();
-            if(referredBy == ""){
-                getField('referral-by.error').html('Please specify referral source').show();
-                return false;
-            }else {
-                getField('referral-by.error').html('Please specify referral source').hide();
-            }
-
-
-            return true;
-        });
-
         //Clear hidden sections
         clearHiddenSections = function(parentObj) {
             parentObj.find('input[type=radio]').each(function() {
@@ -162,6 +143,122 @@
             });
         }
     </script>
+    <ifMode mode="EDIT">
+        <script type="text/javascript">
+                    $(document).ready(function () {
+            //Defaults
+            jq("#tbl-sti-trx-not-issued").hide();
+            jq("#tbl-ecp-not-issued").hide();
+            jq("#tbl-date-given-starter-pack").hide();
+            jq("#row-starter-pack").hide();
+            jq("#tbl-pep-regimen-not-issued").hide();
+            jq("#tbl-prc-number").hide();
+            jq("#row-pep-negative-result").hide();
+            jq("#row-ccc-positive-result").hide();
+            jq("#tbl-assault-type-other").hide();
+            jq("#tbl-other-violence").hide();
+
+
+            //Referred by selected
+            jq("#sti-trx :input[type=radio]").change(stiTrxNotIssuedSelected);
+            jq("#pep-regimen :input[type=radio]").change(pepRegimenNotIssuedSelected);
+            jq("#starter-pack-issued :input[type=radio]").change(starterpckIssuedSelected);
+            jq("#ecp-issued :input[type=radio]").change(ecpNotIssuedSelected);
+            jq("#other-violence :input[type=radio]").change(otherViolenceSelected);
+            jq("#hiv-test-result :input[type=radio]").change(hivTestResultSelected);
+            jq("#other-assault :input[type=checkbox]").change(otherAssaultSelected);
+          });
+
+
+            var otherViolenceSelected = function () {
+            var val = jq(this).val();
+            if (val == 5622 ){
+                jq("#tbl-other-violence").show();
+            }else {
+                jq("#tbl-other-violence").hide();
+                clearHiddenSections(jq("#tbl-other-violence"));
+            }
+        };
+
+            var hivTestResultSelected = function () {
+            var val = jq(this).val();
+            if (val == 664 ){
+                jq("#row-pep-negative-result").show();
+            }
+            else if(val == 703){
+                jq("#row-ccc-positive-result").show();
+            }
+            else {
+                jq("#row-pep-negative-result").hide();
+                clearHiddenSections(jq("#row-pep-negative-result"));
+
+                jq("#row-ccc-positive-result").hide();
+                clearHiddenSections(jq("#row-ccc-positive-result"));
+            }
+        };
+
+          var otherAssaultSelected= function () {
+            var val = jq(this).val();
+            if (val == 5622 ){
+                jq("#tbl-assault-type-other").show();
+            }else {
+                jq("#tbl-assault-type-other").hide();
+                clearHiddenSections(jq("#tbl-assault-type-other"));
+            }
+        };
+
+
+
+         var stiTrxNotIssuedSelected = function () {
+            var val = jq(this).val();
+            if (val == 1066 ){
+                jq("#tbl-sti-trx-not-issued").show();
+            }else {
+                jq("#tbl-sti-trx-not-issued").hide();
+                clearHiddenSections(jq("#tbl-sti-trx-not-issued"));
+            }
+        };
+
+
+         var pepRegimenNotIssuedSelected = function () {
+            var val = jq(this).val();
+            if (val == 1066 ){
+                jq("#tbl-pep-regimen-not-issued").show();
+            }
+            else if(val == 1065 ) {
+                jq("#row-starter-pack").show();
+            }
+            else{
+                 jq("#row-starter-pack").hide();
+                 clearHiddenSections(jq("#row-starter-pack"));
+
+                jq("#tbl-pep-regimen-not-issued").hide();
+                clearHiddenSections(jq("#tbl-pep-regimen-not-issued"));
+            }
+        };
+
+        var starterpckIssuedSelected = function () {
+            var val = jq(this).val();
+            if (val == 1065){
+                jq("#tbl-date-given-starter-pack").show();
+            }else {
+                jq("#tbl-date-given-starter-pack").hide();
+                clearHiddenSections(jq("#tbl-date-given-starter-pack"));
+            }
+        };
+          ecpNotIssuedSelected = function () {
+            var val = jq(this).val();
+            if (val == 1066 ){
+                jq("#tbl-ecp-not-issued").show();
+            }else {
+                jq("#tbl-ecp-not-issued").hide();
+                clearHiddenSections(jq("#tbl-ecp-not-issued"));
+            }
+        };
+
+
+        </script>
+    </ifMode>
     <style>
         .simple-table {
         border: solid 1px #DDEEEE;
@@ -203,7 +300,7 @@
                     <td><b>Reporting Date and Time</b></td>
                     <td><obs required="true" conceptId="166848" size="30" /></td>
                     <td>PRC Number <strong>(format:PRC#-10-2022-00001 )</strong></td>
-                    <td><obs required="true" id="prc-number" conceptId="165416" size="30"/></td>
+                    <td><obs required="true" id="prc-number" conceptId="1646" size="30"/></td>
                 </tr>
                 <tr>
                     <table class="simple-table" >
@@ -351,7 +448,7 @@
                                         <td><obs id="hiv-test-result" conceptId="163760" answerLabels="Non-Reactive,Reactive" answerConceptIds="664,703" style="radio" /></td>
                                     </tr>
                                     <tr id="row-pep-negative-result">
-                                        <td><b>c) Other services offered;</b> <p>Given PEP if HIV test results is Non-Reactive<p></p></td>
+                                        <td><b>c) Other services offered;</b><p>Given PEP if HIV test results is Non-Reactive</p></td>
                                         <td><obs  conceptId="165171" answerLabel="Yes" answerConceptId="1065" style="checkbox" /></td>
                                     </tr>
                                     <tr id="row-ccc-positive-result">
@@ -374,7 +471,7 @@
                 <includeIf velocityTest="$patient.gender == 'F' ">
                 <tr>
                     <td><b>Emergency Contraception Issued</b></td>
-                    <td><obs required="true" id="ecp-issued"  conceptId="165167" answerLabels="Issued,Not Issued" answerConceptIds="1065,1066" style="radio" /></td>
+                    <td><obs  id="ecp-issued"  conceptId="165167" answerLabels="Issued,Not Issued" answerConceptIds="1065,1066" style="radio" /></td>
                     <td>
                         <table class="simple-table" id="tbl-ecp-not-issued">
                             <tr>
@@ -425,7 +522,7 @@
                     <td>
                         <table class="simple-table" id="tbl-date-given-starter-pack">
                             <tr>
-                                <td><b>Date Given</b></td>
+                                <td><b>Date given PEP</b></td>
                                 <td><obs conceptId="166865" size="50" /></td>
                             </tr>
                         </table>
@@ -436,7 +533,7 @@
         <!-- Baseline -->
         <fieldset id="Assesment-tab7">
             <legend>
-                <strong>Baseline Tests</strong>
+                <strong>Baseline Tests and Appointment Details</strong>
             </legend>
             <table class="simple-table" id="adherence-7">
                 <tr>
@@ -457,7 +554,7 @@
                 </tr>
                 <tr>
                     <td><b>TCA Date</b></td>
-                    <td><obs conceptId="160753" required="true" size="50" allowFutureDates="true" /></td>
+                    <td><obs conceptId="160753" required="" size="50" allowFutureDates="true" /></td>
                 </tr>
 
             </table>

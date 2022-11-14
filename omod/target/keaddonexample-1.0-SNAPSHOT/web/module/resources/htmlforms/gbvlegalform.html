@@ -34,25 +34,6 @@
         };
 
 
-        //Before Submit
-        beforeSubmit.push(function() {
-            var referredBy = getValue('referral-by.value');
-            var clientType = getValue('client-type.value');
-            var otherReferred = jq('#other-referral input[type=text]').val();
-            var infoSource = getValue('information-source.value');
-            var otherInfoSource = jq('#other-information-source input[type=text]').val();
-            var county = getField('county.value').val();
-            if(referredBy == ""){
-                getField('referral-by.error').html('Please specify referral source').show();
-                return false;
-            }else {
-                getField('referral-by.error').html('Please specify referral source').hide();
-            }
-
-
-            return true;
-        });
-
         //Clear hidden sections
         clearHiddenSections = function(parentObj) {
             parentObj.find('input[type=radio]').each(function() {
@@ -70,6 +51,28 @@
         }
 
     </script>
+  <ifMode mode="EDIT">
+    <script type="text/javascript">
+            $(document).ready(function () {
+            //Defaults
+            jq("#other-referral-place-row").hide();
+
+
+            //Referred by selected
+            jq("#other-referral-place :input[type=checkbox]").change(otherReferralSelected);
+          });
+
+        var otherReferralSelected = function () {
+            var val = jq(this).val();
+            if (val == 5622 ){
+                jq("#other-referral-place-row").show();
+            }else {
+                jq("#other-referral-place-row").hide();
+                clearHiddenSections(jq("#other-referral-place-row"));
+            }
+        };
+    </script>
+  </ifMode>
   <style>
         .simple-table {
         border: solid 1px #DDEEEE;
@@ -150,7 +153,7 @@
         </tr>
         <tr>
           <td>Brief Description of Action(s) taken</td>
-          <td> <obs conceptId="166511" size="50"  style="textarea"/> </td>
+          <td> <obs conceptId="166511" rows="3" cols="40" style="textarea"/> </td>
         </tr>
       </table>
     </fieldset>
@@ -175,7 +178,7 @@
         </tr>
         <tr id="other-referral-place-row">
           <td>Any other referral place <span style="color:red;"><strong>*</strong></span></td>
-          <td> <obs conceptId="161103AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" size="50"  style="textarea"/> </td>
+          <td> <obs conceptId="161103AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" rows="3" cols="40"  style="textarea"/> </td>
         </tr>
       </table>
     </fieldset>
@@ -193,7 +196,7 @@
            <td>Criminal Suit Number</td>
            <td> <obs conceptId="162086" size="50" /></td>
            <td rowspan="2">Case Details</td>
-           <td rowspan="2"><obs conceptId="161011" size="70" style="textarea" /></td>
+           <td rowspan="2"><obs conceptId="161011" rows="3" cols="40" style="textarea" /></td>
         </tr>
         <tr>
             <td>Alternative contact name</td>

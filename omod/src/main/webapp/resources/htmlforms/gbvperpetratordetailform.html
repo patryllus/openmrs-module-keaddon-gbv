@@ -46,25 +46,6 @@
         };
 
 
-        //Before Submit
-        beforeSubmit.push(function() {
-            var referredBy = getValue('referral-by.value');
-            var clientType = getValue('client-type.value');
-            var otherReferred = jq('#other-referral input[type=text]').val();
-            var infoSource = getValue('information-source.value');
-            var otherInfoSource = jq('#other-information-source input[type=text]').val();
-            var county = getField('county.value').val();
-            if(referredBy == ""){
-                getField('referral-by.error').html('Please specify referral source').show();
-                return false;
-            }else {
-                getField('referral-by.error').html('Please specify referral source').hide();
-            }
-
-
-            return true;
-        });
-
         //Clear hidden sections
         clearHiddenSections = function(parentObj) {
             parentObj.find('input[type=radio]').each(function() {
@@ -81,6 +62,41 @@
             });
         }
     </script>
+  <ifMode mode="EDIT">
+    <script type="text/javascript">
+
+       $(document).ready(function () {
+            //Defaults
+            jq("#tbl-other-occupation").hide();
+            jq("#tbl-pep-given").hide();
+            jq("#tbl-ecp-given").hide();
+
+            //Referred by selected
+            jq("#ecp-given :input[type=radio]").change(ecpGivenNoSelected);
+            jq("#pep-given :input[type=radio]").change(pepGivenNoSelected);
+          });
+
+        var ecpGivenNoSelected = function () {
+            var val = jq(this).val();
+            if (val == 1066 ){
+                jq("#tbl-ecp-given").show();
+            }else {
+                jq("#tbl-ecp-given").hide();
+                clearHiddenSections(jq("#tbl-ecp-given"));
+            }
+        };
+
+         var pepGivenNoSelected = function () {
+            var val = jq(this).val();
+            if (val == 1066 ){
+                jq("#tbl-pep-given").show();
+            }else {
+                jq("#tbl-pep-given").hide();
+                clearHiddenSections(jq("#tbl-pep-given"));
+            }
+        };
+    </script>
+  </ifMode>
   <style>
         .simple-table {
         border: solid 1px #DDEEEE;
@@ -124,11 +140,11 @@
       <table class="simple-table" id="Checklist-tbl1">
         <tr>
           <td>Perpetrator number <br/> <i><strong> format is : (P#-10-2022-00001)</strong></i></td>
-          <td><obs required="true" conceptId="1639" size="30"/></td>
+          <td><obs required="true" conceptId="163151" size="30"/></td>
           <td>Phone number</td>
           <td><obs conceptId="163152" size="30"/></td>
           <td>Residence</td>
-          <td><obs required="true" conceptId="167131" size="30"/></td>
+          <td><obs id="residence" conceptId="167131" size="30"/></td>
         </tr>
         <tr>
           <td>Occupation  <span style="color:red;"><strong>*</strong></span>&nbsp;
@@ -146,7 +162,7 @@
             <table id="tbl-other-occupation">
               <tr>
                 <td>Specify other occupation</td>
-                <td><obs required="true" conceptId="160632" size="30"/></td>
+                <td><obs id="specify-occupation" conceptId="160632" rows="3" cols="40"/></td>
               </tr>
             </table>
           </td>
@@ -161,9 +177,11 @@
             <table class="simple-table" id="adherence-1">
               <tr>
                 <td>Presenting Issues</td>
-                <td><obs required="true" conceptId="165138" size="50"  style="textarea"/> </td>
+                <td><obs id="presenting-issue" conceptId="165138" rows="3" cols="40" style="textarea"/> </td>
+              </tr>
+              <tr>
                 <td>Plan of action for presenting issues</td>
-                <td><obs conceptId="163104" size="50"  style="textarea"/> </td>
+                <td><obs id="action-plan" conceptId="163104" rows="3" cols="40" style="textarea"/> </td>
               </tr>
             </table>
     </fieldset>
@@ -180,21 +198,20 @@
                      <table id="tbl-pep-given">
                          <tr>
                            <td>Reason for not giving PEP?</td>
-                           <td><obs required="true" conceptId="162169" style="textarea" size="100"  /></td>
+                           <td><obs id="rson-not-given-pep" conceptId="162169" style="textarea" rows="3" cols="40" /></td>
                          </tr>
                      </table>
                    </td>
-
                 </tr>
                 <includeIf velocityTest="$patient.gender == 'F'">
                 <tr>
                     <td>ECP given</td>
-                     <td> <obs id="ecp-given" required="true" conceptId="374" answerLabels="Yes,No" answerConceptIds="1065,1066" style="radio" /></td>
+                     <td> <obs id="ecp-given"  conceptId="374" answerLabels="Yes,No" answerConceptIds="1065,1066" style="radio" /></td>
                     <td>
                       <table id="tbl-ecp-given">
                         <tr>
-                          <td>Reason for giving ECP?</td>
-                          <td><obs required="true" conceptId="160845" style="textarea" size="100"  /></td>
+                          <td>Reason for not giving ECP?</td>
+                          <td><obs id="reason-not-given-ecp" conceptId="160845" style="textarea" rows="3" cols="40"  /></td>
                         </tr>
                       </table>
                     </td>
