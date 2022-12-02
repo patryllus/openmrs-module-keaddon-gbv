@@ -4,7 +4,6 @@
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
 	<!-- GBV modules App -->
-
 	<bean id="keaddonexample.app.example" factory-bean="kenyacore.appFactoryBean" factory-method="createInstance">
 		<constructor-arg value="keaddonexample.example"/>
 		<constructor-arg value="GBV"/>
@@ -12,7 +11,6 @@
 		<constructor-arg value="keaddonexample:apps/medical.png"/>
 		<constructor-arg value="700"/>
 	</bean>
-
 
 	<!-- ===================== Program ===================== -->
 

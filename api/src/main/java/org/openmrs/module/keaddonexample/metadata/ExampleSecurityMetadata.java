@@ -11,7 +11,7 @@ import static org.openmrs.module.metadatadeploy.bundle.CoreConstructors.*;
  */
 @Component
 @Requires(org.openmrs.module.kenyaemr.metadata.SecurityMetadata.class)
-public class GbvSecurityMetadata extends AbstractMetadataBundle {
+public class ExampleSecurityMetadata extends AbstractMetadataBundle {
 
     public static class _Privilege {
 

@@ -1,2 +1,2 @@
-org/openmrs/module/keaddonexample/page/controller/example/HomePageController.class
-org/openmrs/module/keaddonexample/page/controller/example/PatientProfilePageController.class
+org\openmrs\module\keaddonexample\page\controller\example\HomePageController.class
+org\openmrs\module\keaddonexample\page\controller\example\PatientProfilePageController.class
