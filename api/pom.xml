@@ -16,6 +16,19 @@
 	<dependencies>
 
 		<!-- Begin OpenMRS modules -->
+		<dependency>
+			<groupId>org.openmrs.module</groupId>
+			<artifactId>kenyaemr-api</artifactId>
+			<version>${kenyaemrVersion}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.openmrs.module</groupId>
+			<artifactId>kenyaemr-omod</artifactId>
+			<version>${kenyaemrVersion}</version>
+			<scope>provided</scope>
+		</dependency>
 
 		<dependency>
 			<groupId>org.openmrs.module</groupId>
